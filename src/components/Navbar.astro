@@ -1,0 +1,142 @@
+---
+import { Icon } from "astro-icon/components";
+import linkedInLogo from "../assets/logo-linkedin-icon-4096.png";
+
+interface NavItems {
+  name: string;
+  href: string;
+  icon: string;
+}
+
+const navItems: NavItems[] = [
+  {
+    name: "Home",
+    href: "/",
+    icon: "pixelarticons:home",
+  },
+  {
+    name: "About",
+    href: "/about",
+    icon: "pixelarticons:user",
+  },
+  {
+    name: "Projects",
+    href: "/projects",
+    icon: "pixelarticons:folder",
+  },
+  {
+    name: "Contact",
+    href: "/contact",
+    icon: "pixelarticons:mail",
+  },
+];
+---
+
+<div
+  class="flex justify-between items-center w-full max-w-7xl mx-auto px-4 md:px-8 mt-14 mb-24"
+>
+  <div class="flex-shrink-0">MyLogo</div>
+
+  <div class="pl-20">
+    <nav
+      class="py-3 px-11 md:mx-auto bg-white/90 shadow-lg shadow-black/5 backdrop-blur-xl transition-all rounded-t-2xl md:rounded-full"
+    >
+      <ul
+        class="flex justify-between md:justify-center items-center gap-6 md:gap-12"
+      >
+        {
+          navItems.map((item: NavItems) => (
+            <li>
+              <a
+                href={item.href}
+                class="flex items-center gap-1 text-black transition-colors text-xs md:text-base"
+              >
+                <Icon name={item.icon} class="w-5 h-5" />
+                <span class="hidden md:inline-block">{item.name}</span>
+                <span class="md:hidden">{item.name}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+
+  <a
+    href="https://linkedin.com/in/your-profile"
+    class="flex items-center gap-2 hover:opacity-80 transition-all duration-300 px-3 py-2 shadow-lg shadow-black/5 backdrop-blur-xl rounded-full"
+    aria-label="LinkedIn Profile"
+  >
+    <div class="w-8 h-8 flex-shrink-0">
+      <img
+        src={linkedInLogo.src}
+        alt="LinkedIn Logo"
+        width="32"
+        height="32"
+        class="w-full h-full object-contain"
+      />
+    </div>
+    <span class="hidden md:inline-block text-sm font-medium text-gray-700">
+      Get in touch
+    </span>
+  </a>
+</div>
+
+<script>
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      e.preventDefault();
+      const target = e.currentTarget as HTMLAnchorElement;
+      const targetId = target.getAttribute("href")?.substring(1) || "";
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({
+          behavior: "smooth",
+        });
+      }
+    });
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const sections = document.querySelectorAll("section[id]");
+    const navLinks = document.querySelectorAll("nav a[href^='#']");
+    const observerOptions = { threshold: 0.6 };
+
+    const observerCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          navLinks.forEach((link) => link.classList.remove("active"));
+          const id = entry.target.getAttribute("id");
+          const activeLink = document.querySelector(`nav a[href="#${id}"]`);
+          if (activeLink) {
+            activeLink.classList.add("active");
+          }
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      observerCallback,
+      observerOptions,
+    );
+    sections.forEach((section) => observer.observe(section));
+  });
+</script>
+
+<style>
+  @media (max-width: 767px) {
+    body {
+      padding-bottom: 70px;
+    }
+  }
+
+  nav a.active {
+    color: white !important;
+  }
+
+  .pixel-art {
+    image-rendering: pixelated;
+    transform: scale(2);
+    transform-origin: left top;
+  }
+</style>

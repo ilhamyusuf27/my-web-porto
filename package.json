@@ -1,0 +1,26 @@
+{
+  "name": "web-porto",
+  "type": "module",
+  "license": "MIT",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/image": "^0.18.0",
+    "@astrojs/tailwind": "^6.0.0",
+    "@iconify-json/pixelarticons": "^1.2.2",
+    "@tailwindcss/vite": "^4.0.6",
+    "astro": "^5.2.5",
+    "astro-icon": "^1.1.5",
+    "sharp": "^0.33.5",
+    "tailwindcss": "^4.0.6"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.0",
+    "prettier-plugin-astro": "^0.14.1"
+  }
+}
