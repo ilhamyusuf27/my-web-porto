@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
+import path from "path";
 import icon from "astro-icon";
 import image from "@astrojs/image";
 
@@ -20,6 +21,11 @@ export default defineConfig({
   integrations: [icon(), image()],
   vite: {
     plugins: [tailwindcss()],
+    resolve: {
+      alias: {
+        "@assets": path.resolve('./src/assets'),
+      }
+    },
     build: {
       cssCodeSplit: false,
       rollupOptions: {

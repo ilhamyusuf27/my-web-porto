@@ -3158,6 +3158,11 @@ svgo@^3.3.2:
     csso "^5.0.5"
     picocolors "^1.0.0"
 
+swiper@^11.2.3:
+  version "11.2.3"
+  resolved "https://registry.yarnpkg.com/swiper/-/swiper-11.2.3.tgz#6358e8169dcd78fc1dffb65bb29b5875c7bcedcc"
+  integrity sha512-24m5tqHCd1Wmp9+86aKDoIGMsZGEjIL++3nuB1UjhAhIlvwj4k0Jikxu9PGQ/VswLpoje6JtMDWo12uu4aS2FA==
+
 tailwindcss@4.0.6, tailwindcss@^4.0.6:
   version "4.0.6"
   resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-4.0.6.tgz#c033bfba94d6e3bf70650a2f9fe949f39d3bb191"

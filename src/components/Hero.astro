@@ -1,4 +1,6 @@
 ---
+import Slider from "./Slider.astro";
+
 const roleList: string[] = [
   "Frontend Developer",
   "Web Developer",
@@ -6,21 +8,31 @@ const roleList: string[] = [
 ];
 ---
 
-<div class="flex flex-col items-center w-full px-10 gap-9">
-  <div class="flex gap-3">
-    {
-      roleList.map((role: string) => (
-        <div class="px-3 py-1 shadow-lg shadow-black/5 backdrop-blur-xl border border-[#E4E7EC] bg-[#F9FAFB] text-[] rounded-full text-xs">
-          {role}
-        </div>
-      ))
-    }
+<section>
+  <div class="max-w-5xl mx-auto items-center w-full px-10 gap-9">
+    <div class="flex justify-center gap-3 mb-3">
+      {
+        roleList.map((role: string) => (
+          <div class="px-3 py-1 shadow-lg shadow-black/5 backdrop-blur-xl border border-[#E4E7EC] bg-[#F9FAFB] text-[] rounded-full text-xs">
+            {role}
+          </div>
+        ))
+      }
+    </div>
+    <h1 class="text-6xl font-bold text-center title-hero mb-3">
+      <b>Hello!</b> Iam Ilham Yusuf Alghani, Frontend Developer Based in
+      <b>Indonesia</b>
+    </h1>
+    <span class="text-center block mb-5">
+      2+ Years of Experience as a Frontend Developer Designing Stunning Products
+      and Transforming Ideas into Reality
+    </span>
+    <Slider />
   </div>
-  <span class="text-6xl font-bold text-center">
-    Hello! Iam Ilham Yusuf Alghani, Frontend Developer Based in Indonesia
-  </span>
-  <span>
-    2+ Years of Experience as a Frontend Developer Designing Stunning Products
-    and Transforming Ideas into Reality
-  </span>
-</div>
+</section>
+
+<style>
+  .title-hero b {
+    color: #ff5a5f;
+  }
+</style>

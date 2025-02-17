@@ -33,7 +33,7 @@ const navItems: NavItems[] = [
 ---
 
 <div
-  class="flex justify-between items-center w-full max-w-7xl mx-auto px-4 md:px-8 mt-14 mb-24"
+  class="flex justify-between items-center w-full max-w-5xl mx-auto px-4 md:px-8 mt-14 mb-24"
 >
   <div class="flex-shrink-0">MyLogo</div>
 
@@ -117,7 +117,7 @@ const navItems: NavItems[] = [
 
     const observer = new IntersectionObserver(
       observerCallback,
-      observerOptions,
+      observerOptions
     );
     sections.forEach((section) => observer.observe(section));
   });
