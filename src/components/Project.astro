@@ -1,0 +1,64 @@
+---
+import Card from '../components/Card.astro';
+const projects = [
+  {
+    title: "Tomps Building - Building Management",
+    description: "Personalize stocks category to helping users to find, choose, based from a pre-selected lists of stocks.",
+    image: "/path-to-investment-image.jpg",
+    tags: ["React", "TailwindCSS", "Typescript", "Web"],
+    link: "#"
+  },
+  {
+    title: "Daily Language",
+    description: "Personalize stocks category to helping users to find, choose, based from a pre-selected lists of stocks.",
+    image: "/path-to-investment-image.jpg",
+    tags: ["React", "Dashboard", "Javascript"],
+    link: "#"
+  },
+];
+---
+<section 
+  class="mb-16 sm:mb-20 md:mb-24 lg:mb-28" 
+  id="projects"
+>
+  <div class="max-w-5xl mx-auto w-full px-4 sm:px-6 md:px-8 lg:px-10">
+    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 text-center mb-8 sm:mb-10 md:mb-12">
+      Project
+    </h1>
+
+    <div class="w-full">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+        {projects.map((project, index) => (
+          <Card {...project} index={index} />
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Optional: Add fade-in animation for cards */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Optional: Add stagger effect for cards */
+  .grid > * {
+    animation: fadeIn 0.5s ease forwards;
+    opacity: 0;
+  }
+
+  .grid > *:nth-child(1) { animation-delay: 0.1s; }
+  .grid > *:nth-child(2) { animation-delay: 0.2s; }
+  .grid > *:nth-child(3) { animation-delay: 0.3s; }
+  .grid > *:nth-child(4) { animation-delay: 0.4s; }
+
+  /* Optional: Disable animation for users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .grid > * {
+      animation: none;
+      opacity: 1;
+    }
+  }
+</style>

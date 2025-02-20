@@ -12,6 +12,7 @@
   "dependencies": {
     "@astrojs/image": "^0.18.0",
     "@astrojs/tailwind": "^6.0.0",
+    "@iconify-json/mdi": "^1.2.3",
     "@iconify-json/pixelarticons": "^1.2.2",
     "@tailwindcss/vite": "^4.0.6",
     "astro": "^5.2.5",

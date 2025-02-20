@@ -1,6 +1,5 @@
 ---
-import { Icon } from "astro-icon/components";
-import linkedInLogo from "../assets/logo-linkedin-icon-4096.png";
+import { Icon } from 'astro-icon/components'
 
 interface NavItems {
   name: string;
@@ -8,118 +7,263 @@ interface NavItems {
   icon: string;
 }
 
-const navItems: NavItems[] = [
+const navItems = [
   {
-    name: "Home",
-    href: "/",
-    icon: "pixelarticons:home",
+    name: "Projects",
+    href: "#projects",
+    icon: "mdi:code-braces", // Code icon representing development projects
+  },
+  {
+    name: "Experience",
+    href: "#experience",
+    icon: "mdi:briefcase", // Briefcase for work experience
   },
   {
     name: "About",
-    href: "/about",
-    icon: "pixelarticons:user",
-  },
-  {
-    name: "Projects",
-    href: "/projects",
-    icon: "pixelarticons:folder",
+    href: "#about",
+    icon: "mdi:account", // User account icon for about section
   },
   {
     name: "Contact",
-    href: "/contact",
-    icon: "pixelarticons:mail",
+    href: "#contact",
+    icon: "mdi:email", // Email icon for contact
   },
 ];
+
+const socialMedia = [
+  {
+    name: "GitHub",
+    icon: "mdi:github",
+    href: "https://github.com/ilhamyusuf27"
+  },
+  {
+    name: "LinkedIn",
+    icon: "mdi:linkedin",    
+    href: "https://www.linkedin.com/in/ilhamyusufalghani/"
+  },
+  {
+    name: "Twitter",
+    icon: "mdi:twitter",    
+    href: "https://x.com/ilhamysfa"
+  }
+]
 ---
 
-<div
-  class="flex justify-between items-center w-full max-w-5xl mx-auto px-4 md:px-8 mt-14 mb-24"
->
-  <div class="flex-shrink-0">MyLogo</div>
-
-  <div class="pl-20">
-    <nav
-      class="py-3 px-11 md:mx-auto bg-white/90 shadow-lg shadow-black/5 backdrop-blur-xl transition-all rounded-t-2xl md:rounded-full"
-    >
-      <ul
-        class="flex justify-between md:justify-center items-center gap-6 md:gap-12"
-      >
+<!-- Top Navigation (visible at page start) -->
+<div class="relative">
+  <!-- Top Navigation -->
+  <div class="fixed top-0 left-0 right-0 z-40 bg-white/80 transition-all duration-300 shadow-lg shadow-black/5 backdrop-blur-xl" id="topNav">
+    <div class="flex justify-between items-center w-full max-w-5xl mx-auto px-4 md:px-8 py-4 md:py-8">
+      <div class="flex-shrink-0 font-bold text-[#333333] text-base md:text-lg">ilhamya</div>
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex gap-6 lg:gap-8 font-semibold">
         {
-          navItems.map((item: NavItems) => (
-            <li>
-              <a
-                href={item.href}
-                class="flex items-center gap-1 text-black transition-colors text-xs md:text-base"
-              >
-                <Icon name={item.icon} class="w-5 h-5" />
-                <span class="hidden md:inline-block">{item.name}</span>
-                <span class="md:hidden">{item.name}</span>
-              </a>
-            </li>
+          navItems.map((item) => (
+            <a
+              href={item.href}
+              class="opacity-80 hover:opacity-100 transition-all duration-300 text-sm lg:text-base"
+              aria-label={item.name}
+            >
+              {item.name}
+            </a>
           ))
         }
-      </ul>
-    </nav>
+      </div>
+      <!-- Social Media Icons -->
+      <div class="hidden sm:flex items-center gap-3 md:gap-4">
+        {
+          socialMedia.map((item) => (
+            <a
+              href={item.href}
+              class="hover:opacity-80 transition-all duration-300"
+              aria-label={item.name}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Icon name={item.icon} class="w-5 h-5 md:w-6 md:h-6 text-[#333333]" />
+            </a>
+          ))
+        }
+      </div>
+      <!-- Mobile Menu Button -->
+      <button class="md:hidden p-2" id="mobileMenuBtn" aria-label="Menu">
+        <Icon name="mdi:menu" class="w-6 h-6 text-[#333333]" />
+      </button>
+    </div>
   </div>
 
-  <a
-    href="https://linkedin.com/in/your-profile"
-    class="flex items-center gap-2 hover:opacity-80 transition-all duration-300 px-3 py-2 shadow-lg shadow-black/5 backdrop-blur-xl rounded-full"
-    aria-label="LinkedIn Profile"
+  <!-- Side Navigation -->
+  <div 
+    class="fixed top-0 left-0 h-full w-[60px] md:w-[72px] group hover:w-[240px] transition-all duration-300 transform -translate-x-full bg-white/95 shadow-lg shadow-black/5 backdrop-blur-xl z-50" 
+    id="sideNav"
   >
-    <div class="w-8 h-8 flex-shrink-0">
-      <img
-        src={linkedInLogo.src}
-        alt="LinkedIn Logo"
-        width="32"
-        height="32"
-        class="w-full h-full object-contain"
-      />
+    <div class="flex flex-col h-full py-4 md:py-6">
+      <nav class="flex-1 mt-4 md:mt-8">
+        <ul class="flex flex-col gap-1 md:gap-2">
+          <li>
+            <a
+              href="#"
+              class="flex items-center h-10 md:h-12 px-4 md:px-6 gap-3 md:gap-4 text-[#9E9E9E] hover:text-[#333333] hover:bg-[#f5f5f5] transition-all duration-200 relative"
+            >
+              <Icon name="mdi:home" class="w-5 h-5 flex-shrink-0" />
+              <span class="whitespace-nowrap text-sm md:text-base font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                Home
+              </span>
+            </a>
+          </li>
+          {
+            navItems.map((item: NavItems) => (
+              <li>
+                <a
+                  href={item.href}
+                  class="flex items-center h-10 md:h-12 px-4 md:px-6 gap-3 md:gap-4 text-[#9E9E9E] hover:text-[#333333] hover:bg-[#f5f5f5] transition-all duration-200 relative"
+                >
+                  <Icon name={item.icon} class="w-5 h-5 flex-shrink-0" />
+                  <span class="whitespace-nowrap text-sm md:text-base font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    {item.name}
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <!-- Social Media -->
+      <div class="px-4 md:px-6 border-t border-[#f0f0f0]">
+        <div class="flex flex-col gap-1 md:gap-2 pt-2">
+          {
+            socialMedia.map((item) => (
+              <a
+                href={item.href}
+                class="flex items-center h-10 md:h-12 gap-3 md:gap-4 text-[#9E9E9E] hover:text-[#333333] transition-all duration-200"
+                aria-label={item.name}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon name={item.icon} class="w-5 h-5 flex-shrink-0" />
+                <span class="whitespace-nowrap text-sm md:text-base font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  {item.name}
+                </span>
+              </a>
+            ))
+          }
+        </div>
+      </div>
     </div>
-    <span class="hidden md:inline-block text-sm font-medium text-gray-700">
-      Get in touch
-    </span>
-  </a>
+  </div>
+
+  <!-- Mobile Navigation Menu -->
+  <div class="fixed inset-0 bg-black/50 z-50 hidden" id="mobileNav">
+    <div class="bg-white h-full w-[280px] max-w-[80%] ml-auto p-6">
+      <div class="flex justify-end mb-6">
+        <button id="closeMenuBtn" aria-label="Close menu">
+          <Icon name="mdi:close" class="w-6 h-6 text-[#333333]" />
+        </button>
+      </div>
+      <nav>
+        <ul class="flex flex-col gap-4">
+          {
+            navItems.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  class="flex items-center gap-3 text-[#333333] py-2"
+                >
+                  <Icon name={item.icon} class="w-5 h-5" />
+                  <span>{item.name}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <div class="mt-8 pt-6 border-t border-[#f0f0f0]">
+        <div class="flex gap-4">
+          {
+            socialMedia.map((item) => (
+              <a
+                href={item.href}
+                class="text-[#333333] hover:opacity-80"
+                aria-label={item.name}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon name={item.icon} class="w-6 h-6" />
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-    anchor.addEventListener("click", function (e) {
+  const topNav = document.getElementById('topNav');
+  const sideNav = document.getElementById('sideNav');
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const closeMenuBtn = document.getElementById('closeMenuBtn');
+  const mobileNav = document.getElementById('mobileNav');
+  let lastScroll = 0;
+
+  // Scroll behavior for navigation
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
+    
+    if (currentScroll > 100 && window.innerWidth >= 768) {
+      topNav?.classList.add('opacity-0', '-translate-y-full');
+      sideNav?.classList.remove('-translate-x-full');
+    } else {
+      topNav?.classList.remove('opacity-0', '-translate-y-full');
+      sideNav?.classList.add('-translate-x-full');
+    }
+    
+    lastScroll = currentScroll;
+  });
+
+  // Smooth scroll to top for home link
+  document.querySelectorAll('a[href="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
       e.preventDefault();
-      const target = e.currentTarget as HTMLAnchorElement;
-      const targetId = target.getAttribute("href")?.substring(1) || "";
-      const targetElement = document.getElementById(targetId);
-      if (targetElement) {
-        targetElement.scrollIntoView({
-          behavior: "smooth",
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  });
+
+  // Smooth scroll for section links
+  document.querySelectorAll('a[href^="#"]:not([href="#"])').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('href');
+      const targetSection = document.querySelector(targetId);
+      
+      if (targetSection) {
+        const navHeight = topNav?.offsetHeight || 0;
+        const targetPosition = targetSection.offsetTop - navHeight;
+
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
         });
       }
     });
   });
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const sections = document.querySelectorAll("section[id]");
-    const navLinks = document.querySelectorAll("nav a[href^='#']");
-    const observerOptions = { threshold: 0.6 };
+  mobileMenuBtn?.addEventListener('click', () => {
+    mobileNav?.classList.remove('hidden');
+  });
 
-    const observerCallback = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          navLinks.forEach((link) => link.classList.remove("active"));
-          const id = entry.target.getAttribute("id");
-          const activeLink = document.querySelector(`nav a[href="#${id}"]`);
-          if (activeLink) {
-            activeLink.classList.add("active");
-          }
-        }
-      });
-    };
+  closeMenuBtn?.addEventListener('click', () => {
+    mobileNav?.classList.add('hidden');
+  });
 
-    const observer = new IntersectionObserver(
-      observerCallback,
-      observerOptions
-    );
-    sections.forEach((section) => observer.observe(section));
+  // Close mobile menu when clicking outside
+  mobileNav?.addEventListener('click', (e) => {
+    if (e.target === mobileNav) {
+      mobileNav.classList.add('hidden');
+    }
   });
 </script>
 
@@ -129,14 +273,29 @@ const navItems: NavItems[] = [
       padding-bottom: 70px;
     }
   }
-
+  
   nav a.active {
-    color: white !important;
+    @apply text-[#333333] bg-[#f5f5f5];
   }
 
-  .pixel-art {
-    image-rendering: pixelated;
-    transform: scale(2);
-    transform-origin: left top;
+  /* Smooth scroll behavior for the whole page */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Optional: Add scroll padding to account for fixed header */
+  html {
+    scroll-padding-top: 100px; /* Adjust this value based on your header height */
+  }
+
+  @media (max-width: 767px) {
+    body {
+      padding-bottom: 60px;
+    }
+  }
+
+  /* Add smooth transition for mobile menu */
+  #mobileNav {
+    transition: opacity 0.3s ease;
   }
 </style>
