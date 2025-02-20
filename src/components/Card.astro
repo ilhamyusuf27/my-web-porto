@@ -1,0 +1,91 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  image: string;
+  tags: string[];
+  link?: string;
+  index: number; // Add index prop for staggered animation
+}
+
+const { title, description, image, tags, link, index } = Astro.props;
+---
+
+<div 
+  class="project-card opacity-0 translate-y-8 group relative overflow-hidden rounded-3xl bg-[#0B1121] transition-all duration-700"
+  style={`transition-delay: ${index * 200}ms`}
+>
+  <div class="relative h-0 pb-[56.25%]">
+    <img 
+      src={image} 
+      alt={title}
+      class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+    />
+  </div>
+
+  <div class="p-6 space-y-4">
+    <div class="flex items-center justify-between">
+      <h3 class="text-xl font-semibold text-white">
+        {title}
+      </h3>
+      {link && (
+        <a href={link} class="text-gray-400 hover:text-white transition-colors">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none">
+            <path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      )}
+    </div>
+
+    {description && (
+      <p class="text-gray-400 text-sm">
+        {description}
+      </p>
+    )}
+
+    <div class="flex flex-wrap gap-2">
+      {tags.map((tag) => (
+        <span class="rounded-full bg-gray-800 px-3 py-1 text-sm text-gray-400">
+          {tag}
+        </span>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+  .project-card.animate {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  function setupAnimations() {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate');
+            // Optional: unobserve after animation
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px',
+      }
+    );
+
+    document.querySelectorAll('.project-card').forEach((card) => {
+      observer.observe(card);
+    });
+  }
+
+  // Run on initial load
+  setupAnimations();
+
+  // Run on view transitions if using View Transitions API
+  document.addEventListener('astro:page-load', setupAnimations);
+</script>
