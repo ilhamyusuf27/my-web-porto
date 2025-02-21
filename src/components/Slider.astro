@@ -1,17 +1,19 @@
 ---
 const technologies = [
-  "astro",
-  "react",
-  "typeScript",
-  "tailwindcss",
-  "nodejs",
-  "HTML5",
-  "CSS3",
-  "javaScript",
-  "git",
-  "supabase",
-  "mysql",
-  "bash",
+  "astro.png",
+  "react.svg",
+  "vue.png",
+  "next.png",
+  "nuxt.png",
+  "typeScript.svg",
+  "tailwindcss.svg",
+  "nodejs.svg",
+  "HTML5.svg",
+  "CSS3.svg",
+  "javaScript.svg",
+  "git.svg",
+  "supabase.svg",
+  "postgreeSQL.png",
 ];
 ---
 <div class="relative overflow-x-hidden py-4 sm:py-6 md:py-8">
@@ -31,15 +33,15 @@ const technologies = [
       [...technologies, ...technologies, ...technologies].map((tech: any) => (
         <div class="flex items-center gap-1.5 sm:gap-2 group transition-all duration-300">
           <img
-            src={`/svg/${tech}.svg`}
-            alt={tech}
+            src={`/svg/${tech}`}
+            alt={tech.split(".")[0]}
             class="h-8 sm:h-10 md:h-12 w-auto object-contain transition-transform group-hover:scale-110"
             width="200"
             height="200"
             loading="lazy"
           />
           <span class="text-base sm:text-xl md:text-2xl font-medium text-[var(--white-icon)] hidden sm:inline">
-            {tech.charAt(0).toUpperCase() + tech.slice(1)}
+            {tech.charAt(0).toUpperCase() + tech.slice(1).split(".")[0]}
           </span>
         </div>
       ))
