@@ -1,4 +1,8 @@
 {
+  "packageManager": "yarn@1.22.22",
+  "installConfig": {
+    "hoistingLimits": "workspaces"
+  },
   "name": "web-porto",
   "type": "module",
   "license": "MIT",
