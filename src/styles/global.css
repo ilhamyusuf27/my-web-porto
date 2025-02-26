@@ -7,3 +7,48 @@ body {
   font-variation-settings: "wdth" 100;
   color: #333333;
 }
+
+:root {
+  --background: #ffffff;
+  --background-secondary: #ffffff;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --accent: #8855ff;
+}
+
+.dark {
+  --background: #17181c;
+  --background-secondary: #23262f;
+  --text-primary: #ffffff;
+  --text-secondary: #dddddd;
+  --accent: #8855ff;
+}
+
+body {
+  background-color: var(--background);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.bg-secondary {
+  background-color: var(--background-secondary);
+}
+
+.text-primary {
+  color: var(--text-primary)
+}
+
+.text-secondary {
+  color: var(--text-secondary)
+}
+
+.line-secondary {
+  border-right: 1px solid var(--text-secondary);
+}
+
+/* For your gradient text */
+.gradient-text {
+  background: linear-gradient(45deg, #8855ff, #ff55ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

@@ -31,11 +31,11 @@ const education = {
     <!-- Header -->
     <div class="text-center mb-16 fade-up">
       <h2 class="text-4xl font-bold mb-4">
-        <span class="text-5xl font-bold text-gray-900 mb-12">
+        <span class="text-5xl font-bold text-primary mb-12">
           About Me
         </span>
       </h2>
-      <p class="text-gray-600 max-w-2xl mx-auto">
+      <p class="text-secondary max-w-2xl mx-auto">
         Passionate frontend developer with a keen eye for design and a commitment to creating seamless user experiences.
       </p>
     </div>
@@ -43,11 +43,11 @@ const education = {
     <!-- Profile Section -->
     <div class="grid md:grid-cols-2 gap-12 items-center mb-20">
       <div class="space-y-6 slide-in-left">
-        <h3 class="text-2xl font-semibold">Hey there! 👋</h3>
-        <p class="text-gray-600 leading-relaxed">
+        <h3 class="text-2xl font-semibold text-primary">Hey there! 👋</h3>
+        <p class="text-secondary leading-relaxed">
           I'm a frontend developer based in Indonesia with a passion for building digital experiences. I enjoy creating beautiful and functional websites that provide great user experiences.
         </p>
-        <p class="text-gray-600 leading-relaxed">
+        <p class="text-secondary leading-relaxed">
           When I'm not coding, you can find me exploring new technologies, contributing to open-source projects, or sharing knowledge with the developer community.
         </p>
         <div class="flex gap-4">
@@ -55,8 +55,8 @@ const education = {
             <Icon name="mdi:email" class="w-5 h-5" />
             Contact Me
           </a>
-          <a href="https://drive.google.com/file/d/1F46kt64idFqyNJdY1lV9tyYIPD5-u1ov/view?usp=sharing" class="inline-flex items-center gap-2 px-6 py-3 border border-black/10 rounded-full hover:bg-black/5 transition-all duration-300">
-            <Icon name="mdi:download" class="w-5 h-5" />
+          <a href="https://drive.google.com/file/d/1F46kt64idFqyNJdY1lV9tyYIPD5-u1ov/view?usp=sharing" class="inline-flex items-center gap-2 px-6 py-3 border border-black/10 rounded-full hover:bg-black/5 transition-all duration-300 text-primary">
+            <Icon name="mdi:download" class="w-5 h-5 text-primary" />
             Download CV
           </a>
         </div>
@@ -76,11 +76,11 @@ const education = {
 
     <!-- Skills Section -->
     <div class="mb-20 fade-up">
-      <h3 class="text-2xl font-semibold mb-8 text-center">Skills & Technologies</h3>
+      <h3 class="text-2xl font-semibold mb-8 text-center text-primary">Skills & Technologies</h3>
       <div class="grid md:grid-cols-3 gap-8">
         {skills.map((category, index) => (
-          <div class={`bg-white p-6 rounded-2xl shadow-lg shadow-gray-100 fade-up-card`} style={`animation-delay: ${index * 200}ms`}>
-            <h4 class="text-lg font-semibold mb-4">{category.name}</h4>
+          <div class={`bg-secondary p-6 rounded-2xl shadow-lg shadow-gray-100 fade-up-card`} style={`animation-delay: ${index * 200}ms`}>
+            <h4 class="text-lg font-semibold mb-4 text-primary">{category.name}</h4>
             <div class="flex flex-wrap gap-2">
               {category.items.map((skill, skillIndex) => (
                 <span 

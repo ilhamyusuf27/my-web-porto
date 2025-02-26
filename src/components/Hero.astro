@@ -17,10 +17,12 @@ const stats = [
     <div class="flex justify-center flex-wrap gap-2 sm:gap-3 mb-4 sm:mb-6">
       {
         roleList.map((role: string) => (
-          <div class="px-3 sm:px-4 py-1.5 sm:py-2 shadow-lg shadow-black/5 backdrop-blur-xl border border-[#E4E7EC] bg-white/80 rounded-full text-xs sm:text-sm hover:scale-105 transition-transform duration-300 cursor-default">
-            <div class="flex items-center gap-1.5 sm:gap-2">
+          <div class="px-3 sm:px-4 py-1.5 sm:py-2 shadow-lg shadow-black/5 backdrop-blur-xl bg-secondary rounded-full text-xs sm:text-sm hover:scale-105 transition-transform duration-300 cursor-default">
+            <div class="flex items-center gap-1.5 sm:gap-2 text">
               <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-purple-600 rounded-full animate-pulse"></div>
-              {role}
+              <span class="text-primary">
+                {role}
+              </span>
             </div>
           </div>
         ))
@@ -34,7 +36,7 @@ const stats = [
         <span class="block mt-2">Frontend Developer Based in Indonesia</span>
       </h1>
       
-      <p class="text-center text-base sm:text-lg text-gray-600 max-w-2xl mx-auto animate-fade-in delay-200 px-4">
+      <p class="text-center text-base sm:text-lg text-gray-600 max-w-2xl mx-auto animate-fade-in delay-200 px-4 text-primary">
         2+ Years of Experience as a Frontend Developer Designing Stunning Products
         and Transforming Ideas into Reality
       </p>
@@ -43,11 +45,11 @@ const stats = [
     <!-- Stats section -->
     <div class="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 max-w-3xl mx-auto my-8 sm:my-10 md:my-12 px-4">
       {stats.map(stat => (
-        <div class="text-center p-3 sm:p-4 rounded-lg bg-white/50 backdrop-blur-sm border border-[#E4E7EC] hover:scale-105 transition-transform duration-300">
+        <div class="text-center p-3 sm:p-4 rounded-lg bg-secondary backdrop-blur-sm border border-[#E4E7EC] hover:scale-105 transition-transform duration-300">
           <div class="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 inline-block text-transparent bg-clip-text">
             {stat.number}
           </div>
-          <div class="text-xs sm:text-sm text-gray-600 mt-1">{stat.label}</div>
+          <div class="text-xs sm:text-sm mt-1 text-primary">{stat.label}</div>
         </div>
       ))}
     </div>
