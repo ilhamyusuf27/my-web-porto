@@ -1,0 +1,45 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/global.css";
+
+const notes = [
+  ["Web auth basics", "A future note about sessions, cookies, tokens, and frontend-safe auth patterns."],
+  ["Docker hardening", "A future checklist for smaller images, secrets, ports, and container defaults."],
+  ["Incident notes", "A lightweight format for debugging what broke, what changed, and what to improve."],
+];
+---
+
+<Layout>
+  <main class="page-shell">
+    <section class="page-card">
+      <nav class="crumb"><a href="/">← Home</a><span>Notes queue</span></nav>
+      <header>
+        <p>Learning log</p>
+        <h1>Notes I may turn into short technical articles.</h1>
+      </header>
+      <div class="note-grid">
+        {notes.map(([title, desc], index) => (
+          <article>
+            <span>#{String(index + 1).padStart(2, "0")}</span>
+            <h2>{title}</h2>
+            <p>{desc}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  :global(html), :global(body) { overflow: auto; }
+  .page-shell { min-height: 100svh; display: grid; place-items: center; padding: clamp(1rem, 3vw, 2rem); background: radial-gradient(circle at 82% 20%, rgba(148,226,213,.18), transparent 26rem), var(--crust); color: var(--text); }
+  .page-card { width: min(100%, 920px); border: 1px solid var(--border); background: rgba(30,30,46,.88); padding: clamp(1rem, 3vw, 2rem); box-shadow: 0 24px 80px rgba(0,0,0,.36); }
+  .crumb { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; font-family: var(--mono); font-size: .78rem; text-transform: uppercase; }
+  a { color: var(--mauve); text-decoration: none; }
+  header p, article span { margin: 0; color: var(--mauve); font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .12em; }
+  h1 { max-width: 15ch; margin: .5rem 0 1.5rem; color: var(--rosewater); font-size: clamp(2.2rem, 6vw, 4.3rem); line-height: .92; letter-spacing: -.06em; }
+  .note-grid { display: grid; gap: .75rem; }
+  article { border: 1px solid var(--surface1); background: rgba(49,50,68,.38); padding: 1rem; }
+  h2 { margin: .55rem 0 .4rem; color: var(--text); font-size: 1.05rem; }
+  p { margin: 0; color: var(--subtext1); line-height: 1.5; }
+</style>

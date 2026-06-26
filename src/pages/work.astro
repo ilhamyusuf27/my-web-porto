@@ -1,0 +1,74 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/global.css";
+
+const experiences = [
+  ["Madeindonesia", "Front-End Web Developer", "Aug 2025 – Present", "Developed and maintained WordPress webshop projects using HTML, SCSS, jQuery, PHP, and WooCommerce."],
+  ["Tomps by Telkom Indonesia", "Front-End Web Developer", "Jan 2023 – Mar 2025", "Built and maintained tomps.id, Tomps Admin, and Tomps Project using Vue, Nuxt, Next.js, and unit testing with Jest, React Testing Library, and Vitest."],
+  ["Telkom Indonesia", "Front-End Web Developer", "Sep 2022 – Dec 2022", "Developed dashboard interfaces with React, Tailwind CSS, Bootstrap, Jest, and Enzyme for projects including HunianAja / Tomps Building."],
+  ["UGM FK-KMK", "IT Assistant · Contract", "Nov 2020 – Apr 2021", "Created posters, live-stream overlays, broadcast support, and video editing for seminars and learning materials."],
+];
+
+const education = [
+  ["Pijar Camp", "Full-Stack Website Developer", "May 2022 – Aug 2022", "JavaScript, Node.js, Express.js, React.js, Next.js, time management, public speaking."],
+  ["Universitas AMIKOM Yogyakarta", "S1 Informatics · GPA 3.85 / 4.00", "Sep 2017 – Aug 2021", "Graduated cum laude; studied web development, C++, C#, multimedia, animation, AR, and interactive media."],
+];
+---
+
+<Layout>
+  <main class="page-shell">
+    <section class="page-card">
+      <nav class="crumb"><a href="/">← Home</a><span>CV archive</span></nav>
+      <header>
+        <p>Experience map data</p>
+        <h1>Work history, education, and skills from my CV.</h1>
+      </header>
+
+      <section class="archive-section">
+        <h2>Work Experience</h2>
+        <div class="project-grid">
+          {experiences.map(([company, role, date, desc]) => (
+            <article>
+              <span>{date}</span>
+              <h3>{company}</h3>
+              <strong>{role}</strong>
+              <p>{desc}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="archive-section">
+        <h2>Education</h2>
+        <div class="project-grid compact">
+          {education.map(([school, role, date, desc]) => (
+            <article>
+              <span>{date}</span>
+              <h3>{school}</h3>
+              <strong>{role}</strong>
+              <p>{desc}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  :global(html), :global(body) { overflow: auto; }
+  .page-shell { min-height: 100svh; display: grid; place-items: center; padding: clamp(1rem, 3vw, 2rem); background: radial-gradient(circle at 20% 10%, rgba(203,166,247,.22), transparent 28rem), var(--crust); color: var(--text); }
+  .page-card { width: min(100%, 1080px); border: 1px solid var(--border); background: rgba(30,30,46,.88); padding: clamp(1rem, 3vw, 2rem); box-shadow: 0 24px 80px rgba(0,0,0,.36); }
+  .crumb { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; font-family: var(--mono); font-size: .78rem; text-transform: uppercase; }
+  a { color: var(--mauve); text-decoration: none; }
+  header p, article span { margin: 0; color: var(--mauve); font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .12em; }
+  h1 { max-width: 16ch; margin: .5rem 0 1.5rem; color: var(--rosewater); font-size: clamp(2.2rem, 6vw, 4.5rem); line-height: .92; letter-spacing: -.06em; }
+  .archive-section + .archive-section { margin-top: 1.5rem; }
+  h2 { margin: 0 0 .8rem; color: var(--lavender); font-size: 1rem; }
+  .project-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+  article { border: 1px solid var(--surface1); background: rgba(49,50,68,.38); padding: 1rem; }
+  h3 { margin: .55rem 0 .2rem; color: var(--text); font-size: 1.1rem; }
+  strong { display: block; color: var(--teal); font-size: .88rem; margin-bottom: .45rem; }
+  p { margin: 0; color: var(--subtext1); line-height: 1.5; }
+  @media (max-width: 720px) { .project-grid { grid-template-columns: 1fr; } }
+</style>
