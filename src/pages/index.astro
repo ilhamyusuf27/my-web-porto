@@ -3,26 +3,26 @@ import Layout from "../layouts/Layout.astro";
 import "../styles/global.css";
 
 const selectedWork = [
-  ["Work 05", "Madeindonesia", "Front-End Web Developer", "WordPress · WooCommerce · PHP", "Aug 2025 – Present", "active", "58%", "18%"],
-  ["Work 04", "Tomps by Telkom", "Front-End Web Developer", "Vue · Nuxt · Next · Testing", "Jan 2023 – Mar 2025", "done", "46%", "32%"],
-  ["Work 03", "Telkom Indonesia", "Front-End Web Developer", "React · Tailwind · Bootstrap · Jest", "Sep 2022 – Dec 2022", "done", "57%", "49%"],
-  ["Work 02", "UGM FK-KMK", "IT Assistant", "Design · streaming · video editing", "Nov 2020 – Apr 2021", "done", "43%", "66%"],
-  ["Edu 02", "Pijar Camp", "Full-Stack Website Developer", "JS · Node · Express · React · Next", "May 2022 – Aug 2022", "edu", "69%", "75%"],
-  ["Edu 01", "AMIKOM Yogyakarta", "S1 Informatics · GPA 3.85", "Web · multimedia · animation", "Sep 2017 – Aug 2021", "edu", "31%", "82%"],
+  ["Work 04", "Madeindonesia", "Front-End Web Developer", "WordPress · WooCommerce · PHP", "2025 →", "active", "80%", "24%"],
+  ["Work 03", "Tomps by Telkom", "Front-End Web Developer", "Vue · Nuxt · Next · Testing", "2023–25", "done", "58%", "36%"],
+  ["Work 02", "Telkom Indonesia", "Front-End Web Developer", "React · Tailwind · Bootstrap · Jest", "2022", "done", "38%", "22%"],
+  ["Work 01", "IT Assistant · UGM FK-KMK", "IT Assistant", "Design · streaming · video editing", "2020–21", "done", "18%", "36%"],
+  ["Edu 02", "Pijar Camp", "Full-Stack Website Developer", "JS · Node · Express · React · Next", "2022", "edu", "58%", "73%"],
+  ["Edu 01", "AMIKOM Yogyakarta", "S1 Informatics · GPA 3.85", "Web · multimedia · animation", "2017–21", "edu", "22%", "80%"],
 ];
 
 const profile = [
-  ["Slot", "01 / Ilham"],
-  ["Mode", "Freelance + remote"],
-  ["Base", "Indonesia · GMT+7"],
-  ["Degree", "S1 Informatics · 3.85"],
+  ["Open for", "Freelance · remote"],
+  ["Location", "Indonesia · GMT+7"],
+  ["Focus", "Frontend + integration"],
+  ["Delivery", "Clean UI · deploy handoff"],
 ];
 
-const stats = [
-  ["UI Taste", "92%"],
-  ["Prototype", "88%"],
-  ["Backend", "64%"],
-  ["Ops Study", "41%"],
+const hiringSnapshot = [
+  ["Experience", "3+ yrs web"],
+  ["Stack", "React · Vue · Next"],
+  ["Backend", "Node · PHP · SQL"],
+  ["Deploy", "Docker · Cloudflare"],
 ];
 
 const runtime = [
@@ -33,22 +33,41 @@ const runtime = [
 ];
 
 const toolbelt = [
-  ["Frontend", "React · Vue · Next · Nuxt · Tailwind"],
-  ["CMS / PHP", "WordPress · WooCommerce · PHP"],
+  ["Frontend", "React · Vue · Next · Nuxt · Tailwind · Redux · Zustand"],
+  ["CMS / PHP", "WordPress · WooCommerce · PHP · Strapi"],
   ["Testing", "Jest · RTL · Vitest · Enzyme"],
-  ["Backend", "Node.js · Express.js"],
-  ["Database", "PostgreSQL · Firebase · MySQL · MongoDB"],
+  ["Backend", "Node.js · Express.js · Nest"],
+  ["Database", "PostgreSQL · Firebase · MySQL · MongoDB · Prisma ORM"],
   ["Ops", "Git · GitHub · Docker · Cloudflare"],
+  ["AI tools", "Gemini · Codex · Hermes · Claude"],
+];
+
+const projects = [
+  ["Portfolio HUD", "Astro · Catppuccin · Cloudflare", "Live polish"],
+  ["Tomps modules", "Vue · Nuxt · testing", "Product UI"],
+  ["CMS storefronts", "WordPress · Woo · PHP", "Client work"],
 ];
 
 const questLog = [
-  ["done", "Revive portfolio direction"],
-  ["done", "Rewrite project story"],
-  ["todo", "Dockerize app demos"],
-  ["todo", "Practice logs + metrics"],
+  ["done", "Ship clearer recruiter snapshot"],
+  ["done", "Restore projects overview"],
+  ["todo", "Add demo screenshots"],
 ];
 
-const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
+const notes = ["Web auth", "Docker", "Observability"];
+
+const footerStats = [
+  ["Latency", "measuring…", "latency-value"],
+  ["Server time", "--:--:-- GMT+7", "server-time"],
+  ["Build", "Astro static", "build-value"],
+  ["Location / edge", "Cloudflare Pages", "edge-value"],
+];
+
+const socialLinks = [
+  ["GitHub", "https://github.com/ilhamyusuf27", "GH"],
+  ["Email", "mailto:hello@ilhamya.dev", "@"],
+  ["LinkedIn", "https://www.linkedin.com/in/ilhamyusufalghani/", "IN"],
+];
 ---
 
 <Layout>
@@ -90,25 +109,18 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
           <a href="/work">Work</a>
           <a href="/notes">Notes</a>
           <a href="https://github.com/ilhamyusuf27" target="_blank" rel="noreferrer">GitHub</a>
-          <a href="mailto:hello@ilhamya.dev">Email</a>
+          <span class="profile-loaded">Profile loaded →</span>
         </nav>
       </header>
 
       <section class="hero-grid" aria-label="Intro summary">
         <article class="intro-panel panel" aria-labelledby="intro-title">
           <button class="pixel-avatar" type="button" aria-label="Pixel character representing Ilham" data-avatar-mood="focus">
+            <span class="avatar-aura" aria-hidden="true"></span>
+            <span class="avatar-particle particle-a" aria-hidden="true"></span>
+            <span class="avatar-particle particle-b" aria-hidden="true"></span>
             <span class="avatar-shadow" aria-hidden="true"></span>
-            <span class="avatar-body" aria-hidden="true">
-              <span class="avatar-neck"></span>
-              <span class="avatar-head">
-                <span class="avatar-hair"></span>
-                <span class="avatar-glasses left"></span>
-                <span class="avatar-glasses right"></span>
-                <span class="avatar-mouth"></span>
-              </span>
-              <span class="avatar-hoodie"></span>
-              <span class="avatar-laptop">&lt;/&gt;</span>
-            </span>
+            <img class="avatar-image" src="/ilham-avatar.png" alt="" aria-hidden="true" />
             <span class="avatar-caption">UI + terminal mode</span>
           </button>
           <div class="save-label"><span>Save file</span><strong>Frontend Builder</strong></div>
@@ -123,17 +135,15 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
         </article>
 
         <article class="profile-panel panel" aria-label="Profile status">
-          <div class="section-head"><span>Profile</span><h2>Status board</h2></div>
+          <div class="section-head"><span>Profile</span><h2>Hiring signal</h2></div>
           <dl class="status-list">
             {profile.map(([label, value]) => (
               <div><dt>{label}</dt><dd>{value}</dd></div>
             ))}
           </dl>
-          <div class="stat-bars" aria-label="Skill stats">
-            {stats.map(([label, value]) => (
-              <div class="stat-row" style={`--value:${value}`}>
-                <span>{label}</span><strong>{value}</strong><i></i>
-              </div>
+          <div class="hiring-grid" aria-label="Recruiter useful snapshot">
+            {hiringSnapshot.map(([label, value]) => (
+              <div><span>{label}</span><strong>{value}</strong></div>
             ))}
           </div>
         </article>
@@ -153,6 +163,14 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
             <p><i>[ok]</i> api + db containers ready</p>
             <p><span>$</span> cloudflare deploy --dry-run</p>
             <p><i>[ready]</i> static assets prepared</p>
+            <p><span>$</span> git log --oneline -5</p>
+            <p><i>a17c9e2</i> tune career-map lanes</p>
+            <p><i>7bc42aa</i> add quest-log cards</p>
+            <p><i>40f8d31</i> polish hero avatar</p>
+            <p><span>$</span> npm test</p>
+            <p><i>[pass]</i> 18 tests · 3 suites · 0 failed</p>
+            <p><span>$</span> ls projects/</p>
+            <p><i>[dir]</i> portfolio-hud · tomps-modules · cms-storefronts</p>
           </div>
           <form class="terminal-input" aria-label="Interactive terminal demo">
             <label for="terminal-command">$</label>
@@ -167,22 +185,57 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
       </section>
 
       <section class="content-grid" aria-label="Portfolio summary">
+        <article class="toolbelt-panel panel">
+          <div class="section-head"><span>01</span><h2>Toolbelt</h2></div>
+          <dl class="toolbelt-list">
+            {toolbelt.map(([label, value]) => (
+              <div><dt>{label}</dt><dd>{value}</dd></div>
+            ))}
+          </dl>
+        </article>
+
+        <article class="ops-panel panel">
+          <div class="section-head"><span>02</span><h2>Projects / quest log</h2></div>
+          <div class="project-stack" aria-label="Projects overview">
+            {projects.map(([name, stack, status]) => (
+              <a href="/work" class="project-mini">
+                <span>{status}</span>
+                <strong>{name}</strong>
+                <small>{stack}</small>
+              </a>
+            ))}
+          </div>
+          <ul class="quest-list">
+            {questLog.map(([state, item]) => <li class={state}>{item}</li>)}
+          </ul>
+          <div class="note-queue" aria-label="Article queue">
+            {notes.map((note) => <a href="/notes">{note}</a>)}
+          </div>
+        </article>
+
         <article class="work-panel panel">
-          <div class="section-head"><span>01</span><h2>Work map</h2></div>
+          <div class="section-head"><span>03</span><h2>Career map</h2></div>
           <div class="experience-map" aria-label="Work experience map">
             <div class="map-toolbar">
-              <div class="map-banner">Career Map</div>
+              <div class="map-banner">Work experience</div>
               <button class="map-expand" type="button" aria-expanded="false">Expand map</button>
             </div>
             <div class="map-canvas">
               <div class="map-art" aria-hidden="true">
-                <span class="mountains"></span>
-                <span class="river"></span>
-                <span class="village village-a"></span>
-                <span class="village village-b"></span>
-                <span class="trees trees-a"></span>
-                <span class="trees trees-b"></span>
-                <span class="trail-line"></span>
+                <svg class="map-paths" viewBox="0 0 100 100" preserveAspectRatio="none">
+                  <path class="work-route route-shadow" d="M18 36 C26 20, 31 18, 38 22 S48 45, 58 36 S70 16, 80 24" />
+                  <path class="work-route" d="M18 36 C26 20, 31 18, 38 22 S48 45, 58 36 S70 16, 80 24" />
+                  <path class="edu-route route-shadow" d="M22 80 C34 88, 47 62, 58 73" />
+                  <path class="edu-route" d="M22 80 C34 88, 47 62, 58 73" />
+                </svg>
+                <span class="map-lane-label work-label">Work experience</span>
+                <span class="map-lane-label edu-label">Education</span>
+                <span class="compass-rose">✦</span>
+                <span class="you-pin">YOU</span>
+                <span class="contour contour-a"></span>
+                <span class="contour contour-b"></span>
+                <span class="map-corner corner-a"></span>
+                <span class="map-corner corner-b"></span>
               </div>
               {selectedWork.map(([act, name, role, tech, date, state, x, y]) => (
                 <a
@@ -190,6 +243,7 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
                   href="/work"
                   style={`--x:${x}; --y:${y}`}
                   aria-label={`${act}: ${name} - ${role}`}
+                  data-tooltip={`${act} · ${date}|${name}|${role}|${tech}`}
                 >
                   <span class="node-dot"></span>
                   <span class="node-card">
@@ -203,32 +257,30 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
             </div>
           </div>
         </article>
-
-        <article class="toolbelt-panel panel">
-          <div class="section-head"><span>02</span><h2>Toolbelt</h2></div>
-          <dl class="toolbelt-list">
-            {toolbelt.map(([label, value]) => (
-              <div><dt>{label}</dt><dd>{value}</dd></div>
-            ))}
-          </dl>
-        </article>
-
-        <article class="ops-panel panel">
-          <div class="section-head"><span>03</span><h2>System / notes</h2></div>
-          <div class="resource-grid" aria-label="App resource usage">
-            {runtime.map(([label, value]) => (
-              <div><span>{label}</span><strong>{value}</strong></div>
-            ))}
-          </div>
-          <ul class="quest-list">
-            {questLog.map(([state, item]) => <li class={state}>{item}</li>)}
-          </ul>
-          <div class="note-queue" aria-label="Article queue">
-            {notes.map((note) => <a href="/notes">{note}</a>)}
-          </div>
-        </article>
       </section>
+
+      <footer class="status-footer panel-lite" aria-label="System footer">
+        <div class="footer-stats">
+          {footerStats.map(([label, value, id]) => (
+            <div class="footer-cell">
+              <span>{label}</span>
+              <strong data-footer-id={id}>{value}</strong>
+            </div>
+          ))}
+        </div>
+        <div class="footer-social" aria-label="Social links">
+          <span>Social</span>
+          <div>
+            {socialLinks.map(([label, href, icon]) => (
+              <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noreferrer' : undefined} aria-label={label}>
+                <b>{icon}</b><em>{label}</em>
+              </a>
+            ))}
+          </div>
+        </div>
+      </footer>
     </section>
+    <div class="cursor-tooltip" hidden aria-hidden="true"></div>
   </main>
 </Layout>
 
@@ -245,6 +297,11 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
   const experienceMap = document.querySelector('.experience-map');
   const mapCanvas = document.querySelector('.map-canvas');
   const mapExpand = document.querySelector('.map-expand');
+  const mapNodes = [...document.querySelectorAll('.map-node')];
+  const cursorTooltip = document.querySelector('.cursor-tooltip');
+  const latencyValue = document.querySelector('[data-footer-id="latency-value"]');
+  const serverTime = document.querySelector('[data-footer-id="server-time"]');
+  const buildValue = document.querySelector('[data-footer-id="build-value"]');
   const mapSlot = document.createComment('experience-map-slot');
   experienceMap?.after(mapSlot);
   let mapPan = { x: 0, y: 0 };
@@ -266,19 +323,40 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
   };
   const catLines = {
     '.intro-panel': 'profile loaded ✦',
-    '.profile-panel': 'stats look sharp',
+    '.profile-panel': 'hiring signal', 
     '.code-panel': 'terminal ready',
-    '.work-panel': 'open the quest log?',
+    '.work-panel': 'career route ready',
     '.toolbelt-panel': 'nice inventory',
     '.ops-panel': 'watch the metrics',
     '.topbar': 'choose a path',
   };
 
+  function updateFooterTelemetry() {
+    if (latencyValue) {
+      const nav = performance.getEntriesByType('navigation')[0];
+      const fallback = performance.timing ? performance.timing.responseStart - performance.timing.requestStart : 86;
+      const latency = Math.max(1, Math.round(nav?.responseStart || fallback || 86));
+      latencyValue.textContent = `${latency}ms edge`;
+    }
+    if (buildValue) buildValue.textContent = document.lastModified ? `built ${new Date(document.lastModified).toLocaleDateString('en-GB')}` : 'Astro static';
+  }
+
+  function tickServerTime() {
+    if (!serverTime) return;
+    serverTime.textContent = new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false,
+    }).format(new Date()) + ' GMT+7';
+  }
+
+  updateFooterTelemetry();
+  tickServerTime();
+  setInterval(tickServerTime, 1000);
+
   function moveCatTo(target, mood = 'curious') {
     if (!cat || !target) return;
-    if (target.matches?.('.intro-panel, .pixel-avatar')) {
-      cat.style.setProperty('--cat-x', 'calc(100vw - 132px)');
-      cat.style.setProperty('--cat-y', 'calc(100vh - 128px)');
+    if (target.matches?.('.intro-panel, .pixel-avatar, .work-panel')) {
+      cat.style.setProperty('--cat-x', 'calc(100vw - 116px)');
+      cat.style.setProperty('--cat-y', '76px');
       cat.dataset.mood = mood;
       return;
     }
@@ -297,7 +375,7 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
     token.textContent = kind === 'command' ? '$' : '[out]';
     row.append(token, document.createTextNode(` ${text}`));
     terminalLog.append(row);
-    while (terminalLog.children.length > 8) terminalLog.firstElementChild?.remove();
+    while (terminalLog.children.length > 14) terminalLog.firstElementChild?.remove();
   }
 
   function setMapPan(x, y) {
@@ -305,6 +383,35 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
     experienceMap?.style.setProperty('--pan-x', `${x}px`);
     experienceMap?.style.setProperty('--pan-y', `${y}px`);
   }
+
+  function positionCursorTooltip(event) {
+    if (!cursorTooltip || cursorTooltip.hidden) return;
+    const offset = 18;
+    const rect = cursorTooltip.getBoundingClientRect();
+    const x = Math.min(window.innerWidth - rect.width - 12, event.clientX + offset);
+    const y = Math.min(window.innerHeight - rect.height - 12, event.clientY + offset);
+    cursorTooltip.style.setProperty('--tip-x', `${Math.max(12, x)}px`);
+    cursorTooltip.style.setProperty('--tip-y', `${Math.max(12, y)}px`);
+  }
+
+  mapNodes.forEach((node) => {
+    node.addEventListener('pointerenter', (event) => {
+      if (!cursorTooltip) return;
+      const [meta, title, role, tech] = (node.dataset.tooltip || '').split('|');
+      cursorTooltip.replaceChildren();
+      for (const [tag, value] of [['b', meta], ['strong', title], ['em', role], ['small', tech]]) {
+        const el = document.createElement(tag);
+        el.textContent = value || '';
+        cursorTooltip.append(el);
+      }
+      cursorTooltip.hidden = false;
+      positionCursorTooltip(event);
+    });
+    node.addEventListener('pointermove', positionCursorTooltip);
+    node.addEventListener('pointerleave', () => {
+      if (cursorTooltip) cursorTooltip.hidden = true;
+    });
+  });
 
   mapExpand?.addEventListener('click', () => {
     const expanded = !experienceMap.classList.contains('is-expanded');
@@ -378,9 +485,19 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
     if (avatarCaption) avatarCaption.textContent = 'click to change mode';
   });
 
+  avatar?.addEventListener('pointermove', (event) => {
+    const rect = avatar.getBoundingClientRect();
+    const tx = ((event.clientX - rect.left) / rect.width - 0.5) * 5;
+    const ty = ((event.clientY - rect.top) / rect.height - 0.5) * 4;
+    avatar.style.setProperty('--avatar-tilt-x', `${tx}px`);
+    avatar.style.setProperty('--avatar-tilt-y', `${ty}px`);
+  });
+
   avatar?.addEventListener('pointerleave', () => {
     const mood = avatar.dataset.avatarMood || 'focus';
     const entry = avatarMoods.find(([key]) => key === mood);
+    avatar.style.setProperty('--avatar-tilt-x', '0px');
+    avatar.style.setProperty('--avatar-tilt-y', '0px');
     if (avatarCaption && entry) avatarCaption.textContent = entry[1];
   });
 
@@ -519,11 +636,11 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
   .rune-c { right: 13%; bottom: 8%; animation-delay: -2.5s; }
 
   .desktop-frame {
-    width: min(100%, 1600px);
-    height: min(calc(100svh - 1.4rem), 880px);
+    width: min(100%, 1580px);
+    height: min(calc(100svh - 0.8rem), 890px);
     display: grid;
-    grid-template-rows: auto minmax(0, 1.08fr) minmax(0, 0.92fr);
-    gap: clamp(0.5rem, 0.8vw, 0.75rem);
+    grid-template-rows: auto minmax(0, 1.06fr) minmax(0, 0.82fr) auto;
+    gap: clamp(0.42rem, 0.7vw, 0.65rem);
     position: relative;
     z-index: 1;
     perspective: 1200px;
@@ -603,7 +720,7 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
   }
 
   .topbar {
-    min-height: 46px;
+    min-height: 44px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -630,30 +747,33 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
   }
 
   .nav-links { gap: 1rem; font-family: var(--mono); font-size: 0.72rem; letter-spacing: .08em; text-transform: uppercase; }
+  .profile-loaded { margin-left: .3rem; padding: .28rem .52rem; border: 1px solid var(--lavender); color: var(--rosewater); background: rgba(17,17,27,.72); box-shadow: 3px 3px 0 rgba(203,166,247,.12); }
   a { color: inherit; }
-  .nav-links a, .map-node, .note-queue a { text-decoration: none; }
+  .nav-links a, .map-node, .note-queue a, .project-mini, .footer-social a { text-decoration: none; }
   .nav-links a { color: var(--subtext0); }
   .nav-links a:hover { color: var(--mauve); }
 
   .hero-grid, .content-grid { min-height: 0; display: grid; gap: clamp(0.5rem, 0.8vw, 0.75rem); }
   .hero-grid { grid-template-columns: minmax(440px, 1.16fr) minmax(300px, .68fr) minmax(380px, .86fr); }
-  .content-grid { grid-template-columns: minmax(450px, 1.12fr) minmax(360px, .92fr) minmax(330px, .84fr); }
+  .content-grid { grid-template-columns: minmax(330px, .82fr) minmax(330px, .82fr) minmax(480px, 1.36fr); }
 
-  .intro-panel { display: grid; align-content: center; padding-right: clamp(10.5rem, 17vw, 15.5rem); }
+  .intro-panel { display: grid; align-content: center; padding: clamp(0.85rem, 1.15vw, 1.15rem) clamp(13.5rem, 21vw, 19rem) clamp(1.05rem, 1.3vw, 1.35rem) clamp(0.85rem, 1.15vw, 1.15rem); }
   .pixel-avatar {
     position: absolute;
-    right: clamp(0.7rem, 1.4vw, 1.35rem);
-    top: 50%;
-    width: clamp(132px, 11vw, 172px);
-    height: clamp(168px, 14vw, 214px);
+    right: clamp(0.4rem, 1vw, 1rem);
+    bottom: 0;
+    width: clamp(210px, 18vw, 300px);
+    height: min(98%, clamp(250px, 24vw, 380px));
     margin: 0;
     padding: 0;
     border: 0;
     background: transparent;
     cursor: pointer;
-    transform: translateY(-50%);
+    transform: translate3d(var(--avatar-tilt-x, 0px), var(--avatar-tilt-y, 0px), 0);
+    transition: transform 220ms ease;
     z-index: 2;
     image-rendering: pixelated;
+    animation: avatar-bob 4.8s ease-in-out infinite;
   }
 
   .pixel-avatar:focus-visible {
@@ -661,14 +781,52 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
     outline-offset: 4px;
   }
 
+  .avatar-aura {
+    position: absolute;
+    right: 7%;
+    bottom: 9%;
+    width: 74%;
+    height: 72%;
+    border: 1px dashed rgba(203,166,247,.2);
+    background: radial-gradient(circle, rgba(203,166,247,.12), transparent 66%);
+    opacity: .72;
+    animation: avatar-aura 5.6s ease-in-out infinite;
+  }
+
+  .avatar-particle {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: var(--teal);
+    box-shadow: 0 0 10px rgba(148,226,213,.38);
+    opacity: .54;
+    animation: avatar-particle 4.2s steps(4, end) infinite;
+  }
+  .particle-a { right: 23%; top: 26%; }
+  .particle-b { right: 8%; top: 48%; animation-delay: 1.4s; background: var(--mauve); }
+
   .avatar-shadow {
     position: absolute;
-    left: 18%;
-    right: 10%;
-    bottom: 8px;
+    left: 20%;
+    right: 14%;
+    bottom: 0;
     height: 10px;
     background: rgba(17, 17, 27, 0.72);
     border: 1px solid rgba(180, 190, 254, 0.24);
+  }
+
+  .avatar-image {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 112%;
+    height: 100%;
+    transform: translateX(-50%);
+    object-fit: contain;
+    object-position: center bottom;
+    image-rendering: pixelated;
+    filter: drop-shadow(7px 9px 0 rgba(17,17,27,.58)) drop-shadow(0 0 18px rgba(203,166,247,.14));
+    animation: avatar-breathe 3.8s ease-in-out infinite;
   }
 
   .avatar-body {
@@ -810,7 +968,7 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
   .avatar-caption {
     position: absolute;
     right: 0;
-    bottom: -8px;
+    bottom: 4px;
     padding: .18rem .32rem;
     border: 1px solid var(--surface1);
     background: rgba(17, 17, 27, 0.82);
@@ -825,6 +983,7 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
   .pixel-avatar[data-avatar-mood="debug"] .avatar-laptop { color: var(--green); box-shadow: 0 0 0 2px rgba(166,227,161,.16), 4px 4px 0 rgba(17,17,27,.55); }
   .pixel-avatar[data-avatar-mood="coffee"] .avatar-mouth { width: 13px; background: var(--yellow); }
   .pixel-avatar:hover .avatar-body { animation-duration: 900ms; }
+  .pixel-avatar:hover .avatar-image { filter: drop-shadow(7px 9px 0 rgba(17,17,27,.58)) drop-shadow(0 0 24px rgba(148,226,213,.2)); }
   .save-label { width: fit-content; display: flex; gap: .55rem; align-items: center; margin-bottom: .55rem; padding: .34rem .48rem; border: 1px solid var(--surface1); background: rgba(49,50,68,.42); font-family: var(--mono); font-size: .68rem; text-transform: uppercase; }
   .save-label span { color: var(--subtext0); }
   .save-label strong { color: var(--green); font-weight: 600; }
@@ -834,7 +993,7 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
   h1 { margin-top: .38rem; color: var(--rosewater); font-size: clamp(3rem, 5vw, 6rem); line-height: .86; letter-spacing: -.085em; }
   .headline { max-width: 18ch; margin-top: .45rem; color: var(--lavender); font-size: clamp(1.12rem, 1.48vw, 1.76rem); line-height: 1.02; letter-spacing: -.045em; text-wrap: balance; }
   .summary { max-width: 68ch; margin-top: .5rem; color: var(--subtext1); font-size: clamp(.84rem, .86vw, .98rem); line-height: 1.34; }
-  .actions { flex-wrap: wrap; gap: .55rem; margin-top: .68rem; }
+  .actions { flex-wrap: wrap; gap: .55rem; margin-top: .72rem; padding-bottom: .18rem; }
 
   .button { min-height: 34px; display: inline-flex; align-items: center; padding: 0 .78rem; border: 1px solid var(--border); font-family: var(--mono); font-size: .72rem; text-decoration: none; transition: transform 160ms ease, border-color 160ms ease, background 160ms ease; }
   .button:hover { transform: translate(-2px, -2px); }
@@ -845,9 +1004,17 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
   h2 { color: var(--text); font-size: .92rem; letter-spacing: -.02em; }
 
   .status-list, .toolbelt-list { display: grid; gap: .28rem; position: relative; z-index: 1; }
-  .status-list div, .toolbelt-list div { display: grid; grid-template-columns: 86px 1fr; gap: .58rem; padding: .28rem .44rem; border: 1px solid var(--surface1); background: rgba(49,50,68,.36); }
+  .status-list div, .toolbelt-list div { display: grid; grid-template-columns: 86px 1fr; gap: .58rem; padding: .24rem .4rem; border: 1px solid var(--surface1); background: rgba(49,50,68,.36); }
+  .toolbelt-list { gap: .18rem; }
+  .toolbelt-list div { grid-template-columns: 78px 1fr; gap: .42rem; padding: .16rem .32rem; }
   dt { color: var(--subtext0); font-family: var(--mono); font-size: .66rem; text-transform: uppercase; }
   dd { color: var(--rosewater); font-size: .76rem; }
+  .toolbelt-list dt { font-size: .56rem; }
+  .toolbelt-list dd { font-size: .63rem; line-height: 1.08; }
+  .hiring-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .28rem; margin-top: .48rem; position: relative; z-index: 1; }
+  .hiring-grid div { min-height: 35px; display: grid; align-content: center; gap: .08rem; padding: .28rem .36rem; border: 1px solid var(--surface1); background: linear-gradient(135deg, rgba(148,226,213,.11), rgba(203,166,247,.09)); }
+  .hiring-grid span { color: var(--subtext0); font-family: var(--mono); font-size: .56rem; text-transform: uppercase; }
+  .hiring-grid strong { color: var(--teal); font-size: .66rem; font-weight: 600; }
 
   .stat-bars { display: grid; gap: .28rem; margin-top: .5rem; position: relative; z-index: 1; }
   .stat-row { display: grid; grid-template-columns: 82px 40px 1fr; align-items: center; gap: .45rem; font-family: var(--mono); font-size: .64rem; color: var(--subtext0); }
@@ -862,11 +1029,11 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
   .terminal-title { display: flex; justify-content: space-between; gap: .75rem; padding: .46rem .72rem; border-bottom: 1px solid var(--surface1); font-family: var(--mono); font-size: .68rem; position: relative; z-index: 1; }
   .terminal-title span { color: var(--blue); }
   .terminal-title strong { color: var(--teal); font-weight: 500; text-transform: uppercase; letter-spacing: .12em; }
-  .terminal-log { display: grid; align-content: center; gap: .16rem; padding: .46rem .72rem; color: var(--subtext1); font-family: var(--mono); font-size: clamp(.58rem, .62vw, .72rem); line-height: 1.12; position: relative; z-index: 1; overflow: hidden; }
-  .terminal-log p { display: flex; gap: .45rem; align-items: baseline; min-width: 0; }
+  .terminal-log { display: grid; align-content: stretch; gap: .02rem; padding: .26rem .64rem; color: var(--subtext1); font-family: var(--mono); font-size: clamp(.43rem, .47vw, .56rem); line-height: 1; position: relative; z-index: 1; overflow: hidden; }
+  .terminal-log p { display: flex; gap: .36rem; align-items: baseline; min-width: 0; }
   .terminal-log span { color: var(--green); }
   .terminal-log i { color: var(--mauve); font-style: normal; }
-  .terminal-log p:nth-child(2n) { padding-left: .9rem; color: var(--overlay2); }
+  .terminal-log p:nth-child(2n) { padding-left: .68rem; color: var(--overlay2); }
   .terminal-input { display: grid; grid-template-columns: auto 1fr auto; gap: .35rem; align-items: center; padding: .34rem .72rem; border-top: 1px solid var(--surface1); font-family: var(--mono); position: relative; z-index: 2; }
   .terminal-input label { color: var(--green); font-size: .7rem; }
   .terminal-input input { min-width: 0; border: 1px solid var(--surface1); background: rgba(17,17,27,.62); color: var(--text); padding: .28rem .4rem; font: inherit; font-size: .66rem; outline: none; }
@@ -888,10 +1055,15 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
     overflow: hidden;
     border: 1px solid var(--surface1);
     background:
-      radial-gradient(circle at 22% 20%, rgba(203,166,247,.18), transparent 28%),
-      radial-gradient(circle at 80% 70%, rgba(137,220,235,.14), transparent 26%),
-      linear-gradient(135deg, rgba(49,50,68,.85), rgba(24,24,37,.88));
-    box-shadow: inset 0 0 0 2px rgba(180,190,254,.08), 4px 4px 0 rgba(17,17,27,.5);
+      linear-gradient(rgba(180,190,254,.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(180,190,254,.055) 1px, transparent 1px),
+      linear-gradient(rgba(137,180,250,.075) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(137,180,250,.075) 1px, transparent 1px),
+      radial-gradient(circle at 16% 22%, rgba(203,166,247,.14), transparent 26%),
+      radial-gradient(circle at 84% 78%, rgba(148,226,213,.11), transparent 30%),
+      linear-gradient(135deg, rgba(30,30,46,.94), rgba(17,17,27,.9));
+    background-size: 18px 18px, 18px 18px, 72px 72px, 72px 72px, auto, auto, auto;
+    box-shadow: inset 0 0 0 2px rgba(180,190,254,.08), inset 0 0 48px rgba(17,17,27,.38), 4px 4px 0 rgba(17,17,27,.5);
   }
 
   .work-panel { display: grid; grid-template-rows: auto minmax(0, 1fr); }
@@ -930,8 +1102,8 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
 
   .map-banner {
     padding: .22rem .82rem .28rem;
-    background: linear-gradient(135deg, rgba(203,166,247,.95), rgba(137,180,250,.92));
-    color: var(--crust);
+    background: rgba(17,17,27,.74);
+    color: var(--rosewater);
     border: 1px solid var(--mauve);
     box-shadow: 2px 2px 0 rgba(17,17,27,.5);
     font-family: var(--mono);
@@ -967,31 +1139,28 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
   .experience-map.is-expanded .map-canvas { cursor: grab; }
   .experience-map.is-dragging .map-canvas { cursor: grabbing; }
 
+  .map-art, .map-paths { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
   .map-art span { position: absolute; display: block; }
-  .mountains {
-    left: 5%; top: 18%; width: 42%; height: 44%;
-    background: linear-gradient(135deg, transparent 0 47%, rgba(180,190,254,.22) 48% 52%, transparent 53%), linear-gradient(45deg, transparent 0 46%, rgba(245,224,220,.18) 47% 53%, transparent 54%);
-    clip-path: polygon(0 100%, 16% 28%, 28% 86%, 42% 18%, 56% 88%, 72% 34%, 100% 100%);
-    opacity: .82;
-  }
-  .river {
-    left: 8%; bottom: 3%; width: 70%; height: 55%;
-    border-left: 2px dashed rgba(137,180,250,.4);
-    border-bottom: 2px dashed rgba(137,180,250,.4);
-    transform: skewX(-18deg) rotate(-8deg);
-    opacity: .8;
-  }
-  .trail-line {
-    left: 48%; top: 20%; width: 16%; height: 65%;
-    border-left: 3px dotted rgba(203,166,247,.72);
-    transform: rotate(-5deg);
-  }
-  .village { width: 34px; height: 26px; background: rgba(203,166,247,.24); clip-path: polygon(0 46%, 50% 0, 100% 46%, 100% 100%, 0 100%); }
-  .village-a { left: 10%; bottom: 16%; }
-  .village-b { right: 10%; bottom: 24%; transform: scale(.85); }
-  .trees-a, .trees-b { width: 42px; height: 38px; background: rgba(166,227,161,.22); clip-path: polygon(10% 100%, 24% 54%, 0 54%, 34% 12%, 68% 54%, 44% 54%, 58% 100%, 76% 100%, 86% 58%, 70% 58%, 100% 24%, 100% 100%); }
-  .trees-a { right: 14%; top: 18%; }
-  .trees-b { left: 18%; top: 48%; transform: scale(.75); }
+  .map-paths { z-index: 1; overflow: visible; display: block; }
+  .map-paths path { fill: none; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }
+  .work-route { stroke: rgba(203,166,247,.82); stroke-width: 2.6; stroke-dasharray: 8 7; filter: drop-shadow(0 0 5px rgba(203,166,247,.28)); }
+  .edu-route { stroke: rgba(148,226,213,.78); stroke-width: 2.25; stroke-dasharray: 2 6; filter: drop-shadow(0 0 5px rgba(148,226,213,.22)); }
+  .route-shadow { stroke: rgba(17,17,27,.72); stroke-width: 6; stroke-dasharray: none; filter: none; }
+  .map-lane-label { z-index: 3; padding: .18rem .38rem; border: 1px solid rgba(180,190,254,.26); background: rgba(17,17,27,.64); color: var(--subtext1); font-family: var(--mono); font-size: .48rem; letter-spacing: .1em; text-transform: uppercase; box-shadow: 2px 2px 0 rgba(17,17,27,.36); }
+  .work-label { left: 8%; top: 12%; color: var(--mauve); }
+  .edu-label { left: 8%; top: 61%; color: var(--teal); }
+  .compass-rose { right: 8%; top: 17%; width: 42px; height: 42px; display: grid !important; place-items: center; border: 1px solid rgba(180,190,254,.18); color: rgba(245,224,220,.28); font-size: 1.25rem; transform: rotate(45deg); }
+  .compass-rose::before, .compass-rose::after { content: ""; position: absolute; background: rgba(180,190,254,.18); }
+  .compass-rose::before { width: 1px; height: 54px; }
+  .compass-rose::after { width: 54px; height: 1px; }
+  .you-pin { right: 16%; bottom: 34%; color: rgba(166,227,161,.55); font-family: var(--mono); font-size: .45rem; letter-spacing: .08em; }
+  .you-pin::before { content: ""; position: absolute; left: -12px; top: 2px; width: 8px; height: 8px; border: 2px solid var(--green); background: rgba(166,227,161,.18); transform: rotate(45deg); box-shadow: 0 0 10px rgba(166,227,161,.35); }
+  .contour { border: 1px dashed rgba(180,190,254,.12); border-radius: 999px; }
+  .contour-a { left: 5%; top: 38%; width: 30%; height: 34%; transform: rotate(-14deg); }
+  .contour-b { right: 6%; bottom: 8%; width: 26%; height: 28%; transform: rotate(18deg); }
+  .map-corner { width: 34px; height: 34px; opacity: .45; }
+  .corner-a { left: 14px; bottom: 14px; border-left: 2px solid rgba(203,166,247,.25); border-bottom: 2px solid rgba(203,166,247,.25); }
+  .corner-b { right: 14px; top: 48px; border-right: 2px solid rgba(148,226,213,.22); border-top: 2px solid rgba(148,226,213,.22); }
 
   .map-node {
     position: absolute;
@@ -1013,6 +1182,9 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
     background: var(--surface2);
     box-shadow: 0 0 0 2px var(--surface1), 2px 2px 0 rgba(17,17,27,.38);
   }
+  .map-node.done .node-dot { background: var(--mauve); box-shadow: 0 0 0 2px rgba(203,166,247,.32), 2px 2px 0 rgba(17,17,27,.38); }
+  .map-node.edu .node-dot { background: var(--teal); box-shadow: 0 0 0 2px rgba(148,226,213,.28), 2px 2px 0 rgba(17,17,27,.38); }
+  .map-node.edu .node-card b, .map-node.edu .node-card small { color: var(--teal); }
   .map-node.active .node-dot {
     background: var(--green);
     box-shadow: 0 0 0 2px var(--surface1), 0 0 0 6px rgba(166,227,161,.2), 0 0 14px rgba(166,227,161,.7);
@@ -1032,16 +1204,67 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
   .node-card strong { color: var(--rosewater); font-size: .66rem; }
   .node-card em { color: var(--subtext1); font-size: .56rem; font-style: normal; }
   .node-card small { color: var(--teal); font-family: var(--mono); font-size: .5rem; }
+  .experience-map:not(.is-expanded) .node-card { min-width: 92px; max-width: 116px; padding: .16rem .24rem; }
+  .experience-map:not(.is-expanded) .node-card em,
   .experience-map:not(.is-expanded) .node-card small { display: none; }
-  .experience-map:not(.is-expanded) .node-card b { font-size: .48rem; }
+  .experience-map:not(.is-expanded) .node-card b { font-size: .46rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .experience-map:not(.is-expanded) .node-card strong { font-size: .54rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .experience-map:not(.is-expanded) .map-node:nth-of-type(2) .node-card,
+  .experience-map:not(.is-expanded) .map-node:nth-of-type(4) .node-card,
+  .experience-map:not(.is-expanded) .map-node:nth-of-type(6) .node-card { order: -1; text-align: right; }
   .map-node:hover { z-index: 10; }
   .map-node:hover .node-card { background: rgba(30,30,46,.95); border-color: var(--mauve); transform: translate(2px, -2px); }
   .map-node:hover .node-dot { background: var(--yellow); }
+  .map-node.edu:hover .node-card { border-color: var(--teal); }
 
-  .resource-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .32rem; margin-bottom: .48rem; position: relative; z-index: 1; }
-  .resource-grid div { min-height: 34px; display: grid; align-content: center; gap: .08rem; padding: .32rem .4rem; border: 1px solid var(--surface1); background: linear-gradient(135deg, rgba(137,180,250,.13), rgba(203,166,247,.1)); }
-  .resource-grid span { color: var(--subtext0); font-family: var(--mono); font-size: .58rem; text-transform: uppercase; }
-  .resource-grid strong { color: var(--teal); font-size: .7rem; font-weight: 600; }
+  .cursor-tooltip {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 120;
+    display: grid;
+    gap: .12rem;
+    min-width: 180px;
+    max-width: 260px;
+    padding: .48rem .58rem;
+    border: 1px solid rgba(180,190,254,.42);
+    border-radius: 4px;
+    background: rgba(17,17,27,.94);
+    box-shadow: 4px 4px 0 rgba(17,17,27,.58), 0 0 20px rgba(203,166,247,.12);
+    color: var(--text);
+    font-family: var(--mono);
+    pointer-events: none;
+    transform: translate(var(--tip-x, -999px), var(--tip-y, -999px));
+  }
+  .cursor-tooltip[hidden] { display: none; }
+  .cursor-tooltip b { color: var(--mauve); font-size: .58rem; font-weight: 600; text-transform: uppercase; }
+  .cursor-tooltip strong { color: var(--rosewater); font-size: .78rem; }
+  .cursor-tooltip em { color: var(--subtext1); font-size: .62rem; font-style: normal; }
+  .cursor-tooltip small { color: var(--teal); font-size: .58rem; }
+
+  @keyframes avatar-bob {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -4px; }
+  }
+  @keyframes avatar-breathe {
+    0%, 100% { scale: 1; }
+    50% { scale: 1.012; }
+  }
+  @keyframes avatar-aura {
+    0%, 100% { opacity: .42; transform: scale(.96); }
+    50% { opacity: .7; transform: scale(1.02); }
+  }
+  @keyframes avatar-particle {
+    0%, 100% { opacity: .18; transform: translateY(6px); }
+    50% { opacity: .64; transform: translateY(-6px); }
+  }
+
+  .project-stack { display: grid; gap: .26rem; margin-bottom: .42rem; position: relative; z-index: 1; }
+  .project-mini { display: grid; grid-template-columns: 66px 1fr; align-items: center; column-gap: .46rem; padding: .28rem .38rem; border: 1px solid var(--surface1); background: linear-gradient(135deg, rgba(137,180,250,.12), rgba(203,166,247,.09)); }
+  .project-mini span { color: var(--green); font-family: var(--mono); font-size: .52rem; text-transform: uppercase; }
+  .project-mini strong { color: var(--rosewater); font-size: .7rem; font-weight: 600; }
+  .project-mini small { grid-column: 2; color: var(--subtext0); font-family: var(--mono); font-size: .55rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .project-mini:hover { border-color: var(--mauve); transform: translateX(2px); }
 
   .quest-list { display: grid; gap: .2rem; margin: 0; padding: 0; list-style: none; position: relative; z-index: 1; }
   .quest-list li { color: var(--subtext1); font-size: .74rem; line-height: 1.12; }
@@ -1052,9 +1275,30 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
   .note-queue a { padding: .25rem .32rem; border: 1px solid var(--surface1); background: rgba(49,50,68,.36); color: var(--lavender); font-family: var(--mono); font-size: .62rem; text-align: center; }
   .note-queue a:hover { border-color: var(--mauve); }
 
+  .status-footer {
+    min-height: 48px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: stretch;
+    gap: .55rem;
+    padding: .42rem .62rem;
+    position: relative;
+    z-index: 1;
+  }
+  .footer-stats { display: grid; grid-template-columns: repeat(4, minmax(120px, 1fr)); gap: .4rem; min-width: 0; }
+  .footer-cell { min-width: 0; display: grid; align-content: center; gap: .05rem; padding: .24rem .38rem; border: 1px solid var(--surface1); background: rgba(49,50,68,.34); }
+  .footer-cell span, .footer-social > span { color: var(--subtext0); font-family: var(--mono); font-size: .52rem; letter-spacing: .1em; text-transform: uppercase; }
+  .footer-cell strong { color: var(--teal); font-family: var(--mono); font-size: .62rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .footer-social { display: grid; grid-template-columns: auto auto; align-items: center; gap: .48rem; padding-left: .45rem; border-left: 1px solid var(--surface1); }
+  .footer-social div { display: flex; gap: .32rem; }
+  .footer-social a { display: inline-flex; align-items: center; gap: .28rem; min-height: 28px; padding: 0 .38rem; border: 1px solid var(--surface1); background: rgba(17,17,27,.54); color: var(--rosewater); font-family: var(--mono); font-size: .58rem; }
+  .footer-social b { color: var(--mauve); font-size: .56rem; }
+  .footer-social em { font-style: normal; }
+  .footer-social a:hover { border-color: var(--teal); color: var(--teal); }
+
   .pixel-cat {
-    --cat-x: calc(100vw - 132px);
-    --cat-y: calc(100vh - 128px);
+    --cat-x: calc(100vw - 112px);
+    --cat-y: 76px;
     position: fixed;
     left: 0;
     top: 0;
@@ -1063,7 +1307,7 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
     border: 0;
     padding: 0;
     background: transparent;
-    z-index: 8;
+    z-index: 12;
     cursor: pointer;
     transform: translate(var(--cat-x), var(--cat-y));
     transition: transform 620ms cubic-bezier(.2, .9, .2, 1);
@@ -1084,9 +1328,12 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
     font-size: .62rem;
     text-transform: uppercase;
     box-shadow: 3px 3px 0 rgba(203,166,247,.18);
-    opacity: .86;
+    display: none;
+    opacity: 0;
     pointer-events: none;
   }
+
+  .pixel-cat:hover .cat-bubble { display: block; opacity: .86; }
 
   .cat-sprite {
     position: absolute;
@@ -1264,7 +1511,9 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
     :global(html), :global(body) { overflow: auto; }
     .home-shell { min-height: 100svh; height: auto; place-items: start center; }
     .desktop-frame { height: auto; grid-template-rows: auto; }
-    .hero-grid, .content-grid { grid-template-columns: 1fr; }
+    .hero-grid, .content-grid, .status-footer { grid-template-columns: 1fr; }
+    .footer-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .footer-social { grid-template-columns: 1fr; border-left: 0; padding-left: 0; }
   }
 
   @media (max-width: 640px) {
@@ -1273,36 +1522,57 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
     .nav-links { width: 100%; justify-content: space-between; gap: .55rem; flex-wrap: wrap; }
     .desktop-frame { width: 100%; }
     .panel, .topbar { border-inline: 0; }
-    .intro-panel { padding-right: 0; padding-top: 10rem; }
-    .pixel-avatar { top: .75rem; right: 1rem; width: 116px; height: 146px; transform: none; }
+    .intro-panel { padding-right: 0; padding-top: 14rem; padding-bottom: 1rem; }
+    .pixel-avatar { top: .75rem; bottom: auto; right: 1rem; width: 168px; height: 210px; transform: none; }
     h1 { font-size: clamp(3rem, 17vw, 4.5rem); }
     .status-list div, .toolbelt-list div { grid-template-columns: 1fr; gap: .16rem; }
     .experience-map { min-height: 260px; }
     .node-card { min-width: 128px; }
-    .note-queue { grid-template-columns: 1fr; }
+    .note-queue, .footer-stats { grid-template-columns: 1fr; }
+    .footer-social div { flex-wrap: wrap; }
   }
 
   @media (max-height: 760px) and (min-width: 1181px) {
-    .desktop-frame { height: calc(100svh - .8rem); gap: .42rem; }
-    .panel { padding: .5rem; }
-    .intro-panel { padding-right: 9.3rem; }
-    .pixel-avatar { width: 112px; height: 142px; }
+    .home-shell { padding: .25rem; }
+    .desktop-frame { height: calc(100svh - .5rem); gap: .32rem; grid-template-rows: auto minmax(0, .93fr) minmax(0, .9fr) auto; }
+    .topbar { min-height: 38px; padding: .42rem .7rem; }
+    .panel { padding: .46rem; }
+    .intro-panel { padding: .62rem 12.4rem .68rem .62rem; }
+    .pixel-avatar { width: 176px; height: min(94%, 222px); bottom: 2px; }
     .code-panel { padding: 0; }
-    h1 { font-size: clamp(2.6rem, 4.45vw, 5rem); }
-    .save-label { margin-bottom: .35rem; padding: .24rem .38rem; }
-    .headline { margin-top: .32rem; font-size: clamp(1rem, 1.28vw, 1.45rem); }
-    .summary { margin-top: .34rem; line-height: 1.22; }
-    .actions { margin-top: .46rem; }
+    h1 { font-size: clamp(2.35rem, 4.05vw, 4.55rem); }
+    .save-label { margin-bottom: .25rem; padding: .18rem .32rem; }
+    .eyebrow { font-size: .56rem; }
+    .headline { margin-top: .24rem; font-size: clamp(.94rem, 1.18vw, 1.32rem); }
+    .summary { margin-top: .26rem; line-height: 1.14; font-size: .78rem; }
+    .actions { margin-top: .38rem; padding-bottom: .34rem; }
     .section-head { margin-bottom: .34rem; }
     .status-list, .toolbelt-list { gap: .18rem; }
-    .status-list div, .toolbelt-list div { padding: .22rem .36rem; }
+    .status-list div, .toolbelt-list div { padding: .105rem .24rem; }
     dt { font-size: .58rem; }
-    dd { font-size: .72rem; }
+    dd { font-size: .66rem; }
     .stat-bars { gap: .18rem; margin-top: .32rem; }
     .stat-row { font-size: .58rem; }
+    .hiring-grid { gap: .18rem; margin-top: .3rem; }
+    .hiring-grid div { min-height: 26px; padding: .16rem .26rem; }
+    .hiring-grid span { font-size: .48rem; }
+    .hiring-grid strong { font-size: .56rem; }
+    .project-stack { gap: .14rem; margin-bottom: .22rem; }
+    .project-mini { padding: .13rem .24rem; grid-template-columns: 54px 1fr; }
+    .project-mini span, .project-mini small { font-size: .46rem; }
+    .project-mini strong { font-size: .58rem; }
+    .note-queue { gap: .1rem; margin-top: .14rem; }
+    .note-queue a { padding: .08rem .14rem; font-size: .46rem; }
+    .status-footer { min-height: 34px; padding: .2rem .34rem; gap: .36rem; }
+    .footer-stats { gap: .22rem; }
+    .footer-cell { padding: .1rem .2rem; }
+    .footer-cell span, .footer-social > span { font-size: .42rem; }
+    .footer-cell strong, .footer-social a { font-size: .47rem; }
+    .footer-social a { min-height: 24px; padding: 0 .28rem; }
     .terminal-title { padding: .28rem .5rem; font-size: .56rem; }
-    .terminal-log { gap: .08rem; padding: .3rem .5rem; font-size: .52rem; line-height: 1.02; }
-    .terminal-log p:nth-child(2n) { padding-left: .65rem; }
+    .terminal-log { gap: 0; padding: .16rem .46rem; font-size: .4rem; line-height: .96; }
+    .terminal-log p { gap: .28rem; }
+    .terminal-log p:nth-child(2n) { padding-left: .46rem; }
     .terminal-input { gap: .22rem; padding: .24rem .5rem; }
     .terminal-input input { padding: .18rem .28rem; font-size: .54rem; }
     .terminal-input button { padding: .18rem .28rem; font-size: .5rem; }
@@ -1314,10 +1584,6 @@ const notes = ["Web auth basics", "Docker hardening", "Incident notes"];
     .node-card strong { font-size: .62rem; }
     .node-card em { font-size: .54rem; }
     .node-card small { display: none; }
-    .resource-grid { gap: .18rem; margin-bottom: .24rem; }
-    .resource-grid div { min-height: 24px; padding: .16rem .26rem; }
-    .resource-grid span { font-size: .5rem; }
-    .resource-grid strong { font-size: .62rem; }
     .quest-list { gap: .1rem; }
     .quest-list li { font-size: .62rem; }
     .note-queue { gap: .14rem; margin-top: .22rem; }
