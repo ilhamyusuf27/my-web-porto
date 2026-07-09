@@ -7,6 +7,9 @@ import image from "@astrojs/image";
 
 // https://astro.build/config
 export default defineConfig({
+  devToolbar: {
+    enabled: false,
+  },
   image: {
     service: {
              entrypoint: 'astro/assets/services/sharp',

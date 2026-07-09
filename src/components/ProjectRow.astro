@@ -1,0 +1,22 @@
+---
+interface Props {
+  href: string;
+  status: string;
+  period: string;
+  title: string;
+  stack: string;
+  description: string;
+}
+
+const { href, status, period, title, stack, description } = Astro.props;
+---
+
+<a href={href} class="project-row">
+  <div class="project-row-main">
+    <div class="card-chrome"><span>{status}</span><b>{period}</b></div>
+    <h3>{title}</h3>
+    <strong>{stack}</strong>
+    <p>{description}</p>
+  </div>
+  <span class="row-action">View case study →</span>
+</a>
