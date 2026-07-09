@@ -1,0 +1,29 @@
+---
+interface TabItem {
+  id: string;
+  label: string;
+  count: number;
+}
+
+interface Props {
+  items: TabItem[];
+  defaultId?: string;
+  ariaLabel?: string;
+}
+
+const { items, defaultId = items[0]?.id, ariaLabel = "Sections" } = Astro.props;
+---
+
+<nav class="tab-bar" role="tablist" aria-label={ariaLabel}>
+  {items.map((item) => (
+    <a
+      class={item.id === defaultId ? "tab-btn is-active" : "tab-btn"}
+      href={`#${item.id}`}
+      role="tab"
+      data-tab={item.id}
+      aria-selected={item.id === defaultId ? "true" : "false"}
+    >
+      {item.label} <b>{item.count}</b>
+    </a>
+  ))}
+</nav>

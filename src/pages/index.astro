@@ -4,7 +4,7 @@ import "../styles/global.css";
 
 const selectedWork = [
   ["Work 04", "Madeindonesia", "Front-End Web Developer", "WordPress · WooCommerce · PHP", "2025 →", "active", "80%", "24%"],
-  ["Work 03", "Tomps by Telkom", "Front-End Web Developer", "Vue · Nuxt · Next · Testing", "2023–25", "done", "58%", "36%"],
+  ["Work 03", "Tomps by Telkom", "Front-End Web Developer", "React · TypeScript · Redux · Testing", "2022–24", "done", "58%", "36%"],
   ["Work 02", "Telkom Indonesia", "Front-End Web Developer", "React · Tailwind · Bootstrap · Jest", "2022", "done", "38%", "22%"],
   ["Work 01", "IT Assistant · UGM FK-KMK", "IT Assistant", "Design · streaming · video editing", "2020–21", "done", "18%", "36%"],
   ["Edu 02", "Pijar Camp", "Full-Stack Website Developer", "JS · Node · Express · React · Next", "2022", "edu", "58%", "73%"],
@@ -14,15 +14,15 @@ const selectedWork = [
 const profile = [
   ["Open for", "Freelance · remote"],
   ["Location", "Indonesia · GMT+7"],
-  ["Focus", "Frontend + integration"],
-  ["Delivery", "Clean UI · deploy handoff"],
+  ["Focus", "Full-stack → SRE"],
+  ["Delivery", "Reliable web systems"],
 ];
 
 const hiringSnapshot = [
-  ["Experience", "3+ yrs web"],
-  ["Stack", "React · Vue · Next"],
-  ["Backend", "Node · PHP · SQL"],
-  ["Deploy", "Docker · Cloudflare"],
+  ["Now", "Full-stack web"],
+  ["Core", "React · Next · Node"],
+  ["Ops", "Docker · Cloudflare"],
+  ["Target", "SRE path"],
 ];
 
 const runtime = [
@@ -33,28 +33,28 @@ const runtime = [
 ];
 
 const toolbelt = [
-  ["Frontend", "React · Vue · Next · Nuxt · Tailwind · Redux · Zustand"],
-  ["CMS / PHP", "WordPress · WooCommerce · PHP · Strapi"],
-  ["Testing", "Jest · RTL · Vitest · Enzyme"],
-  ["Backend", "Node.js · Express.js · Nest"],
-  ["Database", "PostgreSQL · Firebase · MySQL · MongoDB · Prisma ORM"],
-  ["Ops", "Git · GitHub · Docker · Cloudflare"],
-  ["AI tools", "Gemini · Codex · Hermes · Claude"],
+  ["Frontend", "TypeScript · React · Next.js · Vue · Nuxt · Tailwind"],
+  ["Backend", "Node.js · Express · NestJS · PHP · REST API"],
+  ["Data", "PostgreSQL · MariaDB · MongoDB · Prisma · Supabase"],
+  ["Reliability", "Docker · GitHub Actions · Cloudflare · Vercel · Railway"],
+  ["Testing", "Vitest · Jest · React Testing Library"],
+  ["Tools", "Git · pnpm · Figma · Postman · AI coding agents"],
 ];
 
 const projects = [
-  ["Portfolio HUD", "Astro · Catppuccin · Cloudflare", "Live polish"],
-  ["Tomps modules", "Vue · Nuxt · testing", "Product UI"],
-  ["CMS storefronts", "WordPress · Woo · PHP", "Client work"],
+  ["Work", "Tomps SaaS", "Nuxt · Next · Redux", "SaaS portal", "/projects/tomps-saas"],
+  ["Work", "Tomps Project", "Vue · TypeScript · Vuex", "Project management SaaS", "/projects/tomps-project"],
+  ["Work", "BRI Box", "React · Redux · Socket", "Multi-role dashboard", "/projects/bri-box"],
+  ["Freelance", "Daily Language", "React · Redux · MUI", "Tutoring admin", "/projects/daily-language"],
 ];
 
 const questLog = [
-  ["done", "Ship clearer recruiter snapshot"],
-  ["done", "Restore projects overview"],
-  ["todo", "Add demo screenshots"],
+  ["done", "Create categorized project overview"],
+  ["done", "Prepare readable single-project template"],
+  ["todo", "Replace examples with real project data"],
 ];
 
-const notes = ["Web auth", "Docker", "Observability"];
+const projectQueues = ["Work projects", "Learning labs", "Ongoing builds"];
 
 const footerStats = [
   ["Latency", "measuring…", "latency-value"],
@@ -70,7 +70,7 @@ const socialLinks = [
 ];
 ---
 
-<Layout>
+<Layout title="Ilham Yusuf — Full-Stack Developer" description="Full-stack developer portfolio with work projects, SRE direction, and production-minded web systems." image="/ilham-avatar.webp">
   <main class="home-shell" aria-label="Ilham Yusuf portfolio homepage">
     <div class="cursor-glow" aria-hidden="true"></div>
     <div class="decor-layer" aria-hidden="true">
@@ -101,40 +101,44 @@ const socialLinks = [
     </button>
     <section class="desktop-frame">
       <header class="topbar panel-lite">
-        <a class="brand" href="/" aria-label="Ilhamya home">
+        <a class="brand" href="/" data-astro-reload aria-label="Ilhamya home">
           <span class="pixel-logo" aria-hidden="true"></span>
           <span>ilhamya.dev</span>
         </a>
         <nav class="nav-links" aria-label="Navigation links">
-          <a href="/work">Work</a>
-          <a href="/notes">Notes</a>
+          <a href="/projects">Projects</a>
+          <a href="/experience">Experience</a>
+          <a href="/documents/cv-ilham-yusuf-alghani.pdf" target="_blank" rel="noreferrer">CV</a>
           <a href="https://github.com/ilhamyusuf27" target="_blank" rel="noreferrer">GitHub</a>
           <span class="profile-loaded">Profile loaded →</span>
         </nav>
       </header>
 
       <section class="hero-grid" aria-label="Intro summary">
-        <article class="intro-panel panel" aria-labelledby="intro-title">
+        <article class="intro-panel panel home-reveal" aria-labelledby="intro-title">
           <button class="pixel-avatar" type="button" aria-label="Pixel character representing Ilham" data-avatar-mood="focus">
             <span class="avatar-aura" aria-hidden="true"></span>
             <span class="avatar-particle particle-a" aria-hidden="true"></span>
             <span class="avatar-particle particle-b" aria-hidden="true"></span>
             <span class="avatar-shadow" aria-hidden="true"></span>
-            <img class="avatar-image" src="/ilham-avatar.png" alt="" aria-hidden="true" />
+            <picture>
+              <source srcset="/ilham-avatar.webp" type="image/webp" />
+              <img class="avatar-image" src="/ilham-avatar.png" alt="" aria-hidden="true" loading="eager" fetchpriority="high" decoding="async" />
+            </picture>
             <span class="avatar-caption">UI + terminal mode</span>
           </button>
-          <div class="save-label"><span>Save file</span><strong>Frontend Builder</strong></div>
-          <p class="eyebrow">Clean UI · fast prototype · practical backend</p>
+          <div class="save-label"><span>Save file</span><strong>Full-stack Builder</strong></div>
+          <p class="eyebrow">Clean UI · backend integration · SRE mindset</p>
           <h1 id="intro-title">Ilham Yusuf</h1>
           <p class="headline">I turn rough product ideas into clean web interfaces.</p>
-          <p class="summary">Frontend-focused developer who can connect APIs, touch backend pieces, prepare deployment handoff, and keep the interface polished.</p>
+          <p class="summary">Full-stack web developer who builds polished interfaces, connects backend pieces, and is growing toward reliable SRE-style systems.</p>
           <div class="actions">
             <a class="button primary" href="mailto:hello@ilhamya.dev">Start a quest</a>
             <a class="button secondary" href="https://github.com/ilhamyusuf27" target="_blank" rel="noreferrer">Open inventory</a>
           </div>
         </article>
 
-        <article class="profile-panel panel" aria-label="Profile status">
+        <article class="profile-panel panel home-reveal" aria-label="Profile status">
           <div class="section-head"><span>Profile</span><h2>Hiring signal</h2></div>
           <dl class="status-list">
             {profile.map(([label, value]) => (
@@ -148,7 +152,7 @@ const socialLinks = [
           </div>
         </article>
 
-        <article class="code-panel panel" aria-label="Terminal activity">
+        <article class="code-panel panel home-reveal" aria-label="Terminal activity">
           <div class="window-dots" aria-hidden="true"><span></span><span></span><span></span></div>
           <div class="terminal-title" aria-hidden="true">
             <span>~/portfolio</span>
@@ -170,7 +174,7 @@ const socialLinks = [
             <p><span>$</span> npm test</p>
             <p><i>[pass]</i> 18 tests · 3 suites · 0 failed</p>
             <p><span>$</span> ls projects/</p>
-            <p><i>[dir]</i> portfolio-hud · tomps-modules · cms-storefronts</p>
+            <p><i>[dir]</i> tomps-saas · bri-box · daily-language</p>
           </div>
           <form class="terminal-input" aria-label="Interactive terminal demo">
             <label for="terminal-command">$</label>
@@ -185,7 +189,7 @@ const socialLinks = [
       </section>
 
       <section class="content-grid" aria-label="Portfolio summary">
-        <article class="toolbelt-panel panel">
+        <article class="toolbelt-panel panel home-reveal">
           <div class="section-head"><span>01</span><h2>Toolbelt</h2></div>
           <dl class="toolbelt-list">
             {toolbelt.map(([label, value]) => (
@@ -194,26 +198,21 @@ const socialLinks = [
           </dl>
         </article>
 
-        <article class="ops-panel panel">
-          <div class="section-head"><span>02</span><h2>Projects / quest log</h2></div>
-          <div class="project-stack" aria-label="Projects overview">
-            {projects.map(([name, stack, status]) => (
-              <a href="/work" class="project-mini">
-                <span>{status}</span>
+        <article class="ops-panel panel home-reveal">
+          <div class="section-head panel-head-link"><span>02</span><h2>Projects</h2><a href="/projects" class="panel-cta">View all →</a></div>
+          <div class="project-stack" aria-label="Featured projects overview">
+            {projects.map(([type, name, stack, status, href]) => (
+              <a href={href} class="project-mini">
+                <span>{type}</span>
                 <strong>{name}</strong>
                 <small>{stack}</small>
+                <em>{status}</em>
               </a>
             ))}
           </div>
-          <ul class="quest-list">
-            {questLog.map(([state, item]) => <li class={state}>{item}</li>)}
-          </ul>
-          <div class="note-queue" aria-label="Article queue">
-            {notes.map((note) => <a href="/notes">{note}</a>)}
-          </div>
         </article>
 
-        <article class="work-panel panel">
+        <article class="work-panel panel home-reveal">
           <div class="section-head"><span>03</span><h2>Career map</h2></div>
           <div class="experience-map" aria-label="Work experience map">
             <div class="map-toolbar">
@@ -240,7 +239,7 @@ const socialLinks = [
               {selectedWork.map(([act, name, role, tech, date, state, x, y]) => (
                 <a
                   class={`map-node ${state}`}
-                  href="/work"
+                  href="/experience"
                   style={`--x:${x}; --y:${y}`}
                   aria-label={`${act}: ${name} - ${role}`}
                   data-tooltip={`${act} · ${date}|${name}|${role}|${tech}`}
@@ -259,7 +258,7 @@ const socialLinks = [
         </article>
       </section>
 
-      <footer class="status-footer panel-lite" aria-label="System footer">
+      <footer class="status-footer panel-lite home-reveal" aria-label="System footer">
         <div class="footer-stats">
           {footerStats.map(([label, value, id]) => (
             <div class="footer-cell">
@@ -284,7 +283,7 @@ const socialLinks = [
   </main>
 </Layout>
 
-<script is:inline>
+<script>
   const root = document.documentElement;
   const cards = [...document.querySelectorAll('.panel, .panel-lite')];
   const cat = document.querySelector('.pixel-cat');
@@ -314,8 +313,8 @@ const socialLinks = [
   ];
   const terminalReplies = {
     help: 'commands: skills, stack, work, contact, clear',
-    skills: 'react, vue, next, nuxt, tailwind, bootstrap, testing, wordpress/php',
-    stack: 'js, ts, react, vue, next, nuxt, node, express, postgres, firebase, mysql',
+    skills: 'ts, react, next, vue, nuxt, node, nest, php, postgres, docker',
+    stack: 'full-stack core now; reliability, deploys, automation, and SRE next',
     work: 'madeindonesia, tomps by telkom, telkom indonesia, ugm fk-kmk',
     contact: 'email: hello@ilhamya.dev · github: ilhamyusuf27',
     docker: 'can read compose files, run containers, inspect logs, prepare handoff',
@@ -327,9 +326,31 @@ const socialLinks = [
     '.code-panel': 'terminal ready',
     '.work-panel': 'career route ready',
     '.toolbelt-panel': 'nice inventory',
-    '.ops-panel': 'watch the metrics',
+    '.ops-panel': 'project archive ready',
     '.topbar': 'choose a path',
   };
+
+  const revealItems = [...document.querySelectorAll('.home-reveal')];
+  if ('IntersectionObserver' in window) {
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        revealObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.14, rootMargin: '0px 0px -6% 0px' });
+    revealItems.forEach((item, index) => {
+      item.style.setProperty('--reveal-delay', `${Math.min(index * 65, 260)}ms`);
+      revealObserver.observe(item);
+    });
+  } else {
+    revealItems.forEach((item) => item.classList.add('is-visible'));
+  }
+
+  // home reveal timeout fallback: prevents invisible panels if page-transition global styles are stale
+  window.setTimeout(() => {
+    revealItems.forEach((item) => item.classList.add('is-visible'));
+  }, 600);
 
   function updateFooterTelemetry() {
     if (latencyValue) {
@@ -550,7 +571,7 @@ const socialLinks = [
 </script>
 
 <style>
-  :global(html), :global(body) { height: 100%; overflow: hidden; }
+  :global(html), :global(body) { min-height: 100%; overflow: auto; }
 
   .home-shell {
     height: 100svh;
@@ -749,7 +770,7 @@ const socialLinks = [
   .nav-links { gap: 1rem; font-family: var(--mono); font-size: 0.72rem; letter-spacing: .08em; text-transform: uppercase; }
   .profile-loaded { margin-left: .3rem; padding: .28rem .52rem; border: 1px solid var(--lavender); color: var(--rosewater); background: rgba(17,17,27,.72); box-shadow: 3px 3px 0 rgba(203,166,247,.12); }
   a { color: inherit; }
-  .nav-links a, .map-node, .note-queue a, .project-mini, .footer-social a { text-decoration: none; }
+  .nav-links a, .map-node, .project-mini, .panel-cta, .footer-social a { text-decoration: none; }
   .nav-links a { color: var(--subtext0); }
   .nav-links a:hover { color: var(--mauve); }
 
@@ -1259,21 +1280,16 @@ const socialLinks = [
     50% { opacity: .64; transform: translateY(-6px); }
   }
 
-  .project-stack { display: grid; gap: .26rem; margin-bottom: .42rem; position: relative; z-index: 1; }
-  .project-mini { display: grid; grid-template-columns: 66px 1fr; align-items: center; column-gap: .46rem; padding: .28rem .38rem; border: 1px solid var(--surface1); background: linear-gradient(135deg, rgba(137,180,250,.12), rgba(203,166,247,.09)); }
+  .panel-head-link { align-items: center; }
+  .panel-cta { margin-left: auto; padding: .22rem .42rem; border: 1px solid var(--surface1); color: var(--mauve); background: rgba(17,17,27,.38); font-family: var(--mono); font-size: .58rem; text-transform: uppercase; letter-spacing: .1em; }
+  .panel-cta:hover { border-color: var(--teal); color: var(--teal); transform: translate(-1px, -1px); }
+  .project-stack { display: grid; gap: .3rem; margin-bottom: .46rem; position: relative; z-index: 1; }
+  .project-mini { display: grid; grid-template-columns: 66px 1fr auto; align-items: center; column-gap: .46rem; padding: .32rem .42rem; border: 1px solid var(--surface1); background: linear-gradient(135deg, rgba(137,180,250,.12), rgba(203,166,247,.09)); }
   .project-mini span { color: var(--green); font-family: var(--mono); font-size: .52rem; text-transform: uppercase; }
-  .project-mini strong { color: var(--rosewater); font-size: .7rem; font-weight: 600; }
-  .project-mini small { grid-column: 2; color: var(--subtext0); font-family: var(--mono); font-size: .55rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .project-mini strong { color: var(--rosewater); font-size: .72rem; font-weight: 600; }
+  .project-mini small { grid-column: 2; color: var(--subtext0); font-family: var(--mono); font-size: .56rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .project-mini em { grid-row: 1 / span 2; grid-column: 3; color: var(--yellow); font-family: var(--mono); font-size: .52rem; font-style: normal; text-transform: uppercase; }
   .project-mini:hover { border-color: var(--mauve); transform: translateX(2px); }
-
-  .quest-list { display: grid; gap: .2rem; margin: 0; padding: 0; list-style: none; position: relative; z-index: 1; }
-  .quest-list li { color: var(--subtext1); font-size: .74rem; line-height: 1.12; }
-  .quest-list li::before { content: "[ ]"; color: var(--sapphire); margin-right: .42rem; font-family: var(--mono); }
-  .quest-list li.done::before { content: "[x]"; color: var(--green); }
-
-  .note-queue { display: grid; grid-template-columns: repeat(3, 1fr); gap: .26rem; margin-top: .42rem; position: relative; z-index: 1; }
-  .note-queue a { padding: .25rem .32rem; border: 1px solid var(--surface1); background: rgba(49,50,68,.36); color: var(--lavender); font-family: var(--mono); font-size: .62rem; text-align: center; }
-  .note-queue a:hover { border-color: var(--mauve); }
 
   .status-footer {
     min-height: 48px;
@@ -1417,15 +1433,27 @@ const socialLinks = [
   .pixel-cat[data-mood="sleepy"] .cat-eye { height: 2px; top: 15px; background: var(--yellow); }
   .pixel-cat[data-mood="curious"] .cat-sprite { animation-duration: 950ms; }
 
-  .button,
-  .note-queue a {
+
+  .home-reveal { opacity: 0; transform: translateY(12px); transition: opacity 420ms ease var(--reveal-delay, 0ms), transform 420ms ease var(--reveal-delay, 0ms), border-color 180ms ease, box-shadow 180ms ease; }
+  .home-reveal.is-visible { opacity: 1; transform: translateY(0); }
+  .pixel-cat { animation: cat-attention 3.8s steps(2, end) 1.2s infinite; }
+  .pixel-cat:hover, .pixel-cat:focus-visible { animation: none; }
+  .you-pin::before { animation: you-pin-pulse 1.5s steps(2, end) infinite; }
+  .map-node.active .node-card { border-color: rgba(166,227,161,.55); box-shadow: 0 0 18px rgba(166,227,161,.12), 3px 3px 0 rgba(17,17,27,.5); }
+
+  @keyframes cat-attention {
+    0%, 78%, 100% { transform: translate(var(--cat-x), var(--cat-y)); }
+    82% { transform: translate(var(--cat-x), calc(var(--cat-y) - 5px)) rotate(-2deg); }
+    86% { transform: translate(var(--cat-x), var(--cat-y)) rotate(2deg); }
+    90% { transform: translate(var(--cat-x), calc(var(--cat-y) - 3px)); }
+  }
+  @keyframes you-pin-pulse {
+    0%, 100% { transform: rotate(45deg) scale(1); box-shadow: 0 0 10px rgba(166,227,161,.35); }
+    50% { transform: rotate(45deg) scale(1.28); box-shadow: 0 0 18px rgba(166,227,161,.55); }
+  }
+  .button {
     position: relative;
     z-index: 2;
-  }
-
-  .note-queue a:hover {
-    transform: translateX(3px);
-    box-shadow: 3px 3px 0 rgba(137, 180, 250, 0.16);
   }
 
   .pixel-logo {
@@ -1528,7 +1556,7 @@ const socialLinks = [
     .status-list div, .toolbelt-list div { grid-template-columns: 1fr; gap: .16rem; }
     .experience-map { min-height: 260px; }
     .node-card { min-width: 128px; }
-    .note-queue, .footer-stats { grid-template-columns: 1fr; }
+    .footer-stats { grid-template-columns: 1fr; }
     .footer-social div { flex-wrap: wrap; }
   }
 
@@ -1558,11 +1586,9 @@ const socialLinks = [
     .hiring-grid span { font-size: .48rem; }
     .hiring-grid strong { font-size: .56rem; }
     .project-stack { gap: .14rem; margin-bottom: .22rem; }
-    .project-mini { padding: .13rem .24rem; grid-template-columns: 54px 1fr; }
-    .project-mini span, .project-mini small { font-size: .46rem; }
+    .project-mini { padding: .13rem .24rem; grid-template-columns: 54px 1fr auto; }
+    .project-mini span, .project-mini small, .project-mini em { font-size: .46rem; }
     .project-mini strong { font-size: .58rem; }
-    .note-queue { gap: .1rem; margin-top: .14rem; }
-    .note-queue a { padding: .08rem .14rem; font-size: .46rem; }
     .status-footer { min-height: 34px; padding: .2rem .34rem; gap: .36rem; }
     .footer-stats { gap: .22rem; }
     .footer-cell { padding: .1rem .2rem; }
@@ -1584,9 +1610,5 @@ const socialLinks = [
     .node-card strong { font-size: .62rem; }
     .node-card em { font-size: .54rem; }
     .node-card small { display: none; }
-    .quest-list { gap: .1rem; }
-    .quest-list li { font-size: .62rem; }
-    .note-queue { gap: .14rem; margin-top: .22rem; }
-    .note-queue a { padding: .12rem .18rem; font-size: .5rem; }
   }
 </style>

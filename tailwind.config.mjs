@@ -4,7 +4,21 @@ export default {
   theme: {
     extend: {
       colors: {
-        // You can add custom colors here
+        crust: '#11111b',
+        mantle: '#181825',
+        base: '#1e1e2e',
+        surface0: '#313244',
+        surface1: '#45475a',
+        text: '#cdd6f4',
+        subtext0: '#a6adc8',
+        subtext1: '#bac2de',
+        mauve: '#cba6f7',
+        lavender: '#b4befe',
+        rosewater: '#f5e0dc',
+        teal: '#94e2d5',
+        green: '#a6e3a1',
+        yellow: '#f9e2af',
+        pink: '#f5c2e7',
         primary: {
           50: '#f0f9ff',
           100: '#e0f2fe',

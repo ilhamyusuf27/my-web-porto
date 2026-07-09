@@ -45,6 +45,7 @@ html {
 body {
   min-width: 320px;
   margin: 0;
+  overflow: auto;
   font-family: var(--font-sans);
   color: var(--text);
   background: var(--crust);
