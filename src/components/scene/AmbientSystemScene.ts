@@ -211,10 +211,10 @@ function buildWireframeState(id: string): WireframeState {
           -1.05 + lane * 0.82 + Math.floor(index / 6) * 0.14 + z * 0.12,
         ];
       }),
-      rotation: [0.01, -0.08, 0],
-      scale: 1.04,
-      lineOpacity: 0.29,
-      nodeOpacity: 0.32,
+      rotation: [0.012, -0.1, 0],
+      scale: 1.02,
+      lineOpacity: 0.25,
+      nodeOpacity: 0.27,
       signalRoute: [0, 9, 10, 13, 14, 16, 8, 3, 4],
     };
   }
@@ -377,18 +377,18 @@ const MODES: Record<string, SectionMode> = {
   ongoing: {
     camera: [0.5, 4.65, 6.65],
     target: [-0.08, 0.88, 0.3],
-    grid: { extent: 5.2, spacing: 0.68, rotation: -0.06, opacity: 0.13 },
+    grid: { extent: 5.2, spacing: 0.72, rotation: -0.06, opacity: 0.11 },
     wireframe: buildWireframeState("ongoing"),
-    signalOpacity: 0.29,
-    pulseOpacity: 0.25,
+    signalOpacity: 0.25,
+    pulseOpacity: 0.21,
     signalDuration: 5.2,
     drift: [0.022, 0.026],
     activeMotion: {
-      linePulse: 0.12,
-      nodePulse: 0.12,
-      sway: [0.004, 0.014, 0],
-      speed: 0.28,
-      signalScale: 1.07,
+      linePulse: 0.1,
+      nodePulse: 0.1,
+      sway: [0.003, 0.012, 0],
+      speed: 0.24,
+      signalScale: 1.04,
     },
   },
   education: {
