@@ -1,0 +1,224 @@
+---
+import Section from "../layout/Section.astro";
+import Icon from "../ui/Icon.astro";
+import StackChip from "../portfolio/StackChip.astro";
+import { experiences } from "../../data/experiences";
+---
+
+<Section id="experience" label="Experience" index="03" accent="mauve">
+  <header class="log__head" data-reveal>
+    <h2 class="log__title">Experience</h2>
+    <p class="log__sub">Roles in chronological order, most recent first.</p>
+  </header>
+
+  <ol class="log" role="list">
+    {
+      experiences.map((exp) => (
+        <li class={`log__entry ${exp.status}`} data-reveal>
+          <span class="log__node" aria-hidden="true">
+            <span class="log__node-inner" />
+          </span>
+
+          <article class="log__card pixel-card pixel-card--custom" style="--card-accent: var(--mauve);">
+            <div class="log__card-head">
+              <div>
+                <h3 class="log__role">{exp.role}</h3>
+                <p class="log__company">
+                  <Icon name="mdi:briefcase-outline" size={16} />
+                  {exp.company}
+                </p>
+              </div>
+              <span class={`log__status log__status--${exp.status}`}>
+                <span class="log__status-dot" />
+                {exp.status === "active" ? "Active" : "Completed"}
+              </span>
+            </div>
+
+            <div class="log__meta">
+              <span><Icon name="mdi:calendar" size={14} /> {exp.period}</span>
+              <span><Icon name="mdi:map-marker-radius" size={14} /> {exp.location}</span>
+            </div>
+
+            <ul class="log__highlights" role="list">
+              {exp.highlights.map((item) => (
+                <li>
+                  <Icon name="mdi:chevron-right" size={14} />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div class="log__stack">
+              {exp.stack.map((s) => (
+                <StackChip label={s} />
+              ))}
+            </div>
+          </article>
+        </li>
+      ))
+    }
+  </ol>
+</Section>
+
+<style>
+  .log__head {
+    margin-bottom: 1.75rem;
+  }
+
+  .log__title {
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .log__sub {
+    color: var(--subtext-1);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+  }
+
+  .log {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    border-left: 1px dashed rgba(147, 153, 178, 0.42);
+    position: relative;
+  }
+
+  .log__entry {
+    position: relative;
+  }
+
+  .log__node {
+    position: absolute;
+    left: calc(-1.5rem - 9px);
+    top: 1.5rem;
+    width: 16px;
+    height: 16px;
+    display: grid;
+    place-items: center;
+    background: var(--crust);
+    border: 1px solid var(--border-dim);
+  }
+
+  .log__entry.active .log__node {
+    border-color: rgba(203, 166, 247, 0.5);
+  }
+
+  .log__node-inner {
+    width: 6px;
+    height: 6px;
+    background: var(--mauve);
+  }
+
+  .log__entry.active .log__node-inner {
+    background: var(--yellow);
+    box-shadow: none;
+  }
+
+  .log__card {
+    padding: 1.1rem 1.25rem;
+  }
+
+  .log__card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .log__role {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    color: var(--text);
+    margin: 0 0 0.25rem;
+  }
+
+  .log__company {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--subtext-1);
+  }
+
+  .log__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-pixel);
+    font-size: 0.48rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid var(--border-dim);
+    flex: none;
+  }
+
+  .log__status-dot {
+    width: 6px;
+    height: 6px;
+    background: currentColor;
+  }
+
+  .log__status--active {
+    color: var(--yellow);
+    border-color: var(--yellow);
+  }
+
+  .log__status--done {
+    color: var(--mauve);
+    border-color: var(--green);
+  }
+
+  .log__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 0.85rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--subtext-0);
+  }
+
+  .log__meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .log__highlights {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .log__highlights li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    color: var(--subtext-1);
+    line-height: 1.5;
+  }
+
+  .log__highlights :global(svg) {
+    color: var(--green);
+    flex: none;
+    margin-top: 3px;
+  }
+
+  .log__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.85rem;
+    padding-top: 0.85rem;
+    border-top: 2px dashed var(--surface-2);
+  }
+</style>

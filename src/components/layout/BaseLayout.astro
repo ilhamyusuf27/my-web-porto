@@ -1,0 +1,107 @@
+---
+import "../../styles/global.css";
+import "../../styles/utilities.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title,
+  description = "Ilham Yusuf - retro pixel space portfolio. Frontend and fullstack-capable developer building interactive, performant, maintainable web experiences.",
+  image = "/ilham-avatar.webp",
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Fonts: display sans (Space Grotesk) for headings; small pixel HUD
+         (Press Start 2P); Inter body; JetBrains Mono for technical copy. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <meta name="theme-color" content="#11111b" />
+
+    <!-- Mark JS active before paint so [data-reveal] can hide without a flash.
+         Safety timer guarantees content appears even if the GSAP bundle fails. -->
+    <script is:inline>
+      document.documentElement.classList.add("js");
+      window.addEventListener("load", function () {
+        window.setTimeout(function () {
+          document.documentElement.classList.add("reveal-done");
+        }, 3500);
+      });
+    </script>
+  </head>
+  <body class="scanlines vignette">
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <!-- Fixed Three.js scene layer -->
+    <div id="scene-layer" class="scene-layer" aria-hidden="true">
+      <slot name="scene" />
+    </div>
+
+    <slot name="nav" />
+
+    <main id="main" class="main-scroll">
+      <slot />
+    </main>
+
+    <slot name="footer" />
+
+    <style>
+      .skip-link {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        transform: translateY(-120%);
+        background: var(--mauve);
+        color: var(--crust);
+        font-family: var(--font-pixel);
+        font-size: 0.6rem;
+        padding: 0.6rem 1rem;
+        border: 2px solid var(--text);
+        transition: transform 0.15s ease;
+      }
+      .skip-link:focus {
+        transform: translateY(0);
+      }
+
+      .scene-layer {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      main {
+        position: relative;
+        z-index: 1;
+      }
+    </style>
+  </body>
+</html>

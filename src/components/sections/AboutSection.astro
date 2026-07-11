@@ -1,0 +1,237 @@
+---
+import Section from "../layout/Section.astro";
+import PixelCard from "../ui/PixelCard.astro";
+import Icon from "../ui/Icon.astro";
+import { profile } from "../../data/profile";
+
+const capabilityCards = [
+  {
+    label: "Interface craft",
+    icon: "mdi:code-tags",
+    note: "React, Vue, Astro, TypeScript, responsive UI systems.",
+  },
+  {
+    label: "Client delivery",
+    icon: "mdi:view-dashboard",
+    note: "WordPress, WooCommerce, Elementor, ACF, client handoff.",
+  },
+  {
+    label: "Backend fluency",
+    icon: "mdi:server",
+    note: "Node, NestJS, Prisma, PostgreSQL, API integration.",
+  },
+  {
+    label: "Motion systems",
+    icon: "mdi:motion-play-outline",
+    note: "GSAP, Three.js, Canvas, interaction polish.",
+  },
+];
+---
+
+<Section id="about" label="About" index="01" accent="mauve" class="section--dense">
+  <div class="about">
+    <div class="about__intro" data-reveal>
+      <PixelCard accent="mauve" hud="profile-01">
+        <div class="about__avatar-wrap">
+          <div class="about__avatar">
+            <img src={profile.avatar} alt={`Pixel portrait of ${profile.name}`} loading="lazy" decoding="async" />
+            <span class="about__avatar-frame" aria-hidden="true"></span>
+          </div>
+          <div class="about__id">
+            <span class="about__id-label">Player ID</span>
+            <strong class="about__id-name">{profile.callsign}</strong>
+            <span class="about__id-class">{profile.role}</span>
+          </div>
+        </div>
+
+        <h2 class="about__title">Frontend craft with fullstack range.</h2>
+        <p class="about__bio">{profile.intro}</p>
+
+        <ul class="about__facts" role="list">
+          <li>
+            <Icon name="mdi:map-marker-radius" size={16} />
+            <span>{profile.location}</span>
+          </li>
+          <li>
+            <Icon name="mdi:circle-medium" size={16} />
+            <span>{profile.availability}</span>
+          </li>
+          <li>
+            <Icon name="mdi:file-document-outline" size={16} />
+            <span>CV available on request</span>
+          </li>
+        </ul>
+      </PixelCard>
+    </div>
+
+    <div class="about__capabilities">
+      {
+        capabilityCards.map((card) => (
+          <article class="about__capability" data-reveal>
+            <div class="about__capability-head">
+              <span class="about__capability-icon">
+                <Icon name={card.icon} size={20} />
+              </span>
+              <h3>{card.label}</h3>
+            </div>
+            <p>{card.note}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</Section>
+
+<style>
+  .about {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: clamp(0.9rem, 2.2vw, 1.5rem);
+    align-items: start;
+  }
+
+  .about__avatar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .about__avatar {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    flex: none;
+    border: 1px solid var(--border-dim);
+    box-shadow: 4px 4px 0 rgba(17, 17, 27, 0.75);
+    image-rendering: pixelated;
+    overflow: hidden;
+    background: var(--mantle);
+  }
+
+  .about__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .about__avatar-frame {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    box-shadow: inset 0 0 0 1px rgba(203, 166, 247, 0.34);
+  }
+
+  .about__id {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .about__id-label {
+    font-family: var(--font-pixel);
+    font-size: 0.5rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--subtext-0);
+  }
+
+  .about__id-name {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--text);
+  }
+
+  .about__id-class {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--subtext-0);
+  }
+
+  .about__title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    margin: 0 0 0.5rem;
+  }
+
+  .about__bio {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--subtext-1);
+    max-width: 52ch;
+  }
+
+  .about__facts {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .about__facts li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--subtext-1);
+  }
+
+  .about__facts :global(svg) {
+    color: var(--mauve);
+  }
+
+  .about__capabilities {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .about__capability {
+    background: var(--bg-card);
+    border: 1px solid var(--border-dim);
+    border-left: 2px solid rgba(203, 166, 247, 0.42);
+    box-shadow: 3px 3px 0 rgba(17, 17, 27, 0.75);
+    padding: 0.85rem 0.9rem;
+  }
+
+  .about__capability-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .about__capability-icon {
+    display: grid;
+    place-items: center;
+    color: var(--mauve);
+  }
+
+  .about__capability h3 {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    line-height: 1.1;
+    color: var(--text);
+    margin: 0;
+  }
+
+  .about__capability p {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    line-height: 1.45;
+    color: var(--subtext-0);
+  }
+
+  @media (max-width: 860px) {
+    .about {
+      grid-template-columns: 1fr;
+    }
+
+    .about__capabilities {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

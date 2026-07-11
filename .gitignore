@@ -26,7 +26,4 @@ pnpm-debug.log*
 yarn.lock
 
 # audit, design and progress markdown files
-AUDIT.md
-AUDIT_*.md
-DESIGN.md
 PROGRESS.md

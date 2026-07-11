@@ -1,0 +1,55 @@
+---
+import Icon from "./Icon.astro";
+
+interface Props {
+  variant?: "primary" | "ghost" | "blue" | "green";
+  href?: string;
+  icon?: string;
+  iconRight?: string;
+  type?: "button" | "submit";
+  disabled?: boolean;
+  class?: string;
+  target?: string;
+  rel?: string;
+  ["aria-label"]?: string;
+}
+
+const {
+  variant = "primary",
+  href,
+  icon,
+  iconRight,
+  type = "button",
+  disabled = false,
+  class: className = "",
+  target,
+  rel,
+  "aria-label": ariaLabel,
+} = Astro.props;
+
+const variantClass =
+  variant === "ghost"
+    ? "pixel-button--ghost"
+    : variant === "blue"
+      ? "pixel-button--blue"
+      : variant === "green"
+        ? "pixel-button--green"
+        : "";
+
+const Tag = href ? "a" : "button";
+---
+
+<Tag
+  class={`pixel-button ${variantClass} ${className}`}
+  href={href}
+  type={href ? undefined : type}
+  target={target}
+  rel={rel}
+  disabled={href ? undefined : disabled}
+  aria-disabled={href ? (disabled ? "true" : undefined) : undefined}
+  aria-label={ariaLabel}
+>
+  {icon && <Icon name={icon} size={16} />}
+  <slot />
+  {iconRight && <Icon name={iconRight} size={16} />}
+</Tag>

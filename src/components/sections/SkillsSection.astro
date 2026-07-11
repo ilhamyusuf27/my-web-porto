@@ -1,0 +1,179 @@
+---
+import Section from "../layout/Section.astro";
+import Icon from "../ui/Icon.astro";
+import StackChip from "../portfolio/StackChip.astro";
+
+const practicalSkillGroups = [
+  {
+    title: "Daily use",
+    icon: "mdi:monitor-dashboard",
+    summary: "Primary production stack for interface work and implementation.",
+    skills: ["React", "Vue", "TypeScript", "SCSS", "Tailwind", "Git"],
+  },
+  {
+    title: "Comfortable",
+    icon: "mdi:code-braces",
+    summary: "Tools used across projects when the product shape calls for them.",
+    skills: ["Astro", "Next.js", "Nuxt", "Redux Toolkit", "Pinia", "REST"],
+  },
+  {
+    title: "WordPress / Client work",
+    icon: "mdi:view-dashboard",
+    summary: "Client delivery stack for marketing sites and commerce builds.",
+    skills: ["WordPress", "Elementor", "WooCommerce", "ACF", "WPML", "Custom Themes"],
+  },
+  {
+    title: "Currently learning",
+    icon: "mdi:school-outline",
+    summary: "Backend and reliability areas being sharpened through practice.",
+    skills: ["NestJS", "Prisma", "PostgreSQL", "Docker", "Linux", "CI/CD"],
+  },
+  {
+    title: "Experimental",
+    icon: "mdi:flask-outline",
+    summary: "Creative and interaction-heavy tools explored for richer interfaces.",
+    skills: ["GSAP", "Three.js", "Canvas", "Framer Motion", "Socket", "Cloudflare"],
+  },
+];
+---
+
+<Section id="skills" label="Expertise" index="02" accent="mauve" class="section--dense">
+  <header class="skills__head" data-reveal>
+    <h2 class="skills__title">Expertise</h2>
+    <p class="skills__sub">Grouped by how the tools show up in real work.</p>
+  </header>
+
+  <div class="skills__grid">
+    {
+      practicalSkillGroups.map((group) => (
+        <article
+          class="skill-slot"
+          data-reveal
+          tabindex="0"
+          aria-label={`${group.title} skills`}
+        >
+          <div class="skill-slot__head">
+            <span class="skill-slot__icon">
+              <Icon name={group.icon} size={20} />
+            </span>
+            <div>
+              <h3 class="skill-slot__title">{group.title}</h3>
+              <p class="skill-slot__summary">{group.summary}</p>
+            </div>
+          </div>
+          <div class="skill-slot__chips">
+            {group.skills.map((skill) => (
+              <StackChip label={skill} />
+            ))}
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</Section>
+
+<style>
+  .skills__head {
+    margin-bottom: 1.2rem;
+    max-width: 680px;
+  }
+
+  .skills__title {
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+    margin-bottom: 0.4rem;
+  }
+
+  .skills__sub {
+    color: var(--subtext-1);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+  }
+
+  .skills__grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.85rem;
+  }
+
+  .skill-slot {
+    --accent: var(--mauve);
+    background: var(--bg-card);
+    border: 1px solid var(--border-dim);
+    border-top: 1px solid rgba(203, 166, 247, 0.34);
+    box-shadow: 4px 4px 0 rgba(17, 17, 27, 0.72);
+    padding: 0.95rem 1rem;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+
+  .skill-slot:nth-child(1),
+  .skill-slot:nth-child(2) {
+    grid-column: span 3;
+  }
+
+  .skill-slot:nth-child(n + 3) {
+    grid-column: span 2;
+  }
+
+  .skill-slot:hover,
+  .skill-slot:focus-visible {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 rgba(17, 17, 27, 0.82), 0 0 0 1px rgba(203, 166, 247, 0.34);
+    outline: none;
+  }
+
+  .skill-slot__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px dashed rgba(147, 153, 178, 0.36);
+  }
+
+  .skill-slot__icon {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    color: var(--mauve);
+    background: var(--mantle);
+    border: 1px solid var(--border-dim);
+  }
+
+  .skill-slot__title {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 1.15rem;
+    color: var(--text);
+    margin: 0 0 0.2rem;
+  }
+
+  .skill-slot__summary {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--subtext-0);
+  }
+
+  .skill-slot__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  @media (max-width: 980px) {
+    .skills__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .skill-slot:nth-child(n) {
+      grid-column: span 1;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .skills__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

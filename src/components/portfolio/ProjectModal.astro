@@ -1,0 +1,200 @@
+---
+import Modal from "../ui/Modal.astro";
+import Icon from "../ui/Icon.astro";
+import { projects } from "../../data/projects";
+
+// Embedded payload so the controller can populate the modal without a fetch.
+const payload = projects.map((p) => ({
+  id: p.id,
+  title: p.title,
+  type: p.type,
+  period: p.period,
+  role: p.role,
+  status: p.status,
+  summary: p.summary,
+  problem: p.problem ?? null,
+  contribution: p.contribution ?? [],
+  outcomes: p.outcomes ?? [],
+  stack: p.stack,
+  links: p.links ?? [],
+  accent: p.accent ?? "mauve",
+  image: p.image ?? null,
+}));
+---
+
+<Modal id="project-modal" titleId="project-modal-title">
+  <span slot="title" data-field="title">Project</span>
+
+  <div class="pm">
+    <div class="pm__meta" aria-hidden="false">
+      <span class="pm__meta-item" data-field="type">Type</span>
+      <span class="pm__meta-item pm__meta-item--accent" data-field="status-label">Status</span>
+      <span class="pm__meta-item" data-field="period">Period</span>
+    </div>
+
+    <p class="pm__role">
+      <Icon name="mdi:account" size={14} decorative />
+      <span data-field="role">Role</span>
+    </p>
+
+    <p class="pm__summary" data-field="summary">Summary</p>
+
+    <section class="pm__block" data-block="problem" hidden>
+      <h3 class="pm__heading"><Icon name="mdi:target" size={16} /> Mission brief</h3>
+      <p data-field="problem"></p>
+    </section>
+
+    <section class="pm__block" data-block="contribution" hidden>
+      <h3 class="pm__heading"><Icon name="mdi:format-list-bulleted" size={16} /> Contribution</h3>
+      <ul class="pm__list" data-field="contribution"></ul>
+    </section>
+
+    <section class="pm__block" data-block="outcomes" hidden>
+      <h3 class="pm__heading"><Icon name="mdi:trophy" size={16} /> Outcomes</h3>
+      <dl class="pm__outcomes" data-field="outcomes"></dl>
+    </section>
+
+    <section class="pm__block">
+      <h3 class="pm__heading"><Icon name="mdi:code-tags" size={16} /> Tech stack</h3>
+      <div class="pm__stack" data-field="stack"></div>
+    </section>
+
+    <div class="pm__links" data-block="links" hidden>
+      <div class="pm__links-inner" data-field="links"></div>
+    </div>
+  </div>
+</Modal>
+
+<script type="application/json" id="project-data" set:html={JSON.stringify(payload)} is:inline />
+
+<style>
+  .pm {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .pm__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .pm__meta-item {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--subtext-0);
+    background: var(--surface-0);
+    border: 2px solid var(--surface-2);
+    padding: 0.3rem 0.55rem;
+    border-radius: 2px;
+  }
+
+  .pm__meta-item--accent {
+    color: var(--text);
+    border-color: rgba(203, 166, 247, 0.5);
+  }
+
+  .pm__role {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--subtext-1);
+    margin-top: -0.5rem;
+  }
+
+  .pm__summary {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .pm__block[hidden] {
+    display: none;
+  }
+
+  .pm__heading {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--font-pixel);
+    font-size: 0.55rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mauve);
+    margin-bottom: 0.65rem;
+  }
+
+  .pm__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .pm__list li {
+    position: relative;
+    padding-left: 1.5rem;
+    line-height: 1.55;
+    color: var(--subtext-1);
+  }
+
+  .pm__list li::before {
+    content: ">";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--mauve);
+    font-family: var(--font-mono);
+    font-weight: 700;
+  }
+
+  .pm__outcomes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin: 0;
+  }
+
+  .pm__outcomes > div {
+    background: var(--surface-0);
+    border: 2px solid var(--surface-2);
+    border-left: 2px solid rgba(203, 166, 247, 0.42);
+    padding: 0.6rem 0.75rem;
+  }
+
+  .pm__outcomes dt {
+    font-family: var(--font-pixel);
+    font-size: 0.5rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--subtext-0);
+    margin-bottom: 0.25rem;
+  }
+
+  .pm__outcomes dd {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text);
+  }
+
+  .pm__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .pm__links[hidden] {
+    display: none;
+  }
+
+  .pm__links-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+</style>

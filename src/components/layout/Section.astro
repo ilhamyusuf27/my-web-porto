@@ -1,0 +1,109 @@
+---
+interface Props {
+  id: string;
+  label: string;
+  index?: string;
+  accent?: string;
+  class?: string;
+}
+
+const { id, label, index, accent = "mauve", class: className = "" } = Astro.props;
+---
+
+<section
+  id={id}
+  class={`section ${className}`}
+  data-section={id}
+  data-accent={accent}
+  aria-label={label}
+  style="--section-accent: var(--mauve);"
+>
+  <div class="section__chrome" aria-hidden="true">
+    {index && <span class="section__index">{index}</span>}
+    <span class="section__label">{label}</span>
+    <span class="section__rule" />
+  </div>
+  <div class="section__inner container">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section {
+    min-height: 100vh;
+    position: relative;
+    display: grid;
+    place-items: center;
+    /* clip (not hidden) keeps decorations tidy without establishing a scroll
+       container, so GSAP page snapping and tall-section scrolling still work. */
+    overflow: clip;
+    scroll-snap-align: start;
+    padding: calc(var(--section-padding) + 2.5rem) var(--section-padding);
+  }
+
+  .section.section--dense {
+    padding-block: clamp(5.5rem, 8vh, 6.5rem) clamp(2rem, 5vh, 3.25rem);
+  }
+
+  .section__chrome {
+    position: absolute;
+    top: clamp(4.5rem, 8vh, 6rem);
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(100%, var(--container-width));
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-inline: var(--section-padding);
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .section__index {
+    font-family: var(--font-pixel);
+    font-size: 0.55rem;
+    color: var(--section-accent);
+    background: rgba(17, 17, 27, 0.72);
+    border: 1px solid var(--border-dim);
+    padding: 0.3rem 0.5rem;
+    line-height: 1;
+  }
+
+  .section__label {
+    font-family: var(--font-pixel);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--subtext-0);
+    white-space: nowrap;
+  }
+
+  .section__rule {
+    flex: 1;
+    height: 1px;
+    background: repeating-linear-gradient(
+      to right,
+      rgba(147, 153, 178, 0.35) 0,
+      rgba(147, 153, 178, 0.35) 6px,
+      transparent 6px,
+      transparent 12px
+    );
+  }
+
+  .section__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+  }
+
+  @media (max-width: 640px) {
+    .section,
+    .section.section--dense {
+      padding-block: 6rem 2.5rem;
+    }
+
+    .section__chrome {
+      top: 5.5rem;
+    }
+  }
+</style>

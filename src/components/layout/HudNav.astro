@@ -1,0 +1,284 @@
+---
+import Icon from "../ui/Icon.astro";
+import { profile } from "../../data/profile";
+
+const navItems = [
+  { id: "hero", label: "Start", icon: "mdi:rocket-launch" },
+  { id: "about", label: "Profile", icon: "mdi:account" },
+  { id: "skills", label: "Inventory", icon: "mdi:code-tags" },
+  { id: "experience", label: "Log", icon: "mdi:briefcase-outline" },
+  { id: "projects", label: "Archive", icon: "mdi:folder" },
+  { id: "experimental", label: "Lab", icon: "mdi:flask-empty-outline" },
+  { id: "ongoing", label: "Quests", icon: "mdi:target" },
+  { id: "education", label: "Training", icon: "mdi:school" },
+  { id: "contact", label: "Contact", icon: "mdi:send" },
+];
+---
+
+<nav class="hud" aria-label="Section navigation">
+  <a class="hud__brand" href="#hero" aria-label={`${profile.name} - back to start`}>
+    <span class="hud__brand-mark" aria-hidden="true">{profile.callsign.slice(0, 2).toUpperCase()}</span>
+    <span class="hud__brand-text">{profile.callsign}.dev</span>
+  </a>
+
+  <ul class="hud__list" role="list">
+    {
+      navItems.map((item) => (
+        <li>
+          <a
+            class="hud__item"
+            href={`#${item.id}`}
+            data-hud-item={item.id}
+            aria-label={item.label}
+            title={item.label}
+          >
+            <span class="hud__icon">
+              <Icon name={item.icon} size={18} />
+            </span>
+            <span class="hud__text">{item.label}</span>
+            <span class="hud__pip" aria-hidden="true" />
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <button class="hud__menu only-mobile" type="button" aria-expanded="false" aria-controls="hud-mobile" data-hud-toggle>
+    <Icon name="mdi:menu" size={22} />
+    <span class="sr-only">Toggle navigation</span>
+  </button>
+
+  <div class="hud__mobile only-mobile" id="hud-mobile" data-hud-mobile hidden>
+    {
+      navItems.map((item) => (
+        <a class="hud__mobile-item" href={`#${item.id}`} data-hud-mobile-item={item.id}>
+          <Icon name={item.icon} size={18} />
+          <span>{item.label}</span>
+        </a>
+      ))
+    }
+  </div>
+</nav>
+
+<script is:inline>
+  (() => {
+    const toggle = document.querySelector("[data-hud-toggle]");
+    const menu = document.querySelector("[data-hud-mobile]");
+    if (!toggle || !menu) return;
+
+    const setOpen = (open) => {
+      menu.hidden = !open;
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+
+    toggle.addEventListener("click", () =>
+      setOpen(menu.hidden)
+    );
+
+    menu.querySelectorAll("a").forEach((a) =>
+      a.addEventListener("click", () => setOpen(false))
+    );
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !menu.hidden) setOpen(false);
+    });
+  })();
+</script>
+
+<style>
+  .hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 9400;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1rem 0.5rem;
+    width: 72px;
+  }
+
+  .hud__brand {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    background: rgba(30, 30, 46, 0.78);
+    border: 1px solid rgba(203, 166, 247, 0.42);
+    box-shadow: 2px 2px 0 rgba(17, 17, 27, 0.72);
+    color: var(--mauve);
+    font-family: var(--font-pixel);
+    font-size: 0.7rem;
+  }
+
+  .hud__brand-mark {
+    line-height: 1;
+  }
+
+  .hud__brand-text {
+    display: none;
+  }
+
+  .hud__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: center;
+  }
+
+  .hud__item {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    color: var(--overlay-1);
+    border: 1px solid transparent;
+    border-radius: 2px;
+    transition: color 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+  }
+
+  .hud__item:hover,
+  .hud__item:focus-visible {
+    color: var(--text);
+    background: rgba(49, 50, 68, 0.52);
+    border-color: var(--border-dim);
+  }
+
+  .hud__icon {
+    display: grid;
+    place-items: center;
+  }
+
+  .hud__text {
+    display: none;
+    position: absolute;
+    left: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    background: var(--surface-0);
+    border: 1px solid var(--border-dim);
+    box-shadow: 2px 2px 0 rgba(17, 17, 27, 0.72);
+    padding: 0.3rem 0.6rem;
+    font-family: var(--font-pixel);
+    font-size: 0.55rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.12s ease;
+  }
+
+  .hud__item:hover .hud__text,
+  .hud__item:focus-visible .hud__text {
+    opacity: 1;
+  }
+
+  .hud__pip {
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%) scale(0);
+    width: 8px;
+    height: 8px;
+    background: var(--mauve);
+    box-shadow: none;
+    transition: transform 0.12s ease;
+  }
+
+  /* Active section state, set by hud script */
+  .hud__item[aria-current="true"] {
+    color: var(--text);
+    background: rgba(49, 50, 68, 0.52);
+    border-color: var(--mauve);
+  }
+
+  .hud__item[aria-current="true"] .hud__pip {
+    transform: translateY(-50%) scale(1);
+  }
+
+  .hud__menu {
+    display: none;
+  }
+
+  .hud__mobile {
+    display: none;
+  }
+
+  /* ---------- Mobile: top bar + dropdown ---------- */
+  @media (max-width: 768px) {
+    .hud {
+      flex-direction: row;
+      justify-content: space-between;
+      bottom: auto;
+      width: 100%;
+      height: 56px;
+      padding: 0 1rem;
+      background: rgba(17, 17, 27, 0.85);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--border-dim);
+    }
+
+    .hud__brand {
+      width: auto;
+      height: 36px;
+      padding: 0 0.6rem;
+    }
+
+    .hud__list {
+      display: none;
+    }
+
+    .hud__menu {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      background: rgba(49, 50, 68, 0.72);
+      border: 1px solid var(--border-dim);
+      color: var(--text);
+      border-radius: 2px;
+    }
+
+    .hud__mobile {
+      position: absolute;
+      top: 56px;
+      right: 0;
+      left: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      padding: 1rem;
+      background: var(--mantle);
+      border-bottom: 1px solid var(--border-dim);
+    }
+
+    .hud__mobile[hidden] {
+      display: none;
+    }
+
+    .hud__mobile-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--border-dim);
+      background: var(--surface-0);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+
+    .hud__mobile-item[aria-current="true"] {
+      border-color: var(--mauve);
+      color: var(--mauve);
+    }
+  }
+</style>

@@ -1,0 +1,201 @@
+---
+import Section from "../layout/Section.astro";
+import PixelButton from "../ui/PixelButton.astro";
+import Icon from "../ui/Icon.astro";
+import { profile } from "../../data/profile";
+---
+
+<Section id="hero" label="Intro" index="00" accent="mauve" class="section--dense">
+  <div class="hero">
+    <p class="hero__prompt" data-reveal>
+      <span class="hero__prompt-prompt">root@ilhamya:~$</span>
+      <span>./launch --mission=portfolio</span>
+      <span class="hero__cursor" aria-hidden="true"></span>
+    </p>
+
+    <h1 class="hero__title" data-reveal>
+      <span class="hero__title-line">{profile.name.split(" ")[0]}</span>
+      <span class="hero__title-line hero__title-line--accent">{profile.name.split(" ")[1]}</span>
+    </h1>
+
+    <p class="hero__role" data-reveal>
+      <span>{profile.role}</span>
+      <span class="hero__sep" aria-hidden="true">//</span>
+      <span>{profile.subrole}</span>
+    </p>
+
+    <p class="hero__tagline" data-reveal>{profile.tagline}</p>
+
+    <div class="hero__actions" data-reveal>
+      <PixelButton href="#projects" iconRight="mdi:arrow-right" variant="primary">
+        View selected work
+      </PixelButton>
+      <PixelButton href="#about" variant="ghost">
+        About me
+      </PixelButton>
+    </div>
+
+    <dl class="hero__stats" data-reveal>
+      <div>
+        <dt>Status</dt>
+        <dd>{profile.availability}</dd>
+      </div>
+      <div>
+        <dt>Location</dt>
+        <dd>{profile.location}</dd>
+      </div>
+      <div>
+        <dt>Mode</dt>
+        <dd>Frontend + Fullstack</dd>
+      </div>
+    </dl>
+
+    <a class="hero__scroll" href="#about" aria-label="Scroll to profile">
+      <span>scroll</span>
+      <Icon name="mdi:arrow-down" size={16} />
+    </a>
+  </div>
+</Section>
+
+<style>
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    max-width: 820px;
+    padding-block: 0.5rem;
+  }
+
+  .hero__prompt {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--subtext-1);
+    background: rgba(24, 24, 37, 0.72);
+    border: 1px solid var(--border-dim);
+    padding: 0.5rem 0.85rem;
+  }
+
+  .hero__prompt-prompt {
+    color: var(--mauve);
+  }
+
+  .hero__cursor {
+    width: 8px;
+    height: 16px;
+    background: var(--mauve);
+    animation: blink 1s steps(2, start) infinite;
+  }
+
+  @keyframes blink {
+    to {
+      visibility: hidden;
+    }
+  }
+
+  .hero__title {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: clamp(2.65rem, 8vw, 5.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  .hero__title-line {
+    display: block;
+  }
+
+  .hero__title-line--accent {
+    color: var(--mauve);
+  }
+
+  .hero__role {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
+    color: var(--subtext-1);
+  }
+
+  .hero__sep {
+    color: var(--overlay-0);
+  }
+
+  .hero__tagline {
+    font-size: clamp(1rem, 2.2vw, 1.25rem);
+    line-height: 1.5;
+    color: var(--subtext-1);
+    max-width: 46ch;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.25rem;
+  }
+
+  .hero__stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 640px;
+    margin: 0.5rem 0 0;
+  }
+
+  .hero__stats > div {
+    background: var(--surface-0);
+    border: 1px solid var(--border-dim);
+    border-top-color: rgba(203, 166, 247, 0.34);
+    padding: 0.6rem 0.8rem;
+    box-shadow: 3px 3px 0 rgba(17, 17, 27, 0.75);
+  }
+
+  .hero__stats dt {
+    font-family: var(--font-pixel);
+    font-size: 0.5rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--subtext-0);
+    margin-bottom: 0.35rem;
+  }
+
+  .hero__stats dd {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text);
+  }
+
+  .hero__scroll {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+    font-family: var(--font-pixel);
+    font-size: 0.5rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--subtext-0);
+    animation: float 2.4s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__cursor,
+    .hero__scroll {
+      animation: none;
+    }
+  }
+</style>

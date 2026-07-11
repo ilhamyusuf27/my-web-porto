@@ -1,0 +1,226 @@
+---
+import type { Project } from "../../data/projects";
+import Icon from "../ui/Icon.astro";
+import StackChip from "./StackChip.astro";
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+
+const statusMap: Record<string, { label: string; icon: string }> = {
+  completed: { label: "Completed", icon: "mdi:check" },
+  ongoing: { label: "Ongoing", icon: "mdi:progress-clock" },
+  experimental: { label: "Experimental", icon: "mdi:flask-empty-outline" },
+};
+
+const status = statusMap[project.status] ?? statusMap.completed;
+const accent = "mauve";
+---
+
+<article
+  class="project-card pixel-card pixel-card--custom interactive"
+  style={`--card-accent: var(--${accent});`}
+  data-accent={accent}
+>
+  <button
+    type="button"
+    class="project-card__open"
+    data-project-trigger={project.id}
+    aria-label={`View details for ${project.title}`}
+  >
+    <span class="sr-only">Open project details</span>
+  </button>
+
+  <div class="project-card__media" aria-hidden="true">
+    {
+      project.image ? (
+        <img
+          src={project.image}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          class="project-card__img"
+        />
+      ) : (
+        <div class="project-card__placeholder">
+          <Icon name="mdi:folder-open-outline" size={40} />
+        </div>
+      )
+    }
+    <span class="project-card__status">
+      <Icon name={status.icon} size={12} />
+      {status.label}
+    </span>
+  </div>
+
+  <div class="project-card__body">
+    <div class="project-card__topline">
+      <span class="project-card__type">{project.type}</span>
+      <span class="project-card__period">{project.period}</span>
+    </div>
+    <h3 class="project-card__title">{project.title}</h3>
+    <p class="project-card__summary">{project.summary}</p>
+
+    <div class="project-card__stack">
+      {project.stack.slice(0, 4).map((s) => <StackChip label={s} accent={accent} />)}
+      {project.stack.length > 4 && <span class="project-card__more">+{project.stack.length - 4}</span>}
+    </div>
+
+    <div class="project-card__foot">
+      <span class="project-card__cta">
+        View details
+        <Icon name="mdi:chevron-right" size={16} />
+      </span>
+    </div>
+  </div>
+</article>
+
+<style>
+  .project-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+    border-top-width: 1px;
+  }
+
+  .project-card__open {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    z-index: 3;
+  }
+
+  .project-card__open:focus-visible {
+    outline: 2px solid var(--mauve);
+    outline-offset: -4px;
+  }
+
+  .project-card__media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: var(--mantle);
+    border-bottom: 1px solid var(--border-dim);
+    overflow: hidden;
+  }
+
+  .project-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.85) brightness(0.9);
+    transition: transform 0.4s ease, filter 0.3s ease;
+  }
+
+  .project-card:hover .project-card__img {
+    transform: scale(1.05);
+    filter: saturate(1) brightness(1);
+  }
+
+  .project-card__placeholder {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--surface-2);
+    background:
+      repeating-linear-gradient(45deg, var(--mantle) 0 12px, var(--base) 12px 24px);
+  }
+
+  .project-card__status {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-pixel);
+    font-size: 0.48rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text);
+    background: rgba(17, 17, 27, 0.85);
+    border: 1px solid rgba(203, 166, 247, 0.48);
+    padding: 0.3rem 0.45rem;
+  }
+
+  .project-card__body {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1rem 1.1rem 1.1rem;
+  }
+
+  .project-card__topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--subtext-0);
+  }
+
+  .project-card__type {
+    color: var(--mauve);
+  }
+
+  .project-card__title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+    color: var(--text);
+    margin: 0;
+  }
+
+  .project-card__summary {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--subtext-1);
+  }
+
+  .project-card__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.15rem;
+  }
+
+  .project-card__more {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--subtext-0);
+    align-self: center;
+  }
+
+  .project-card__foot {
+    margin-top: 0.4rem;
+    border-top: 1px dashed rgba(147, 153, 178, 0.36);
+    padding-top: 0.6rem;
+  }
+
+  .project-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: var(--font-pixel);
+    font-size: 0.55rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mauve);
+  }
+
+  .project-card:hover .project-card__cta :global(svg) {
+    transform: translateX(3px);
+  }
+</style>

@@ -1,0 +1,95 @@
+---
+import { projects, projectFilters } from "../../data/projects";
+import ProjectCard from "./ProjectCard.astro";
+---
+
+<div class="project-grid" data-project-grid>
+  <div class="project-grid__filters" role="tablist" aria-label="Filter projects by category">
+    {
+      projectFilters.map((filter, i) => (
+        <button
+          type="button"
+          class="project-filter"
+          role="tab"
+          aria-selected={i === 0 ? "true" : "false"}
+          data-filter={filter.id}
+        >
+          {filter.label}
+        </button>
+      ))
+    }
+  </div>
+
+  <div class="project-grid__cards">
+    {
+      projects.map((project) => (
+        <div class="project-grid__cell" data-category={project.category}>
+          <ProjectCard project={project} />
+        </div>
+      ))
+    }
+  </div>
+
+  <p class="project-grid__empty" data-project-empty hidden>
+    No projects in this category yet.
+  </p>
+</div>
+
+<style>
+  .project-grid__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .project-filter {
+    font-family: var(--font-pixel);
+    font-size: 0.52rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--subtext-0);
+    background: var(--surface-0);
+    border: 1px solid var(--border-dim);
+    box-shadow: 2px 2px 0 rgba(17, 17, 27, 0.72);
+    padding: 0.55rem 0.85rem;
+    border-radius: 2px;
+    transition: color 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+  }
+
+  .project-filter:hover {
+    color: var(--text);
+    border-color: rgba(203, 166, 247, 0.38);
+  }
+
+  .project-filter[aria-selected="true"] {
+    color: var(--crust);
+    background: var(--mauve);
+    border-color: rgba(205, 214, 244, 0.72);
+  }
+
+  .project-grid__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: clamp(1rem, 2.5vw, 1.5rem);
+  }
+
+  .project-grid__cell {
+    display: flex;
+  }
+
+  .project-grid__cell > :global(*) {
+    width: 100%;
+  }
+
+  .project-grid__cell[hidden] {
+    display: none;
+  }
+
+  .project-grid__empty {
+    font-family: var(--font-mono);
+    color: var(--subtext-0);
+    padding: 2rem;
+    text-align: center;
+  }
+</style>

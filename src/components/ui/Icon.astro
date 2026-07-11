@@ -1,0 +1,33 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  name: string;
+  size?: number | string;
+  class?: string;
+  title?: string;
+  /** Decorative icons are hidden from assistive tech by default. */
+  decorative?: boolean;
+}
+
+const { name, size = 20, class: className = "", title, decorative = true } = Astro.props;
+
+const ariaProps = title
+  ? { role: "img", "aria-label": title, title }
+  : { "aria-hidden": decorative ? "true" : undefined };
+---
+
+<Icon
+  name={name}
+  size={size}
+  class={`pixel-icon ${className}`}
+  {...ariaProps}
+/>
+
+<style>
+  .pixel-icon {
+    display: inline-block;
+    flex: none;
+    vertical-align: middle;
+  }
+</style>

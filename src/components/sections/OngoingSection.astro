@@ -1,0 +1,162 @@
+---
+import Section from "../layout/Section.astro";
+import Icon from "../ui/Icon.astro";
+import { ongoingQuests } from "../../data/profile";
+---
+
+<Section id="ongoing" label="Currently Building" index="06" accent="mauve" class="section--dense">
+  <header class="quests__head" data-reveal>
+    <h2 class="quests__title">Currently building</h2>
+    <p class="quests__sub">What is in progress right now and where it is heading next.</p>
+  </header>
+
+  <div class="quests">
+    {
+      ongoingQuests.map((quest) => (
+        <article
+          class="quest"
+          data-reveal
+          style={`--accent: var(--${quest.accent});`}
+        >
+          <div class="quest__top">
+            <span class="quest__icon">
+              <Icon name="mdi:flag-checkered" size={20} />
+            </span>
+            <div class="quest__heading">
+              <h3 class="quest__title">{quest.title}</h3>
+              <p class="quest__focus">{quest.focus}</p>
+            </div>
+            <span class="quest__pct">{quest.progress}%</span>
+          </div>
+
+          <div class="quest__bar" role="progressbar" aria-valuenow={quest.progress} aria-valuemin="0" aria-valuemax="100" aria-label={`${quest.title} progress`}>
+            <span class="quest__bar-fill" style={`width: ${quest.progress}%;`} />
+          </div>
+
+          <div class="quest__next">
+            <Icon name="mdi:arrow-right" size={14} />
+            <span><strong>Next:</strong> {quest.next}</span>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</Section>
+
+<style>
+  .quests__head {
+    margin-bottom: 1.15rem;
+    max-width: 680px;
+  }
+
+  .quests__title {
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .quests__sub {
+    color: var(--subtext-1);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+  }
+
+  .quests {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.85rem, 2vw, 1.15rem);
+  }
+
+  .quest {
+    --accent: var(--yellow);
+    background: var(--bg-card);
+    border: 1px solid var(--border-dim);
+    border-left: 2px solid rgba(203, 166, 247, 0.42);
+    box-shadow: 4px 4px 0 rgba(17, 17, 27, 0.72);
+    padding: 0.95rem 1rem;
+  }
+
+  .quest__top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .quest__icon {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    color: var(--mauve);
+    background: var(--mantle);
+    border: 1px solid var(--border-dim);
+    flex: none;
+  }
+
+  .quest__heading {
+    flex: 1;
+  }
+
+  .quest__title {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    color: var(--text);
+    margin: 0 0 0.2rem;
+  }
+
+  .quest__focus {
+    font-size: 0.88rem;
+    color: var(--subtext-1);
+    line-height: 1.45;
+  }
+
+  .quest__pct {
+    font-family: var(--font-pixel);
+    font-size: 0.7rem;
+    color: var(--mauve);
+    flex: none;
+  }
+
+  .quest__bar {
+    height: 12px;
+    background: var(--mantle);
+    border: 1px solid var(--border-dim);
+    overflow: hidden;
+    margin-bottom: 0.6rem;
+  }
+
+  .quest__bar-fill {
+    display: block;
+    height: 100%;
+    background: repeating-linear-gradient(
+      45deg,
+      var(--mauve),
+      var(--mauve) 6px,
+      rgba(203, 166, 247, 0.55) 6px,
+      rgba(203, 166, 247, 0.55) 12px
+    );
+  }
+
+  .quest__next {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--subtext-0);
+  }
+
+  .quest__next strong {
+    color: var(--text);
+  }
+
+  .quest__next :global(svg) {
+    color: var(--mauve);
+  }
+
+  @media (max-width: 980px) {
+    .quests {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

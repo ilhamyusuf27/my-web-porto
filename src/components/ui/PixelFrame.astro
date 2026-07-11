@@ -1,0 +1,77 @@
+---
+/**
+ * Decorative pixel corner-bracket frame. Wraps arbitrary content with a
+ * HUD-style bracket border. The accent is intentionally fixed to mauve to
+ * keep the visual language restrained.
+ */
+interface Props {
+  accent?: string;
+  class?: string;
+  label?: string;
+}
+
+const { class: className = "", label } = Astro.props;
+---
+
+<span class={`pixel-frame-wrap ${className}`}>
+  <span class="pixel-frame-bracket tl" aria-hidden="true" />
+  <span class="pixel-frame-bracket tr" aria-hidden="true" />
+  <span class="pixel-frame-bracket bl" aria-hidden="true" />
+  <span class="pixel-frame-bracket br" aria-hidden="true" />
+  {label && <span class="pixel-frame-label" aria-hidden="true">{label}</span>}
+  <slot />
+</span>
+
+<style>
+  .pixel-frame-wrap {
+    position: relative;
+    display: block;
+  }
+
+  .pixel-frame-bracket {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .tl {
+    top: 0;
+    left: 0;
+    border-top: 1px solid rgba(203, 166, 247, 0.55);
+    border-left: 1px solid rgba(203, 166, 247, 0.55);
+  }
+  .tr {
+    top: 0;
+    right: 0;
+    border-top: 1px solid rgba(203, 166, 247, 0.55);
+    border-right: 1px solid rgba(203, 166, 247, 0.55);
+  }
+  .bl {
+    bottom: 0;
+    left: 0;
+    border-bottom: 1px solid rgba(203, 166, 247, 0.55);
+    border-left: 1px solid rgba(203, 166, 247, 0.55);
+  }
+  .br {
+    bottom: 0;
+    right: 0;
+    border-bottom: 1px solid rgba(203, 166, 247, 0.55);
+    border-right: 1px solid rgba(203, 166, 247, 0.55);
+  }
+
+  .pixel-frame-label {
+    position: absolute;
+    top: -10px;
+    left: 12px;
+    background: rgba(17, 17, 27, 0.86);
+    padding: 0 0.5rem;
+    font-family: var(--font-pixel);
+    font-size: 0.5rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mauve);
+    z-index: 2;
+  }
+</style>

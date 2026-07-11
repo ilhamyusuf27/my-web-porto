@@ -1,0 +1,221 @@
+---
+import Section from "../layout/Section.astro";
+import Icon from "../ui/Icon.astro";
+import PixelCard from "../ui/PixelCard.astro";
+import { education, certificates } from "../../data/education";
+
+const typeIcon: Record<string, string> = {
+  degree: "mdi:school",
+  bootcamp: "mdi:book-open-page-variant",
+  certificate: "mdi:certificate",
+};
+---
+
+<Section id="education" label="Education" index="07" accent="mauve" class="section--dense">
+  <header class="edu__head" data-reveal>
+    <h2 class="edu__title">Education</h2>
+    <p class="edu__sub">Formal education, bootcamp training, and certifications.</p>
+  </header>
+
+  <div class="edu">
+    <div class="edu__timeline">
+      {
+        education.map((item) => (
+          <PixelCard accent="mauve" hud={item.period}>
+            <article class="edu__item" data-reveal>
+              <span class="edu__type">
+                <Icon name={typeIcon[item.type] ?? "mdi:school"} size={16} />
+                {item.type}
+              </span>
+              <h3 class="edu__title-line">{item.title}</h3>
+              <p class="edu__org">
+                <Icon name="mdi:map-marker-radius" size={14} />
+                {item.org}
+              </p>
+              <p class="edu__detail">{item.detail}</p>
+              {item.note && (
+                <span class="edu__note">
+                  <Icon name="mdi:star" size={12} />
+                  {item.note}
+                </span>
+              )}
+            </article>
+          </PixelCard>
+        ))
+      }
+    </div>
+
+    <aside class="edu__certs" data-reveal>
+      <h3 class="edu__certs-title">
+        <Icon name="mdi:trophy" size={18} />
+        Certificates
+      </h3>
+      <ul role="list">
+        {
+          certificates.map((cert) => (
+            <li>
+              <span class="edu__cert-icon">
+                <Icon name="mdi:certificate" size={20} />
+              </span>
+              <div>
+                <strong>{cert.title}</strong>
+                <span>{cert.issuer}</span>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </aside>
+  </div>
+</Section>
+
+<style>
+  .edu__head {
+    margin-bottom: 1.15rem;
+    max-width: 720px;
+  }
+
+  .edu__title {
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .edu__sub {
+    color: var(--subtext-1);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+  }
+
+  .edu {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.9fr);
+    gap: clamp(0.85rem, 2vw, 1.2rem);
+    align-items: start;
+  }
+
+  .edu__timeline {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .edu__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .edu__type {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    width: fit-content;
+    font-family: var(--font-pixel);
+    font-size: 0.48rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mauve);
+    background: var(--mantle);
+    border: 1px solid rgba(203, 166, 247, 0.42);
+    padding: 0.3rem 0.5rem;
+  }
+
+  .edu__title-line {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    color: var(--text);
+    margin: 0.15rem 0 0;
+  }
+
+  .edu__org {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--subtext-1);
+  }
+
+  .edu__detail {
+    color: var(--subtext-1);
+    line-height: 1.55;
+  }
+
+  .edu__note {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    width: fit-content;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--subtext-1);
+    border: 1px solid var(--border-dim);
+    padding: 0.25rem 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .edu__certs {
+    background: var(--bg-card);
+    border: 1px solid var(--border-dim);
+    border-top: 1px solid rgba(203, 166, 247, 0.34);
+    box-shadow: 4px 4px 0 rgba(17, 17, 27, 0.72);
+    padding: 0.95rem 1rem;
+  }
+
+  .edu__certs-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-pixel);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mauve);
+    margin-bottom: 0.7rem;
+  }
+
+  .edu__certs ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .edu__certs li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+  }
+
+  .edu__cert-icon {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    color: var(--mauve);
+    background: var(--mantle);
+    border: 1px solid var(--border-dim);
+    flex: none;
+  }
+
+  .edu__certs strong {
+    display: block;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.98rem;
+  }
+
+  .edu__certs span {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--subtext-0);
+  }
+
+  @media (max-width: 860px) {
+    .edu {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

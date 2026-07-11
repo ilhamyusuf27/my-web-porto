@@ -1,0 +1,41 @@
+---
+import Section from "../layout/Section.astro";
+import ProjectGrid from "../portfolio/ProjectGrid.astro";
+import ProjectModal from "../portfolio/ProjectModal.astro";
+---
+
+<Section id="projects" label="Selected Work" index="04" accent="mauve">
+  <header class="archive__head" data-reveal>
+    <h2 class="archive__title">Selected work</h2>
+    <p class="archive__sub">
+      Selected work across SaaS dashboards, multi-tenant platforms, and client builds.
+      Select a project to open the full case file.
+    </p>
+  </header>
+
+  <div data-reveal>
+    <ProjectGrid />
+  </div>
+
+  <ProjectModal />
+</Section>
+
+<style>
+  .archive__head {
+    margin-bottom: 1.75rem;
+    text-align: center;
+  }
+
+  .archive__title {
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .archive__sub {
+    color: var(--subtext-1);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    max-width: 60ch;
+    margin-inline: auto;
+  }
+</style>
