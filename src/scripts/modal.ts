@@ -146,8 +146,7 @@ function populate(modal: HTMLElement, p: ProjectPayload): void {
     stackEl.innerHTML = "";
     p.stack.forEach((s) => {
       const chip = document.createElement("span");
-      chip.className = "stack-chip";
-      chip.style.setProperty("--chip-accent", `var(--${p.accent})`);
+      chip.className = "pm-chip";
       chip.textContent = s;
       stackEl.appendChild(chip);
     });
