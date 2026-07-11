@@ -9,55 +9,68 @@ const typeIcon: Record<string, string> = {
   bootcamp: "mdi:book-open-page-variant",
   certificate: "mdi:certificate",
 };
+
+// Re-present existing data: start year as a timeline node, counts as a meta chip.
+const yearOf = (period: string) => period.split(" ")[0];
+const summary = `${education.length} programs · ${certificates.length} credentials`;
 ---
 
 <Section id="education" label="Education" index="07" accent="mauve" class="section--dense">
   <header class="edu__head" data-reveal>
-    <h2 class="edu__title">Education</h2>
-    <p class="edu__sub">Formal education, bootcamp training, and certifications.</p>
+    <div class="edu__head-text">
+      <h2 class="edu__title">Education</h2>
+      <p class="edu__sub">Formal education, bootcamp training, and certifications.</p>
+    </div>
+    <span class="edu__head-meta">{summary}</span>
   </header>
 
   <div class="edu">
-    <div class="edu__timeline">
+    <ol class="edu__list" role="list">
       {
         education.map((item) => (
-          <PixelCard accent="mauve" hud={item.period}>
-            <article class="edu__item" data-reveal>
-              <span class="edu__type">
-                <Icon name={typeIcon[item.type] ?? "mdi:school"} size={16} />
-                {item.type}
-              </span>
-              <h3 class="edu__title-line">{item.title}</h3>
-              <p class="edu__org">
-                <Icon name="mdi:map-marker-radius" size={14} />
-                {item.org}
-              </p>
-              <p class="edu__detail">{item.detail}</p>
-              {item.note && (
-                <span class="edu__note">
-                  <Icon name="mdi:star" size={12} />
-                  {item.note}
-                </span>
-              )}
-            </article>
-          </PixelCard>
+          <li class="edu__entry" data-reveal>
+            <span class="edu__node" aria-hidden="true">{yearOf(item.period)}</span>
+            <PixelCard accent="mauve">
+              <article class="edu__card">
+                <div class="edu__card-head">
+                  <span class="edu__type">
+                    <Icon name={typeIcon[item.type] ?? "mdi:school"} size={16} />
+                    {item.type}
+                  </span>
+                  <span class="edu__period">{item.period}</span>
+                </div>
+                <h3 class="edu__title-line">{item.title}</h3>
+                <p class="edu__org">
+                  <Icon name="mdi:map-marker-radius" size={14} />
+                  {item.org}
+                </p>
+                <p class="edu__detail">{item.detail}</p>
+                {item.note && (
+                  <div class="edu__metric">
+                    <span class="edu__metric-k">Highlight</span>
+                    <span class="edu__metric-v">{item.note}</span>
+                  </div>
+                )}
+              </article>
+            </PixelCard>
+          </li>
         ))
       }
-    </div>
+    </ol>
 
-    <aside class="edu__certs" data-reveal>
-      <h3 class="edu__certs-title">
+    <aside class="edu__credentials" data-reveal>
+      <h3 class="edu__credentials-title">
         <Icon name="mdi:trophy" size={18} />
-        Certificates
+        Credentials
       </h3>
-      <ul role="list">
+      <ul class="edu__credential-list" role="list">
         {
           certificates.map((cert) => (
-            <li>
-              <span class="edu__cert-icon">
+            <li class="edu__credential">
+              <span class="edu__credential-icon">
                 <Icon name="mdi:certificate" size={20} />
               </span>
-              <div>
+              <div class="edu__credential-body">
                 <strong>{cert.title}</strong>
                 <span>{cert.issuer}</span>
               </div>
@@ -65,19 +78,28 @@ const typeIcon: Record<string, string> = {
           ))
         }
       </ul>
+      <p class="edu__credentials-foot">Formal degree and full-stack bootcamp.</p>
     </aside>
   </div>
 </Section>
 
 <style>
   .edu__head {
-    margin-bottom: 1.15rem;
-    max-width: 720px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .edu__head-text {
+    max-width: 620px;
   }
 
   .edu__title {
-    font-size: clamp(1.75rem, 5vw, 2.75rem);
-    margin-bottom: 0.5rem;
+    font-size: clamp(1.75rem, 5vw, 2.6rem);
+    line-height: 1.1;
+    margin-bottom: 0.45rem;
   }
 
   .edu__sub {
@@ -86,29 +108,75 @@ const typeIcon: Record<string, string> = {
     font-size: 0.95rem;
   }
 
+  .edu__head-meta {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.02em;
+    color: var(--subtext-0);
+    background: var(--bg-card);
+    border: 1px solid var(--border-dim);
+    padding: 0.4rem 0.65rem;
+    white-space: nowrap;
+  }
+
   .edu {
     display: grid;
-    grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.9fr);
-    gap: clamp(0.85rem, 2vw, 1.2rem);
+    grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.9fr);
+    gap: clamp(0.9rem, 2vw, 1.25rem);
     align-items: start;
   }
 
-  .edu__timeline {
-    display: grid;
-    gap: 0.85rem;
-  }
-
-  .edu__item {
+  .edu__list {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 3rem;
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: 0.85rem;
+    position: relative;
+    border-left: 1px dashed rgba(147, 153, 178, 0.32);
+  }
+
+  .edu__entry {
+    position: relative;
+  }
+
+  .edu__node {
+    position: absolute;
+    left: -3rem;
+    top: 1rem;
+    width: 2.4rem;
+    transform: translateX(-50%);
+    text-align: center;
+    font-family: var(--font-pixel);
+    font-size: 0.5rem;
+    letter-spacing: 0.04em;
+    color: var(--mauve);
+    background: var(--crust);
+    border: 1px solid var(--border-dim);
+    padding: 0.4rem 0.2rem;
+    line-height: 1;
+  }
+
+  .edu__card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .edu__card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
   }
 
   .edu__type {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    width: fit-content;
     font-family: var(--font-pixel);
     font-size: 0.48rem;
     letter-spacing: 0.06em;
@@ -119,11 +187,19 @@ const typeIcon: Record<string, string> = {
     padding: 0.3rem 0.5rem;
   }
 
+  .edu__period {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--subtext-0);
+  }
+
   .edu__title-line {
     font-family: var(--font-heading);
-    font-size: 1.35rem;
+    font-weight: 600;
+    font-size: clamp(1.2rem, 2.5vw, 1.4rem);
+    line-height: 1.2;
     color: var(--text);
-    margin: 0.15rem 0 0;
+    margin: 0;
   }
 
   .edu__org {
@@ -137,69 +213,89 @@ const typeIcon: Record<string, string> = {
 
   .edu__detail {
     color: var(--subtext-1);
+    font-size: 0.92rem;
     line-height: 1.55;
   }
 
-  .edu__note {
+  .edu__metric {
     display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
+    align-items: baseline;
+    gap: 0.5rem;
     width: fit-content;
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    color: var(--subtext-1);
     border: 1px solid var(--border-dim);
-    padding: 0.25rem 0.5rem;
-    margin-top: 0.25rem;
+    border-left: 2px solid rgba(203, 166, 247, 0.42);
+    padding: 0.4rem 0.65rem;
+    margin-top: 0.15rem;
   }
 
-  .edu__certs {
+  .edu__metric-k {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--subtext-0);
+  }
+
+  .edu__metric-v {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text);
+  }
+
+  .edu__credentials {
     background: var(--bg-card);
     border: 1px solid var(--border-dim);
     border-top: 1px solid rgba(203, 166, 247, 0.34);
     box-shadow: 4px 4px 0 rgba(17, 17, 27, 0.72);
-    padding: 0.95rem 1rem;
+    padding: 1rem 1.1rem;
   }
 
-  .edu__certs-title {
+  .edu__credentials-title {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-family: var(--font-pixel);
-    font-size: 0.6rem;
-    letter-spacing: 0.08em;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--mauve);
-    margin-bottom: 0.7rem;
+    margin-bottom: 0.8rem;
   }
 
-  .edu__certs ul {
+  .edu__credential-list {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
   }
 
-  .edu__certs li {
+  .edu__credential {
     display: flex;
     align-items: flex-start;
     gap: 0.65rem;
+    padding: 0.6rem 0;
+    border-top: 1px dashed rgba(147, 153, 178, 0.28);
   }
 
-  .edu__cert-icon {
+  .edu__credential:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .edu__credential-icon {
     display: grid;
     place-items: center;
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
     color: var(--mauve);
     background: var(--mantle);
     border: 1px solid var(--border-dim);
     flex: none;
   }
 
-  .edu__certs strong {
+  .edu__credential-body strong {
     display: block;
     font-family: var(--font-heading);
     font-weight: 600;
@@ -207,15 +303,42 @@ const typeIcon: Record<string, string> = {
     font-size: 0.98rem;
   }
 
-  .edu__certs span {
+  .edu__credential-body span {
     font-family: var(--font-mono);
     font-size: 0.78rem;
+    color: var(--subtext-0);
+  }
+
+  .edu__credentials-foot {
+    margin: 0.85rem 0 0;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--border-dim);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
     color: var(--subtext-0);
   }
 
   @media (max-width: 860px) {
     .edu {
       grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-height: 760px) {
+    .edu__head {
+      margin-bottom: 0.85rem;
+    }
+
+    .edu__title {
+      font-size: clamp(1.5rem, 4vw, 2.1rem);
+    }
+
+    .edu__list {
+      gap: 0.6rem;
+    }
+
+    .edu__card {
+      gap: 0.4rem;
     }
   }
 </style>

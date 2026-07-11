@@ -62,31 +62,60 @@ const otherSocials = socials.filter((s) => s.id !== "email");
       </ul>
     </div>
 
-    <div class="contact__launch" aria-hidden="true" data-reveal>
-      <div class="contact__launch-pad">
-        <span class="contact__rocket">
-          <Icon name="mdi:rocket-launch" size={56} />
-        </span>
-        <span class="contact__trail" />
-        <span class="contact__pad" />
+    <aside class="contact__aside" data-reveal>
+      <div class="contact__panel">
+        <h3 class="contact__panel-title">
+          <Icon name="mdi:at" size={18} />
+          Direct
+        </h3>
+
+        {
+          email && (
+            <a class="contact__email" href={email.url}>
+              {email.handle}
+            </a>
+          )
+        }
+
+        <dl class="contact__facts">
+          <div>
+            <dt>Status</dt>
+            <dd>{profile.availability}</dd>
+          </div>
+          <div>
+            <dt>Location</dt>
+            <dd>{profile.location}</dd>
+          </div>
+          <div>
+            <dt>Focus</dt>
+            <dd>{profile.role}</dd>
+          </div>
+        </dl>
       </div>
-      <p class="contact__callsign">end of transmission - {profile.callsign}.dev</p>
-    </div>
+
+      <p class="contact__callsign">end of transmission · {profile.callsign}.dev</p>
+    </aside>
   </div>
 </Section>
 
 <style>
   .contact {
     display: grid;
-    grid-template-columns: minmax(0, 1.55fr) minmax(220px, 0.75fr);
-    gap: clamp(1rem, 3vw, 2rem);
-    align-items: center;
+    grid-template-columns: minmax(0, 1.4fr) minmax(240px, 0.9fr);
+    gap: clamp(1.25rem, 3vw, 2.25rem);
+    align-items: stretch;
+  }
+
+  .contact__main {
+    display: flex;
+    flex-direction: column;
   }
 
   .contact__signal {
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
+    width: fit-content;
     font-family: var(--font-pixel);
     font-size: 0.5rem;
     letter-spacing: 0.08em;
@@ -95,14 +124,13 @@ const otherSocials = socials.filter((s) => s.id !== "email");
     background: var(--mantle);
     border: 1px solid rgba(203, 166, 247, 0.42);
     padding: 0.3rem 0.55rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.85rem;
   }
 
   .contact__signal-dot {
     width: 7px;
     height: 7px;
     background: var(--mauve);
-    box-shadow: none;
     animation: pulse 1.4s ease-in-out infinite;
   }
 
@@ -112,23 +140,24 @@ const otherSocials = socials.filter((s) => s.id !== "email");
   }
 
   .contact__title {
-    font-size: clamp(2rem, 6vw, 3.5rem);
-    margin-bottom: 0.55rem;
+    font-size: clamp(2rem, 6vw, 3.25rem);
+    line-height: 1.05;
+    margin-bottom: 0.65rem;
   }
 
   .contact__copy {
     font-size: 1.05rem;
     line-height: 1.6;
     color: var(--subtext-1);
-    max-width: 48ch;
-    margin-bottom: 1.1rem;
+    max-width: 46ch;
+    margin-bottom: 1.25rem;
   }
 
   .contact__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 1.1rem;
+    gap: 0.85rem;
+    margin-bottom: 1.25rem;
   }
 
   .contact__links {
@@ -136,8 +165,8 @@ const otherSocials = socials.filter((s) => s.id !== "email");
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.6rem;
   }
 
   .contact__link {
@@ -183,66 +212,81 @@ const otherSocials = socials.filter((s) => s.id !== "email");
     color: var(--overlay-0);
   }
 
-  .contact__launch {
+  .contact__aside {
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 1rem;
+    justify-content: center;
   }
 
-  .contact__launch-pad {
-    position: relative;
-    width: 100%;
-    max-width: 210px;
-    height: 210px;
-    display: grid;
-    place-items: center;
-  }
-
-  .contact__rocket {
-    color: var(--mauve);
-    filter: drop-shadow(0 0 6px rgba(203, 166, 247, 0.14));
-    animation: launch 3.5s ease-in-out infinite;
-  }
-
-  @keyframes launch {
-    0%, 15% { transform: translateY(20px) rotate(-8deg); }
-    55%, 70% { transform: translateY(-30px) rotate(6deg); }
-    100% { transform: translateY(20px) rotate(-8deg); }
-  }
-
-  .contact__trail {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 6px;
-    height: 80px;
-    background: linear-gradient(to bottom, var(--mauve), transparent);
-    opacity: 0.32;
-    animation: trail 3.5s ease-in-out infinite;
-  }
-
-  @keyframes trail {
-    0%, 15% { opacity: 0; height: 0; }
-    30%, 60% { opacity: 0.7; height: 80px; }
-    100% { opacity: 0; height: 0; }
-  }
-
-  .contact__pad {
-    position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 14px;
-    background: repeating-linear-gradient(90deg, rgba(88, 91, 112, 0.82) 0 8px, rgba(69, 71, 90, 0.72) 8px 16px);
+  .contact__panel {
+    background: var(--bg-card);
     border: 1px solid var(--border-dim);
+    border-top: 1px solid rgba(203, 166, 247, 0.34);
+    box-shadow: 4px 4px 0 rgba(17, 17, 27, 0.72);
+    padding: 1.1rem 1.2rem;
+  }
+
+  .contact__panel-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mauve);
+    margin-bottom: 0.75rem;
+  }
+
+  .contact__email {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
+    color: var(--text);
+    word-break: break-all;
+    padding-bottom: 0.85rem;
+    margin-bottom: 0.85rem;
+    border-bottom: 1px solid var(--border-dim);
+    transition: color 0.15s ease;
+  }
+
+  .contact__email:hover {
+    color: var(--mauve);
+  }
+
+  .contact__facts {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .contact__facts > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .contact__facts dt {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--subtext-0);
+  }
+
+  .contact__facts dd {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    color: var(--text);
   }
 
   .contact__callsign {
     font-family: var(--font-pixel);
-    font-size: 0.55rem;
+    font-size: 0.5rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--subtext-0);
@@ -250,8 +294,6 @@ const otherSocials = socials.filter((s) => s.id !== "email");
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .contact__rocket,
-    .contact__trail,
     .contact__signal-dot {
       animation: none;
     }
@@ -261,13 +303,19 @@ const otherSocials = socials.filter((s) => s.id !== "email");
     .contact {
       grid-template-columns: 1fr;
     }
+  }
 
-    .contact__launch {
-      order: -1;
+  @media (max-height: 760px) {
+    .contact__title {
+      font-size: clamp(1.75rem, 5vw, 2.6rem);
     }
 
-    .contact__launch-pad {
-      height: 160px;
+    .contact__copy {
+      margin-bottom: 1rem;
+    }
+
+    .contact__actions {
+      margin-bottom: 1rem;
     }
   }
 </style>
