@@ -1,6 +1,7 @@
 type ProjectPayload = {
   id: string;
   title: string;
+  category: string;
   type: string;
   period: string;
   role: string;
@@ -13,6 +14,7 @@ type ProjectPayload = {
   links: { label: string; url: string; icon?: string }[];
   accent: string;
   image: string | null;
+  images: { src: string; alt: string; caption?: string }[];
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -20,6 +22,25 @@ const STATUS_LABELS: Record<string, string> = {
   ongoing: "Ongoing",
   experimental: "Experimental",
 };
+
+function normalizeCategory(value: string | null | undefined): string {
+  return (value ?? "").trim().toLowerCase();
+}
+
+function matchesFilter(project: ProjectPayload, filterId: string): boolean {
+  const normalizedFilter = normalizeCategory(filterId);
+  const category = normalizeCategory(project.category);
+  const status = normalizeCategory(project.status);
+  return normalizedFilter === "all" || category === normalizedFilter || (normalizedFilter === "ongoing" && status === "ongoing");
+}
+
+function getImages(p: ProjectPayload): { src: string; alt: string; caption?: string }[] {
+  return p.images?.length
+    ? p.images
+    : p.image
+      ? [{ src: p.image, alt: `${p.title} preview` }]
+      : [];
+}
 
 /** Project detail modal: open from any [data-project-trigger], a11y-safe. */
 export function initModal(): void {
@@ -51,9 +72,10 @@ export function initModal(): void {
     lastFocused?.focus();
   };
 
-  // Triggers
-  document.querySelectorAll<HTMLElement>("[data-project-trigger]").forEach((trigger) => {
-    trigger.addEventListener("click", () => open(trigger.dataset.projectTrigger!, trigger));
+  document.addEventListener("click", (event) => {
+    const trigger = (event.target as Element | null)?.closest<HTMLElement>("[data-project-trigger]");
+    if (!trigger?.dataset.projectTrigger) return;
+    open(trigger.dataset.projectTrigger, trigger);
   });
 
   // Close interactions
@@ -71,7 +93,7 @@ export function initModal(): void {
     }
   });
 
-  initProjectFilter();
+  initProjectDirectory(projects);
 }
 
 function populate(modal: HTMLElement, p: ProjectPayload): void {
@@ -152,28 +174,101 @@ function populate(modal: HTMLElement, p: ProjectPayload): void {
     });
   }
 
+  updateGallery(modal, p);
+
   // Links
   const linksBlock = modal.querySelector<HTMLElement>('[data-block="links"]');
   const linksEl = modal.querySelector<HTMLElement>('[data-field="links"]');
-  if (linksBlock && linksEl) {
+  const noLinks = modal.querySelector<HTMLElement>('[data-field="no-links"]');
+  if (linksBlock && linksEl && noLinks) {
     linksEl.innerHTML = "";
     if (p.links.length) {
       p.links.forEach((l) => {
         const a = document.createElement("a");
-        a.className = "pixel-button pixel-button--ghost";
+        const normalizedLabel = l.label.toLowerCase();
+        a.className = normalizedLabel.includes("live") || normalizedLabel.includes("demo")
+          ? "pm-link pm-link--primary"
+          : "pm-link";
         a.href = l.url;
         a.target = "_blank";
         a.rel = "noreferrer";
         a.textContent = l.label;
         linksEl.appendChild(a);
       });
-      linksBlock.hidden = false;
+      linksEl.hidden = false;
+      noLinks.hidden = true;
     } else {
-      linksBlock.hidden = true;
+      linksEl.hidden = true;
+      noLinks.hidden = false;
     }
+    linksBlock.hidden = false;
   }
 
   modal.setAttribute("aria-label", `Project details: ${p.title}`);
+}
+
+function updateGallery(modal: HTMLElement, p: ProjectPayload): void {
+  const image = modal.querySelector<HTMLImageElement>("[data-gallery-image]");
+  const placeholder = modal.querySelector<HTMLElement>("[data-gallery-placeholder]");
+  const count = modal.querySelector<HTMLElement>("[data-gallery-count]");
+  const caption = modal.querySelector<HTMLElement>("[data-gallery-caption]");
+  const thumbs = modal.querySelector<HTMLElement>("[data-gallery-thumbs]");
+  if (!image || !placeholder || !count || !caption || !thumbs) return;
+
+  const images = getImages(p);
+
+  const setActiveImage = (index: number) => {
+    const selected = images[index];
+    if (!selected) return;
+    image.src = selected.src;
+    image.alt = selected.alt;
+    image.hidden = false;
+    placeholder.hidden = true;
+    count.textContent = `${index + 1} / ${images.length}`;
+    caption.textContent = selected.caption ?? selected.alt;
+    thumbs.querySelectorAll<HTMLButtonElement>(".pm-thumb").forEach((button, buttonIndex) => {
+      button.setAttribute("aria-selected", buttonIndex === index ? "true" : "false");
+    });
+  };
+
+  thumbs.innerHTML = "";
+  if (!images.length) {
+    image.hidden = true;
+    image.removeAttribute("src");
+    image.alt = "";
+    placeholder.hidden = false;
+    count.textContent = "No images";
+    caption.textContent = "No preview asset";
+    thumbs.hidden = true;
+    return;
+  }
+
+  count.textContent = `1 / ${images.length}`;
+  if (images.length === 1) {
+    thumbs.hidden = true;
+    setActiveImage(0);
+    return;
+  }
+
+  images.forEach((item, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "pm-thumb";
+    button.setAttribute("aria-label", `Show image ${index + 1} of ${images.length}: ${item.alt}`);
+    button.setAttribute("aria-selected", index === 0 ? "true" : "false");
+
+    const thumb = document.createElement("img");
+    thumb.src = item.src;
+    thumb.alt = "";
+    thumb.loading = "lazy";
+    thumb.decoding = "async";
+    button.appendChild(thumb);
+    button.addEventListener("click", () => setActiveImage(index));
+    thumbs.appendChild(button);
+  });
+
+  thumbs.hidden = false;
+  setActiveImage(0);
 }
 
 function showModal(modal: HTMLElement): void {
@@ -203,31 +298,177 @@ function trapFocus(e: KeyboardEvent, modal: HTMLElement): void {
   }
 }
 
-/** Project archive filter tabs. */
-function initProjectFilter(): void {
+/** Project directory: shared selection state for list view, grid view, filters, and preview. */
+function initProjectDirectory(projects: ProjectPayload[]): void {
   const grid = document.querySelector<HTMLElement>("[data-project-grid]");
   if (!grid) return;
 
   const filters = grid.querySelectorAll<HTMLElement>("[data-filter]");
-  const cells = grid.querySelectorAll<HTMLElement>("[data-category]");
   const empty = grid.querySelector<HTMLElement>("[data-project-empty]");
+  const count = grid.querySelector<HTMLElement>("[data-project-count]");
+  const selectors = grid.querySelectorAll<HTMLElement>("[data-project-select]");
+  const viewToggles = grid.querySelectorAll<HTMLElement>("[data-view-toggle]");
+  const viewPanels = grid.querySelectorAll<HTMLElement>("[data-view-panel]");
+  const previewOpen = grid.querySelector<HTMLElement>("[data-preview-open]");
+  const previewImage = grid.querySelector<HTMLImageElement>("[data-preview-image]");
+  const previewMedia = grid.querySelector<HTMLElement>("[data-preview-media]");
+  const preview = grid.querySelector<HTMLElement>("[data-project-preview]");
+  const previewTitle = grid.querySelector<HTMLElement>("[data-preview-title]");
+  const previewType = grid.querySelector<HTMLElement>("[data-preview-type]");
+  const previewSummary = grid.querySelector<HTMLElement>("[data-preview-summary]");
+  const previewStatus = grid.querySelector<HTMLElement>("[data-preview-status]");
+  const previewRole = grid.querySelector<HTMLElement>("[data-preview-role]");
+  const previewImageCount = grid.querySelector<HTMLElement>("[data-preview-image-count]");
+  const previewStack = grid.querySelector<HTMLElement>("[data-preview-stack]");
+  const previewLinkState = grid.querySelector<HTMLElement>("[data-preview-link-state]");
+  let activeFilter = "all";
+  let selectedId = selectors[0]?.dataset.projectSelect ?? "";
+
+  const visibleProjects = () =>
+    projects.filter((project) => matchesFilter(project, activeFilter));
+
+  const clearPreview = () => {
+    selectedId = "";
+    if (previewImage) {
+      previewImage.hidden = true;
+      previewImage.removeAttribute("src");
+    }
+    previewMedia?.querySelector<HTMLElement>("[data-preview-placeholder]")?.removeAttribute("hidden");
+    if (previewTitle) previewTitle.textContent = "No case file selected";
+    if (previewType) previewType.textContent = "Empty folder";
+    if (previewSummary) previewSummary.textContent = "This folder does not contain a public case file yet.";
+    if (previewStatus) previewStatus.textContent = "Empty";
+    if (previewRole) previewRole.textContent = "Not available";
+    if (previewImageCount) previewImageCount.textContent = "No image";
+    if (previewLinkState) previewLinkState.textContent = "No public link";
+    if (previewStack) previewStack.innerHTML = "";
+    if (previewOpen) {
+      previewOpen.removeAttribute("data-project-trigger");
+      previewOpen.setAttribute("disabled", "true");
+    }
+    selectors.forEach((selector) => {
+      selector.classList.remove("is-selected");
+      selector.setAttribute("aria-current", "false");
+    });
+  };
+
+  const renderPreview = (project: ProjectPayload, animate = true) => {
+    const images = getImages(project);
+
+    selectedId = project.id;
+    if (previewOpen) previewOpen.removeAttribute("disabled");
+    if (previewImage && previewMedia) {
+      const placeholder = previewMedia.querySelector<HTMLElement>("[data-preview-placeholder]");
+      if (images[0]) {
+        previewImage.src = images[0].src;
+        previewImage.alt = "";
+        previewImage.hidden = false;
+        placeholder?.setAttribute("hidden", "");
+      } else {
+        previewImage.hidden = true;
+        previewImage.removeAttribute("src");
+        placeholder?.removeAttribute("hidden");
+      }
+    }
+
+    if (previewTitle) previewTitle.textContent = project.title;
+    if (previewType) previewType.textContent = project.type;
+    if (previewSummary) previewSummary.textContent = project.summary;
+    if (previewStatus) previewStatus.textContent = STATUS_LABELS[project.status] ?? project.status;
+    if (previewRole) previewRole.textContent = project.role;
+    if (previewImageCount) {
+      previewImageCount.textContent = images.length ? `${images.length} available` : "No image";
+    }
+    if (previewOpen) previewOpen.dataset.projectTrigger = project.id;
+    if (previewLinkState) {
+      previewLinkState.textContent = project.links.length
+        ? `${project.links.length} public link${project.links.length > 1 ? "s" : ""}`
+        : "No public link";
+    }
+
+    if (previewStack) {
+      previewStack.innerHTML = "";
+      project.stack.slice(0, 5).forEach((item) => {
+        const chip = document.createElement("span");
+        chip.textContent = item;
+        previewStack.appendChild(chip);
+      });
+    }
+
+    selectors.forEach((selector) => {
+      const selected = selector.dataset.projectSelect === project.id;
+      selector.classList.toggle("is-selected", selected);
+      selector.setAttribute("aria-current", selected ? "true" : "false");
+    });
+
+    if (animate && preview) {
+      preview.classList.remove("is-updating");
+      void preview.offsetWidth;
+      preview.classList.add("is-updating");
+      window.setTimeout(() => preview.classList.remove("is-updating"), 260);
+    }
+  };
+
+  const selectProject = (id: string, fallbackToFirst = true) => {
+    const visible = visibleProjects();
+    const project = visible.find((item) => item.id === id) ?? (fallbackToFirst ? visible[0] : undefined);
+    if (project) renderPreview(project);
+    else clearPreview();
+  };
+
+  const applyFilter = (id: string) => {
+    activeFilter = id;
+
+    filters.forEach((filter) => {
+      const active = filter.dataset.filter === id;
+      filter.setAttribute("aria-selected", active ? "true" : "false");
+      filter.setAttribute("aria-pressed", active ? "true" : "false");
+      if (active) filter.setAttribute("aria-current", "true");
+      else filter.removeAttribute("aria-current");
+      filter.classList.toggle("is-active", active);
+    });
+
+    const visibleIds = new Set(visibleProjects().map((project) => project.id));
+    selectors.forEach((selector) => {
+      const projectId = selector.dataset.projectSelect;
+      selector.hidden = !projectId || !visibleIds.has(projectId);
+    });
+
+    if (empty) empty.hidden = visibleIds.size !== 0;
+    if (count) count.textContent = `${visibleIds.size} shown`;
+
+    if (!visibleIds.has(selectedId)) selectProject("", true);
+    else selectProject(selectedId, true);
+  };
+
+  selectors.forEach((selector) => {
+    selector.addEventListener("click", () => {
+      const project = projects.find((p) => p.id === selector.dataset.projectSelect);
+      if (project) renderPreview(project);
+    });
+  });
 
   filters.forEach((filter) => {
     filter.addEventListener("click", () => {
-      const id = filter.dataset.filter!;
-
-      filters.forEach((f) =>
-        f.setAttribute("aria-selected", f === filter ? "true" : "false")
-      );
-
-      let visible = 0;
-      cells.forEach((cell) => {
-        const show = id === "all" || cell.dataset.category === id;
-        cell.hidden = !show;
-        if (show) visible++;
-      });
-
-      if (empty) empty.hidden = visible !== 0;
+      applyFilter(filter.dataset.filter ?? "all");
     });
   });
+
+  viewToggles.forEach((toggle) => {
+    toggle.addEventListener("click", () => {
+      const view = toggle.dataset.viewToggle ?? "list";
+      grid.dataset.view = view;
+      viewToggles.forEach((item) => {
+        const active = item === toggle;
+        item.classList.toggle("is-active", active);
+        item.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+      viewPanels.forEach((panel) => {
+        panel.hidden = panel.dataset.viewPanel !== view;
+      });
+      selectProject(selectedId, true);
+    });
+  });
+
+  applyFilter(activeFilter);
 }

@@ -1,41 +1,68 @@
 ---
 import Section from "../layout/Section.astro";
 import Icon from "../ui/Icon.astro";
-import { ongoingQuests } from "../../data/profile";
+import { ongoingQuests as buildItems } from "../../data/profile";
+
+const phaseLabel = (progress: number) => {
+  if (progress >= 70) return "Polish";
+  if (progress >= 55) return "Build";
+  return "Research";
+};
+
+const focusLabel = (id: string) => {
+  if (id === "sre-path") return "Reliability";
+  if (id === "moneyflow") return "Product";
+  return "Portfolio";
+};
+
+const displayFocus = (id: string, focus: string) =>
+  id === "portfolio"
+    ? "Production systems portfolio built with Astro, GSAP, and Three.js."
+    : focus;
 ---
 
 <Section id="ongoing" label="Currently Building" index="06" accent="mauve" class="section--dense">
-  <header class="quests__head" data-reveal>
-    <h2 class="quests__title">Currently building</h2>
-    <p class="quests__sub">What is in progress right now and where it is heading next.</p>
+  <header class="queue__head" data-reveal>
+    <h2 class="queue__title">Currently building</h2>
+    <p class="queue__sub">What is in progress right now and where it is heading next.</p>
   </header>
 
-  <div class="quests">
+  <div class="queue">
     {
-      ongoingQuests.map((quest) => (
+      buildItems.map((item, index) => (
         <article
-          class="quest"
+          class="ticket"
           data-reveal
-          style={`--accent: var(--${quest.accent});`}
+          style={`--queue-progress: ${item.progress}%; --queue-delay: ${index * 180}ms; --queue-scan-delay: ${index * 340}ms; --queue-signal-delay: ${index * 240}ms;`}
         >
-          <div class="quest__top">
-            <span class="quest__icon">
-              <Icon name="mdi:flag-checkered" size={20} />
+          <div class="ticket__meta">
+            <span class="ticket__ticket">QUEUE-{String(index + 1).padStart(2, "0")}</span>
+            <span class="ticket__status">
+              <span aria-hidden="true"></span>
+              {phaseLabel(item.progress)}
             </span>
-            <div class="quest__heading">
-              <h3 class="quest__title">{quest.title}</h3>
-              <p class="quest__focus">{quest.focus}</p>
+          </div>
+
+          <div class="ticket__top">
+            <div class="ticket__heading">
+              <h3 class="ticket__title">{item.title}</h3>
+              <p class="ticket__focus">{displayFocus(item.id, item.focus)}</p>
             </div>
-            <span class="quest__pct">{quest.progress}%</span>
           </div>
 
-          <div class="quest__bar" role="progressbar" aria-valuenow={quest.progress} aria-valuemin="0" aria-valuemax="100" aria-label={`${quest.title} progress`}>
-            <span class="quest__bar-fill" style={`width: ${quest.progress}%;`} />
+          <div class="ticket__progress">
+            <div class="ticket__progress-head">
+              <span>{focusLabel(item.id)}</span>
+              <strong>{item.progress}%</strong>
+            </div>
+            <div class="ticket__bar" role="progressbar" aria-valuenow={item.progress} aria-valuemin="0" aria-valuemax="100" aria-label={`${item.title} progress`}>
+              <span class="ticket__bar-fill" />
+            </div>
           </div>
 
-          <div class="quest__next">
-            <Icon name="mdi:arrow-right" size={14} />
-            <span><strong>Next:</strong> {quest.next}</span>
+          <div class="ticket__next">
+            <span>Next step</span>
+            <p>{item.next}</p>
           </div>
         </article>
       ))
@@ -44,119 +71,309 @@ import { ongoingQuests } from "../../data/profile";
 </Section>
 
 <style>
-  .quests__head {
+  .queue__head {
     margin-bottom: 1.15rem;
     max-width: 680px;
   }
 
-  .quests__title {
+  .queue__title {
     font-size: clamp(1.75rem, 5vw, 2.75rem);
     margin-bottom: 0.5rem;
   }
 
-  .quests__sub {
+  .queue__sub {
     color: var(--subtext-1);
     font-family: var(--font-mono);
     font-size: 0.95rem;
   }
 
-  .quests {
+  .queue {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: clamp(0.85rem, 2vw, 1.15rem);
+    align-items: stretch;
   }
 
-  .quest {
-    --accent: var(--yellow);
-    background: var(--bg-card);
+  .ticket {
+    --queue-progress: 0%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    min-width: 0;
+    background:
+      linear-gradient(180deg, rgba(49, 50, 68, 0.5), rgba(24, 24, 37, 0.76)),
+      var(--bg-card);
     border: 1px solid var(--border-dim);
-    border-left: 2px solid rgba(203, 166, 247, 0.42);
-    box-shadow: 4px 4px 0 rgba(17, 17, 27, 0.72);
-    padding: 0.95rem 1rem;
+    box-shadow: 0 14px 34px rgba(17, 17, 27, 0.24);
+    padding: 0.95rem;
+    overflow: clip;
+    transition:
+      transform 180ms ease,
+      border-color 180ms ease,
+      background-color 180ms ease;
   }
 
-  .quest__top {
+  .ticket::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-top: 1px solid rgba(203, 166, 247, 0.22);
+    opacity: 0.82;
+  }
+
+  .ticket::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      115deg,
+      transparent 0%,
+      transparent 42%,
+      rgba(203, 166, 247, 0.052) 50%,
+      transparent 58%,
+      transparent 100%
+    );
+    opacity: 0;
+    transform: translateX(-44%);
+  }
+
+  .ticket__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem;
+    color: var(--subtext-0);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .ticket__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--mauve);
+    white-space: nowrap;
+  }
+
+  .ticket__status span {
+    width: 7px;
+    height: 7px;
+    background: var(--mauve);
+    box-shadow: 0 0 0 4px rgba(203, 166, 247, 0.07);
+  }
+
+  .ticket__top {
     display: flex;
     align-items: flex-start;
-    gap: 0.75rem;
-    margin-bottom: 0.65rem;
+    gap: 0.7rem;
   }
 
-  .quest__icon {
-    display: grid;
-    place-items: center;
-    width: 38px;
-    height: 38px;
-    color: var(--mauve);
-    background: var(--mantle);
-    border: 1px solid var(--border-dim);
-    flex: none;
-  }
-
-  .quest__heading {
+  .ticket__heading {
     flex: 1;
   }
 
-  .quest__title {
+  .ticket__title {
     font-family: var(--font-heading);
-    font-size: 1.2rem;
+    font-size: 1.15rem;
+    line-height: 1.18;
     color: var(--text);
-    margin: 0 0 0.2rem;
+    margin: 0 0 0.35rem;
   }
 
-  .quest__focus {
+  .ticket__focus {
     font-size: 0.88rem;
     color: var(--subtext-1);
     line-height: 1.45;
   }
 
-  .quest__pct {
-    font-family: var(--font-pixel);
-    font-size: 0.7rem;
-    color: var(--mauve);
-    flex: none;
+  .ticket__progress {
+    display: grid;
+    gap: 0.45rem;
+    margin-top: auto;
   }
 
-  .quest__bar {
-    height: 12px;
-    background: var(--mantle);
-    border: 1px solid var(--border-dim);
-    overflow: hidden;
-    margin-bottom: 0.6rem;
-  }
-
-  .quest__bar-fill {
-    display: block;
-    height: 100%;
-    background: repeating-linear-gradient(
-      45deg,
-      var(--mauve),
-      var(--mauve) 6px,
-      rgba(203, 166, 247, 0.55) 6px,
-      rgba(203, 166, 247, 0.55) 12px
-    );
-  }
-
-  .quest__next {
+  .ticket__progress-head {
     display: flex;
-    align-items: center;
-    gap: 0.4rem;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
     font-family: var(--font-mono);
-    font-size: 0.8rem;
+  }
+
+  .ticket__progress-head span {
+    color: var(--subtext-0);
+    font-size: 0.72rem;
+  }
+
+  .ticket__progress-head strong {
+    color: var(--mauve);
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  .ticket__bar {
+    position: relative;
+    height: 8px;
+    background:
+      linear-gradient(90deg, rgba(147, 153, 178, 0.12), rgba(147, 153, 178, 0.04)),
+      var(--mantle);
+    border: 1px solid rgba(147, 153, 178, 0.24);
+    overflow: hidden;
+  }
+
+  .ticket__bar-fill {
+    position: relative;
+    display: block;
+    width: var(--queue-progress);
+    height: 100%;
+    background: linear-gradient(90deg, rgba(203, 166, 247, 0.42), rgba(203, 166, 247, 0.78));
+  }
+
+  .ticket__bar-fill::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 38px;
+    background: linear-gradient(90deg, transparent, rgba(205, 214, 244, 0.26), transparent);
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+
+  .ticket__next {
+    display: grid;
+    gap: 0.28rem;
+    padding-top: 0.72rem;
+    border-top: 1px dashed rgba(147, 153, 178, 0.22);
+    font-family: var(--font-mono);
     color: var(--subtext-0);
   }
 
-  .quest__next strong {
-    color: var(--text);
+  .ticket__next span {
+    color: var(--mauve);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
-  .quest__next :global(svg) {
-    color: var(--mauve);
+  .ticket__next p {
+    margin: 0;
+    color: var(--text);
+    font-size: 0.8rem;
+    line-height: 1.42;
+  }
+
+  @media (hover: hover) {
+    .ticket:hover {
+      transform: translateY(-2px);
+      border-color: rgba(203, 166, 247, 0.32);
+      background-color: rgba(49, 50, 68, 0.48);
+    }
+  }
+
+  :global(.section.is-active-section) .ticket__status span {
+    animation: queue-status-pulse 4.8s ease-in-out infinite;
+    animation-delay: var(--queue-delay);
+  }
+
+  :global(.section.is-active-section) .ticket::after {
+    animation: queue-card-scan 8.5s ease-in-out infinite;
+    animation-delay: var(--queue-scan-delay);
+  }
+
+  :global(.section.is-active-section) .ticket__bar-fill::after {
+    animation: queue-progress-signal 4.8s ease-in-out infinite;
+    animation-delay: var(--queue-signal-delay);
   }
 
   @media (max-width: 980px) {
-    .quests {
+    .queue {
       grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-height: 760px) and (min-width: 981px) {
+    .queue__head {
+      margin-bottom: 0.85rem;
+    }
+
+    .queue__title {
+      font-size: clamp(1.55rem, 4vw, 2.25rem);
+    }
+
+    .ticket {
+      gap: 0.68rem;
+      padding: 0.82rem;
+    }
+
+    .ticket__focus,
+    .ticket__next p {
+      font-size: 0.78rem;
+      line-height: 1.38;
+    }
+  }
+
+  @keyframes queue-status-pulse {
+    0%,
+    100% {
+      opacity: 0.72;
+      transform: scale(1);
+      box-shadow: 0 0 0 4px rgba(203, 166, 247, 0.06);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.14);
+      box-shadow: 0 0 0 7px rgba(203, 166, 247, 0.03);
+    }
+  }
+
+  @keyframes queue-card-scan {
+    0%,
+    56%,
+    100% {
+      opacity: 0;
+      transform: translateX(-44%);
+    }
+    68% {
+      opacity: 1;
+    }
+    86% {
+      opacity: 0;
+      transform: translateX(44%);
+    }
+  }
+
+  @keyframes queue-progress-signal {
+    0%,
+    35%,
+    100% {
+      opacity: 0;
+      transform: translateX(-100%);
+    }
+    48% {
+      opacity: 1;
+    }
+    68% {
+      opacity: 0;
+      transform: translateX(calc(var(--queue-progress) + 20px));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ticket,
+    .ticket__status span,
+    .ticket::after,
+    .ticket__bar-fill::after {
+      animation: none !important;
+      transition: none !important;
+    }
+
+    .ticket:hover {
+      transform: none;
     }
   }
 </style>

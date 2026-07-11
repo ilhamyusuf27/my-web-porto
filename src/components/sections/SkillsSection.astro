@@ -3,259 +3,509 @@ import Section from "../layout/Section.astro";
 import Icon from "../ui/Icon.astro";
 import StackChip from "../portfolio/StackChip.astro";
 
-const practicalSkillGroups = [
+const capabilityModules = [
   {
-    title: "Daily use",
+    id: "M-01",
+    title: "Daily Driver",
+    label: "Production UI",
     icon: "mdi:monitor-dashboard",
-    summary: "Primary production stack for interface work and implementation.",
-    skills: ["React", "Vue", "TypeScript", "SCSS", "Tailwind", "Git"],
+    summary:
+      "Frontend implementation stack used for production interfaces and component systems.",
+    tools: ["React", "Vue", "TypeScript", "SCSS", "Tailwind", "Git"],
+    className: "matrix-module--daily",
   },
   {
-    title: "Comfortable",
-    icon: "mdi:code-braces",
-    summary: "Tools used across projects when the product shape calls for them.",
-    skills: ["Astro", "Next.js", "Nuxt", "Redux Toolkit", "Pinia", "REST"],
-  },
-  {
-    title: "WordPress / Client work",
+    id: "M-02",
+    title: "Client Delivery",
+    label: "Client-ready",
     icon: "mdi:view-dashboard",
-    summary: "Client delivery stack for marketing sites and commerce builds.",
-    skills: ["WordPress", "Elementor", "WooCommerce", "ACF", "WPML", "Custom Themes"],
+    summary:
+      "WordPress and commerce tooling for maintainable client handoff and content operations.",
+    tools: [
+      "WordPress",
+      "Elementor",
+      "WooCommerce",
+      "ACF",
+      "WPML",
+      "Custom Themes",
+    ],
+    className: "matrix-module--client",
   },
   {
-    title: "Currently learning",
-    icon: "mdi:school-outline",
-    summary: "Backend and reliability areas being sharpened through practice.",
-    skills: ["NestJS", "Prisma", "PostgreSQL", "Docker", "Linux", "CI/CD"],
+    id: "M-03",
+    title: "Fullstack Layer",
+    label: "API / Data",
+    icon: "mdi:server",
+    summary:
+      "Backend and data layer coverage for product APIs, integrations, and persistence.",
+    tools: ["Node.js", "NestJS", "Prisma", "PostgreSQL", "REST"],
+    className: "matrix-module--fullstack",
   },
   {
-    title: "Experimental",
-    icon: "mdi:flask-outline",
-    summary: "Creative and interaction-heavy tools explored for richer interfaces.",
-    skills: ["GSAP", "Three.js", "Canvas", "Framer Motion", "Socket", "Cloudflare"],
+    id: "M-04",
+    title: "Interface Motion",
+    label: "Interaction",
+    icon: "mdi:motion-play-outline",
+    summary:
+      "Motion and rendering tools used to add restrained polish to browser interfaces.",
+    tools: ["GSAP", "Three.js", "Canvas", "Framer Motion"],
+    className: "matrix-module--motion",
   },
-  ];
+  {
+    id: "M-05",
+    title: "Reliability Track",
+    label: "Learning path",
+    icon: "mdi:wrench-outline",
+    summary:
+      "Reliability direction focused on deployment hygiene, Linux workflow, and observability habits.",
+    tools: ["Docker", "Linux", "CI/CD", "Cloudflare", "Monitoring / SRE"],
+    className: "matrix-module--reliability",
+  },
+];
 
-const moduleCount = `${practicalSkillGroups.length} modules`;
+const operatingLabels = [
+  "No arbitrary skill scores",
+  "Grouped by delivery use",
+  "Frontend-led, systems-aware",
+];
 ---
 
-<Section id="skills" label="Expertise" index="02" accent="mauve" class="section--dense">
-  <div class="skills__motif" aria-hidden="true"></div>
+<Section
+  id="skills"
+  label="Expertise"
+  index="02"
+  accent="mauve"
+  class="section--dense"
+>
+  <div class="capability" data-reveal>
+    <header class="capability__head">
+      <div class="capability__head-copy">
+        <p class="capability__eyebrow">Capability Matrix</p>
+        <h2 class="capability__title">
+          Stack topology for production delivery.
+        </h2>
+        <p class="capability__intro">
+          Practical tool coverage grouped by how it shows up in real work:
+          frontend craft, client delivery, backend integration, interface
+          polish, and reliability learning.
+        </p>
+      </div>
+      <aside class="capability__summary" aria-label="Capability summary">
+        <span>05 modules</span>
+        <span>Frontend primary</span>
+        <span>Fullstack capable</span>
+      </aside>
+    </header>
 
-  <header class="skills__head" data-reveal>
-    <div class="skills__head-text">
-      <h2 class="skills__title">Expertise</h2>
-      <p class="skills__sub">Grouped by how the tools show up in real work.</p>
-    </div>
-    <span class="skills__head-meta">{moduleCount}</span>
-  </header>
-
-  <div class="skills__grid">
-    {
-      practicalSkillGroups.map((group, i) => (
-        <article
-          class="skill-slot"
-          data-reveal
-          tabindex="0"
-          aria-label={`${group.title} skills`}
-        >
-          <header class="skill-slot__head">
-            <span class="skill-slot__icon">
-              <Icon name={group.icon} size={20} />
-            </span>
-            <div class="skill-slot__head-text">
-              <span class="skill-slot__index">M-{String(i + 1).padStart(2, "0")}</span>
-              <h3 class="skill-slot__title">{group.title}</h3>
+    <div class="capability__topology" aria-label="Capability areas">
+      <div class="capability__connectors" aria-hidden="true"></div>
+      {
+        capabilityModules.map((module) => (
+          <article class={`matrix-module ${module.className}`}>
+            <header class="matrix-module__head">
+              <span class="matrix-module__id">{module.id}</span>
+              <span class="matrix-module__icon" aria-hidden="true">
+                <Icon name={module.icon} size={16} />
+              </span>
+              <span class="matrix-module__label">{module.label}</span>
+            </header>
+            <h3>{module.title}</h3>
+            <p>{module.summary}</p>
+            <div
+              class="matrix-module__chips"
+              aria-label={`${module.title} tools`}
+            >
+              {module.tools.map((tool) => (
+                <StackChip label={tool} />
+              ))}
             </div>
-          </header>
-          <p class="skill-slot__summary">{group.summary}</p>
-          <div class="skill-slot__chips">
-            {group.skills.map((skill) => (
-              <StackChip label={skill} />
-            ))}
-          </div>
-        </article>
-      ))
-    }
+          </article>
+        ))
+      }
+    </div>
+
+    <footer class="capability__labels" aria-label="Operating labels">
+      {
+        operatingLabels.map((label) => (
+          <span>
+            <i aria-hidden="true" />
+            {label}
+          </span>
+        ))
+      }
+    </footer>
   </div>
 </Section>
 
 <style>
-  .skills__motif {
-    position: absolute;
-    inset: -1.5rem;
-    z-index: 0;
-    pointer-events: none;
-    background-image:
-      linear-gradient(to right, rgba(147, 153, 178, 0.06) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(147, 153, 178, 0.045) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(147, 153, 178, 0.05) 1px, transparent 1px);
-    background-size:
-      44px 44px,
-      44px 44px,
-      100% 44px;
-    -webkit-mask-image: radial-gradient(ellipse at 50% 35%, #000 0%, transparent 82%);
-    mask-image: radial-gradient(ellipse at 50% 35%, #000 0%, transparent 82%);
-  }
-
-  .skills__head {
+  .capability {
     position: relative;
-    z-index: 1;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 1.2rem;
-  }
-
-  .skills__head-text {
-    max-width: 620px;
-  }
-
-  .skills__title {
-    font-size: clamp(1.75rem, 5vw, 2.75rem);
-    line-height: 1.1;
-    margin-bottom: 0.4rem;
-  }
-
-  .skills__sub {
-    color: var(--subtext-1);
-    font-family: var(--font-mono);
-    font-size: 0.95rem;
-  }
-
-  .skills__head-meta {
-    flex: none;
-    font-family: var(--font-mono);
-    font-size: 0.74rem;
-    letter-spacing: 0.02em;
-    color: var(--subtext-0);
-    background: var(--bg-card);
-    border: 1px solid var(--border-dim);
-    padding: 0.4rem 0.65rem;
-    white-space: nowrap;
-  }
-
-  .skills__grid {
-    position: relative;
-    z-index: 1;
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 0.85rem;
+    gap: clamp(0.8rem, 1.7vh, 1.05rem);
   }
 
-  .skill-slot {
-    --accent: var(--mauve);
+  .capability__head,
+  .capability__topology,
+  .capability__labels {
     position: relative;
-    background: var(--bg-card);
-    border: 1px solid var(--border-dim);
-    border-top: 1px solid rgba(203, 166, 247, 0.34);
-    box-shadow: 4px 4px 0 rgba(17, 17, 27, 0.72);
-    padding: 0.95rem 1rem;
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    z-index: 1;
   }
 
-  /* small module notch in the corner (structural detail, not an ornament) */
-  .skill-slot::after {
+  .capability__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 0.32fr);
+    align-items: end;
+    gap: 1rem;
+  }
+
+  .capability__head-copy {
+    max-width: 760px;
+  }
+
+  .capability__eyebrow,
+  .capability__intro,
+  .capability__summary,
+  .matrix-module__id,
+  .matrix-module__label,
+  .capability__labels {
+    font-family: var(--font-mono);
+  }
+
+  .capability__eyebrow {
+    margin: 0 0 0.4rem;
+    color: var(--mauve);
+    font-size: 0.74rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .capability__title {
+    max-width: 820px;
+    margin: 0;
+    font-size: clamp(1.65rem, 4vw, 2.55rem);
+    line-height: 1.06;
+    letter-spacing: 0;
+    color: var(--text);
+  }
+
+  .capability__intro {
+    max-width: 72ch;
+    margin: 0.55rem 0 0;
+    color: var(--subtext-1);
+    font-size: clamp(0.86rem, 1.2vw, 0.95rem);
+    line-height: 1.55;
+  }
+
+  .capability__summary {
+    display: grid;
+    gap: 0.35rem;
+    padding: 0.72rem;
+    border: 1px solid rgba(147, 153, 178, 0.22);
+    background: rgba(17, 17, 27, 0.38);
+    color: var(--subtext-0);
+    font-size: 0.66rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .capability__summary span {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.8rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid rgba(147, 153, 178, 0.14);
+  }
+
+  .capability__summary span:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .capability__topology {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-auto-rows: minmax(10.7rem, auto);
+    gap: 0.72rem;
+    padding: 0.78rem;
+    border: 1px solid rgba(147, 153, 178, 0.2);
+    background:
+      linear-gradient(135deg, rgba(203, 166, 247, 0.045), transparent 34%),
+      rgba(24, 24, 37, 0.48);
+    overflow: hidden;
+  }
+
+  .capability__connectors {
+    position: absolute;
+    inset: 0.8rem;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        90deg,
+        transparent 0 15%,
+        rgba(147, 153, 178, 0.16) 15% 15.2%,
+        transparent 15.2% 100%
+      ),
+      linear-gradient(
+        90deg,
+        transparent 0 48%,
+        rgba(147, 153, 178, 0.14) 48% 48.15%,
+        transparent 48.15% 100%
+      ),
+      linear-gradient(
+        90deg,
+        transparent 0 74%,
+        rgba(147, 153, 178, 0.13) 74% 74.15%,
+        transparent 74.15% 100%
+      ),
+      linear-gradient(
+        0deg,
+        transparent 0 49%,
+        rgba(147, 153, 178, 0.14) 49% 49.2%,
+        transparent 49.2% 100%
+      );
+    opacity: 0.8;
+  }
+
+  .matrix-module {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto auto auto 1fr;
+    gap: 0.48rem;
+    min-width: 0;
+    padding: 0.78rem;
+    border: 1px solid rgba(147, 153, 178, 0.22);
+    background: rgba(30, 30, 46, 0.68);
+    transition:
+      transform 0.16s ease,
+      background 0.16s ease,
+      border-color 0.16s ease;
+  }
+
+  .matrix-module::before {
     content: "";
     position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 8px;
-    height: 8px;
-    background: rgba(147, 153, 178, 0.32);
+    top: -1px;
+    left: 0.8rem;
+    width: 2.4rem;
+    height: 1px;
+    background: rgba(203, 166, 247, 0.58);
   }
 
-  .skill-slot:nth-child(1),
-  .skill-slot:nth-child(2) {
+  .matrix-module:hover {
+    transform: translateY(-2px);
+    border-color: rgba(203, 166, 247, 0.34);
+    background: rgba(49, 50, 68, 0.46);
+  }
+
+  .matrix-module--daily {
+    grid-column: span 5;
+  }
+
+  .matrix-module--client {
+    grid-column: span 4;
+  }
+
+  .matrix-module--fullstack {
     grid-column: span 3;
   }
 
-  .skill-slot:nth-child(n + 3) {
-    grid-column: span 2;
+  .matrix-module--motion {
+    grid-column: 1 / span 5;
   }
 
-  .skill-slot:hover,
-  .skill-slot:focus-visible {
-    transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 rgba(17, 17, 27, 0.82), 0 0 0 1px rgba(203, 166, 247, 0.34);
-    outline: none;
+  .matrix-module--reliability {
+    grid-column: span 7;
   }
 
-  .skill-slot__head {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.65rem;
-    margin-bottom: 0.65rem;
-    padding-bottom: 0.6rem;
-    border-bottom: 1px dashed rgba(147, 153, 178, 0.32);
+  .matrix-module__head {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.45rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(147, 153, 178, 0.18);
   }
 
-  .skill-slot__icon {
+  .matrix-module__id {
+    color: var(--overlay-1);
+    font-size: 0.62rem;
+    letter-spacing: 0.09em;
+  }
+
+  .matrix-module__icon {
     display: grid;
     place-items: center;
-    width: 34px;
-    height: 34px;
     color: var(--mauve);
-    background: var(--mantle);
-    border: 1px solid var(--border-dim);
-    flex: none;
+    opacity: 0.9;
   }
 
-  .skill-slot__head-text {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-  }
-
-  .skill-slot__index {
-    font-family: var(--font-mono);
-    font-size: 0.64rem;
+  .matrix-module__label {
+    justify-self: end;
+    padding: 0.13rem 0.38rem;
+    border: 1px solid rgba(147, 153, 178, 0.24);
+    color: var(--subtext-0);
+    font-size: 0.55rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--subtext-0);
+    white-space: nowrap;
   }
 
-  .skill-slot__title {
-    font-family: var(--font-heading);
-    font-weight: 600;
-    font-size: 1.1rem;
-    line-height: 1.15;
-    color: var(--text);
+  .matrix-module h3 {
     margin: 0;
+    color: var(--text);
+    font-size: clamp(1rem, 1.35vw, 1.18rem);
+    font-weight: 650;
+    line-height: 1.1;
   }
 
-  .skill-slot__summary {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    line-height: 1.45;
+  .matrix-module p {
+    margin: 0;
     color: var(--subtext-0);
-    margin: 0 0 0.7rem;
+    font-size: 0.78rem;
+    line-height: 1.44;
   }
 
-  .skill-slot__chips {
+  .matrix-module__chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    align-content: end;
+    gap: 0.36rem;
+    margin-top: 0.12rem;
   }
 
-  @media (max-width: 980px) {
-    .skills__grid {
-      grid-template-columns: repeat(2, 1fr);
+  .matrix-module__chips :global(.stack-chip) {
+    padding: 0.24rem 0.48rem;
+    font-size: 0.68rem;
+    background: rgba(49, 50, 68, 0.46);
+  }
+
+  .capability__labels {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.6rem;
+    color: var(--subtext-0);
+    font-size: 0.67rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .capability__labels span {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-width: 0;
+    padding: 0.58rem 0.7rem;
+    border: 1px solid rgba(147, 153, 178, 0.18);
+    background: rgba(17, 17, 27, 0.28);
+  }
+
+  .capability__labels i {
+    width: 5px;
+    height: 5px;
+    flex: none;
+    background: var(--mauve);
+    opacity: 0.76;
+  }
+
+  @media (max-width: 1080px) {
+    .capability__head {
+      grid-template-columns: 1fr;
+      align-items: start;
     }
 
-    .skill-slot:nth-child(n) {
-      grid-column: span 1;
+    .capability__summary {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .capability__summary span {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .capability__topology {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: auto;
+    }
+
+    .matrix-module,
+    .matrix-module--daily,
+    .matrix-module--client,
+    .matrix-module--fullstack,
+    .matrix-module--motion,
+    .matrix-module--reliability {
+      grid-column: auto;
+    }
+
+    .capability__connectors {
+      display: none;
     }
   }
 
-  @media (max-width: 640px) {
-    .skills__grid {
+  @media (max-width: 680px) {
+    .capability__summary,
+    .capability__topology,
+    .capability__labels {
       grid-template-columns: 1fr;
     }
 
-    .skills__motif {
-      inset: -1rem;
+    .matrix-module__head {
+      grid-template-columns: auto auto;
+    }
+
+    .matrix-module__label {
+      grid-column: 1 / -1;
+      justify-self: start;
+    }
+  }
+
+  @media (max-height: 780px) and (min-width: 1081px) {
+    .capability {
+      gap: 0.68rem;
+    }
+
+    .capability__intro {
+      max-width: 68ch;
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+
+    .capability__summary {
+      padding: 0.62rem;
+    }
+
+    .capability__topology {
+      grid-auto-rows: minmax(9.2rem, auto);
+      gap: 0.6rem;
+      padding: 0.65rem;
+    }
+
+    .matrix-module {
+      gap: 0.38rem;
+      padding: 0.64rem;
+    }
+
+    .matrix-module p {
+      font-size: 0.72rem;
+      line-height: 1.36;
+    }
+
+    .matrix-module__chips :global(.stack-chip) {
+      padding: 0.2rem 0.42rem;
+      font-size: 0.64rem;
+    }
+
+    .capability__labels span {
+      padding-block: 0.48rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .matrix-module {
+      transition: none;
+    }
+
+    .matrix-module:hover {
+      transform: none;
     }
   }
 </style>

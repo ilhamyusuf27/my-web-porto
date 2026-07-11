@@ -1,100 +1,148 @@
 ---
 import Section from "../layout/Section.astro";
-import PixelCard from "../ui/PixelCard.astro";
 import Icon from "../ui/Icon.astro";
 import { profile } from "../../data/profile";
 
-const capabilityCards = [
+const capabilityAreas = [
   {
-    label: "Interface craft",
     icon: "mdi:code-tags",
-    note: "React, Vue, Astro, TypeScript, responsive UI systems.",
+    label: "Interface Craft",
+    note: "Responsive UI systems in React, Vue, Astro, and TypeScript.",
+    tag: "Core",
   },
   {
-    label: "Client delivery",
     icon: "mdi:view-dashboard",
-    note: "WordPress, WooCommerce, Elementor, ACF, client handoff.",
+    label: "Client Delivery",
+    note: "WordPress, WooCommerce, Elementor, and ACF for client handoff.",
+    tag: "Client-ready",
   },
   {
-    label: "Backend fluency",
     icon: "mdi:server",
-    note: "Node, NestJS, Prisma, PostgreSQL, API integration.",
+    label: "Backend Integration",
+    note: "Node, NestJS, Prisma, and PostgreSQL for product APIs.",
+    tag: "Production use",
   },
   {
-    label: "Motion systems",
-    icon: "mdi:motion-play-outline",
-    note: "GSAP, Three.js, Canvas, interaction polish.",
+    icon: "mdi:wrench-outline",
+    label: "Reliability / DevOps",
+    note: "Learning Docker, CI/CD, monitoring, and SRE-minded delivery.",
+    tag: "In learning",
   },
-  ];
+];
+
+const modeStrip = [
+  { k: "Base", v: "Indonesia / GMT+7" },
+  { k: "Focus", v: "Frontend + Fullstack" },
+  { k: "Direction", v: "DevOps / SRE" },
+];
+
+const workingModes = [
+  "Interface-first implementation",
+  "Backend-aware delivery",
+  "Client handoff discipline",
+];
 ---
 
-<Section id="about" label="About" index="01" accent="mauve" class="section--dense">
-  <div class="about">
-    <div class="about__motif about__motif--grid" aria-hidden="true"></div>
-    <div class="about__motif about__motif--radar" aria-hidden="true"></div>
-
-    <div class="about__intro" data-reveal>
-      <PixelCard accent="mauve" hud="pilot // 01">
-        <div class="about__screen-head">
-          <span class="about__screen-id">Pilot // Profile</span>
-          <span class="about__screen-status">
-            <span class="about__screen-dot" aria-hidden="true"></span>
-            Active
-          </span>
+<Section id="about" label="Operator Profile" index="01" accent="mauve" class="section--dense">
+  <div class="about" data-reveal>
+    <section class="about__identity-panel" aria-labelledby="about-title">
+      <header class="about__panel-head">
+        <div>
+          <p class="about__eyebrow">Developer Profile</p>
+          <p class="about__panel-id">identity.kernel / verified-context</p>
         </div>
+        <span class="about__availability">
+          <span class="about__availability-dot" aria-hidden="true"></span>
+          Available / Remote
+        </span>
+      </header>
 
-        <div class="about__avatar-wrap">
-          <div class="about__avatar">
-            <img src={profile.avatar} alt={`Pixel portrait of ${profile.name}`} loading="lazy" decoding="async" />
-            <span class="about__avatar-frame" aria-hidden="true"></span>
-          </div>
-          <div class="about__id">
-            <span class="about__id-label">Callsign</span>
-            <strong class="about__id-name">{profile.callsign}</strong>
-            <span class="about__id-class">{profile.role} · {profile.subrole}</span>
-          </div>
+      <div class="about__profile-row">
+        <figure class="about__avatar">
+          <img
+            src={profile.avatar}
+            alt={`Portrait of ${profile.name}`}
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+
+        <div class="about__profile-copy">
+          <span class="about__handle">@{profile.callsign}</span>
+          <h2 id="about-title" class="about__name">{profile.name}</h2>
+          <p class="about__role">{profile.role} / {profile.subrole}</p>
         </div>
+      </div>
 
-        <h2 class="about__title">Frontend craft with fullstack range.</h2>
-        <p class="about__bio">{profile.intro}</p>
+      <p class="about__statement">
+        Frontend-focused engineer with fullstack range, shipping interfaces that
+        stay maintainable after handoff and growing toward reliability-minded
+        production systems.
+      </p>
 
-        <ul class="about__facts" role="list">
-          <li>
-            <Icon name="mdi:map-marker-radius" size={16} />
-            <span>{profile.location}</span>
-          </li>
-          <li>
-            <Icon name="mdi:circle-medium" size={16} />
-            <span>{profile.availability}</span>
-          </li>
-          <li>
-            <Icon name="mdi:file-document-outline" size={16} />
-            <span>CV available on request</span>
-          </li>
-        </ul>
-      </PixelCard>
-    </div>
-
-    <div class="about__capabilities">
-      {
-        capabilityCards.map((card, i) => (
-          <article class="about__capability" data-reveal>
-            <div class="about__capability-head">
-              <span class="about__capability-icon">
-                <Icon name={card.icon} size={18} />
-              </span>
-              <h3>{card.label}</h3>
-              <span class="about__capability-idx">SYS {String(i + 1).padStart(2, "0")}</span>
+      <dl class="about__mode" aria-label="Working context">
+        {
+          modeStrip.map((cell) => (
+            <div class="about__mode-cell">
+              <dt>{cell.k}</dt>
+              <dd>{cell.v}</dd>
             </div>
-            <p>{card.note}</p>
-            <span class="about__capability-status">
-              <span class="about__capability-dot" aria-hidden="true"></span>
-              Online
-            </span>
-          </article>
-        ))
-      }
-    </div>
+          ))
+        }
+      </dl>
+
+      <div class="about__working-mode" aria-label="Current working mode">
+        <p class="about__working-title">Current working mode</p>
+        <ul class="about__working-list">
+          {
+            workingModes.map((item) => (
+              <li>
+                <span aria-hidden="true"></span>
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <p class="about__terminal" aria-hidden="true">
+        <span>&gt;</span>
+        ready · frontend + fullstack engagements
+        <i></i>
+      </p>
+    </section>
+
+    <aside class="about__matrix" aria-labelledby="about-capabilities-title">
+      <header class="about__matrix-head">
+        <div>
+          <h3 id="about-capabilities-title">Capability Areas</h3>
+          <p>04 channels connected to the identity kernel</p>
+        </div>
+        <span aria-hidden="true">04</span>
+      </header>
+
+      <div class="about__channels">
+        {
+          capabilityAreas.map((area, index) => (
+            <article class="about__channel">
+              <div class="about__channel-index" aria-hidden="true">
+                {String(index + 1).padStart(2, "0")}
+              </div>
+              <div class="about__channel-body">
+                <header class="about__channel-head">
+                  <span class="about__channel-icon" aria-hidden="true">
+                    <Icon name={area.icon} size={16} />
+                  </span>
+                  <h4>{area.label}</h4>
+                  <span class="about__channel-tag">{area.tag}</span>
+                </header>
+                <p>{area.note}</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </aside>
   </div>
 </Section>
 
@@ -102,279 +150,564 @@ const capabilityCards = [
   .about {
     position: relative;
     display: grid;
-    grid-template-columns: 1.25fr 1fr;
-    gap: clamp(0.9rem, 2.2vw, 1.5rem);
-    align-items: start;
+    grid-template-columns: minmax(0, 1.12fr) minmax(340px, 0.88fr);
+    gap: clamp(1rem, 2vw, 1.4rem);
+    align-items: stretch;
+    isolation: isolate;
   }
 
-  /* ---------- Cockpit motifs (CSS only, low opacity, decorative) ---------- */
-  .about__motif {
+  .about::before {
+    content: "";
     position: absolute;
-    z-index: 0;
-    pointer-events: none;
+    top: 3.5rem;
+    bottom: 3.5rem;
+    left: calc(52% - 1px);
+    width: 1px;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(203, 166, 247, 0.42),
+      rgba(147, 153, 178, 0.2),
+      transparent
+    );
+    z-index: -1;
   }
 
-  .about__motif--grid {
-    inset: -1.5rem;
-    background-image:
-      linear-gradient(to right, rgba(147, 153, 178, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(147, 153, 178, 0.05) 1px, transparent 1px);
-    background-size: 30px 30px;
-    -webkit-mask-image: radial-gradient(ellipse at 28% 35%, #000 0%, transparent 72%);
-    mask-image: radial-gradient(ellipse at 28% 35%, #000 0%, transparent 72%);
-  }
-
-  .about__motif--radar {
-    width: 420px;
-    height: 420px;
-    left: -90px;
-    top: -70px;
-    border-radius: 50%;
+  .about__identity-panel,
+  .about__matrix {
+    position: relative;
+    min-width: 0;
+    border: 1px solid var(--border-dim);
     background:
-      radial-gradient(circle, rgba(147, 153, 178, 0.16) 0 1.5px, transparent 2px) center / 100% 100% no-repeat,
-      radial-gradient(circle, transparent 64px, rgba(147, 153, 178, 0.10) 64px 65px, transparent 66px),
-      radial-gradient(circle, transparent 124px, rgba(147, 153, 178, 0.08) 124px 125px, transparent 126px),
-      radial-gradient(circle, transparent 184px, rgba(147, 153, 178, 0.05) 184px 185px, transparent 186px),
-      conic-gradient(from 210deg, rgba(203, 166, 247, 0.05), transparent 55deg);
-    -webkit-mask-image: radial-gradient(circle, #000 58%, transparent 70%);
-    mask-image: radial-gradient(circle, #000 58%, transparent 70%);
+      linear-gradient(135deg, rgba(203, 166, 247, 0.055), transparent 42%),
+      rgba(24, 24, 37, 0.78);
+    box-shadow: var(--pixel-shadow);
+    backdrop-filter: blur(10px);
   }
 
-  .about__intro,
-  .about__capabilities {
+  .about__identity-panel {
+    display: grid;
+    grid-template-rows: auto auto auto auto 1fr auto;
+    gap: clamp(0.8rem, 1.8vh, 1.05rem);
+    padding: clamp(1rem, 2vw, 1.45rem);
+    border-top-color: rgba(203, 166, 247, 0.4);
+  }
+
+  .about__identity-panel::before,
+  .about__matrix::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(147, 153, 178, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(147, 153, 178, 0.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: linear-gradient(to bottom, black, transparent 82%);
+  }
+
+  .about__panel-head,
+  .about__matrix-head,
+  .about__profile-row,
+  .about__channel,
+  .about__working-mode,
+  .about__terminal {
     position: relative;
     z-index: 1;
   }
 
-  /* ---------- Profile / cockpit screen ---------- */
-  .about__screen-head {
+  .about__panel-head,
+  .about__matrix-head {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
-    gap: 0.75rem;
-    margin-bottom: 0.95rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px dashed rgba(147, 153, 178, 0.3);
+    gap: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(147, 153, 178, 0.22);
   }
 
-  .about__screen-id {
-    font-family: var(--font-pixel);
-    font-size: 0.5rem;
-    letter-spacing: 0.08em;
+  .about__eyebrow,
+  .about__panel-id,
+  .about__availability,
+  .about__mode dt,
+  .about__working-title,
+  .about__matrix-head p,
+  .about__matrix-head > span,
+  .about__channel-index,
+  .about__channel-tag,
+  .about__terminal {
+    font-family: var(--font-mono);
+  }
+
+  .about__eyebrow {
+    margin: 0 0 0.25rem;
+    font-size: 0.76rem;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--subtext-0);
+    color: var(--text);
   }
 
-  .about__screen-status {
+  .about__panel-id {
+    margin: 0;
+    font-size: 0.66rem;
+    color: var(--overlay-1);
+  }
+
+  .about__availability {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
+    gap: 0.42rem;
+    flex: none;
+    font-size: 0.64rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--mauve);
   }
 
-  .about__screen-dot {
+  .about__availability-dot {
     width: 7px;
     height: 7px;
     background: var(--mauve);
+    box-shadow: 0 0 0 4px rgba(203, 166, 247, 0.08);
   }
 
-  .about__avatar-wrap {
-    display: flex;
+  .about__profile-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: clamp(0.9rem, 2vw, 1.25rem);
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
   }
 
   .about__avatar {
     position: relative;
-    width: 88px;
-    height: 88px;
-    flex: none;
-    border: 1px solid var(--border-dim);
-    box-shadow: 4px 4px 0 rgba(17, 17, 27, 0.75);
-    image-rendering: pixelated;
-    overflow: hidden;
+    width: clamp(86px, 10vw, 112px);
+    aspect-ratio: 1;
+    margin: 0;
+    border: 1px solid rgba(147, 153, 178, 0.36);
     background: var(--mantle);
+    overflow: hidden;
+  }
+
+  .about__avatar::before,
+  .about__avatar::after {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-color: rgba(203, 166, 247, 0.55);
+    pointer-events: none;
+  }
+
+  .about__avatar::before {
+    top: 6px;
+    left: 6px;
+    border-top: 1px solid;
+    border-left: 1px solid;
+  }
+
+  .about__avatar::after {
+    right: 6px;
+    bottom: 6px;
+    border-right: 1px solid;
+    border-bottom: 1px solid;
   }
 
   .about__avatar img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    filter: saturate(0.88) contrast(1.04);
   }
 
-  .about__avatar-frame {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    box-shadow: inset 0 0 0 1px rgba(203, 166, 247, 0.34);
+  .about__profile-copy {
+    min-width: 0;
   }
 
-  .about__id {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-  }
-
-  .about__id-label {
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--subtext-0);
-  }
-
-  .about__id-name {
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    color: var(--text);
-  }
-
-  .about__id-class {
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    color: var(--subtext-0);
-  }
-
-  .about__title {
-    font-family: var(--font-heading);
-    font-size: clamp(1.5rem, 4vw, 2.25rem);
-    line-height: 1.15;
-    margin: 0 0 0.5rem;
-  }
-
-  .about__bio {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: var(--subtext-1);
-    max-width: 52ch;
-  }
-
-  .about__facts {
-    list-style: none;
-    margin: 1rem 0 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .about__facts li {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    color: var(--subtext-1);
-  }
-
-  .about__facts :global(svg) {
-    color: var(--mauve);
-  }
-
-  /* ---------- Capability readouts ---------- */
-  .about__capabilities {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-    align-content: start;
-  }
-
-  .about__capability {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    background: var(--bg-card);
-    border: 1px solid var(--border-dim);
-    border-left: 2px solid rgba(203, 166, 247, 0.42);
-    box-shadow: 3px 3px 0 rgba(17, 17, 27, 0.75);
-    padding: 0.85rem 0.95rem;
-  }
-
-  .about__capability-head {
-    display: flex;
-    align-items: center;
-    gap: 0.55rem;
-  }
-
-  .about__capability-icon {
-    display: grid;
-    place-items: center;
-    width: 30px;
-    height: 30px;
-    color: var(--mauve);
-    background: var(--mantle);
-    border: 1px solid var(--border-dim);
-    flex: none;
-  }
-
-  .about__capability h3 {
-    font-family: var(--font-heading);
-    font-weight: 600;
-    font-size: 0.98rem;
-    line-height: 1.1;
-    color: var(--text);
-    margin: 0;
-  }
-
-  .about__capability-idx {
-    margin-left: auto;
-    font-family: var(--font-mono);
-    font-size: 0.64rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--subtext-0);
-  }
-
-  .about__capability p {
+  .about__handle {
+    display: block;
+    margin-bottom: 0.32rem;
     font-family: var(--font-mono);
     font-size: 0.76rem;
+    color: var(--mauve);
+  }
+
+  .about__name {
+    margin: 0;
+    font-size: clamp(1.8rem, 4vw, 2.75rem);
+    letter-spacing: 0;
+    color: var(--text);
+  }
+
+  .about__role {
+    margin: 0.4rem 0 0;
+    font-family: var(--font-mono);
+    font-size: clamp(0.76rem, 1.2vw, 0.86rem);
+    line-height: 1.4;
+    color: var(--subtext-0);
+  }
+
+  .about__statement {
+    position: relative;
+    z-index: 1;
+    max-width: 58ch;
+    margin: 0;
+    font-size: clamp(1rem, 1.35vw, 1.12rem);
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .about__mode {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0;
+    border: 1px solid rgba(147, 153, 178, 0.22);
+    background: rgba(17, 17, 27, 0.36);
+  }
+
+  .about__mode-cell {
+    min-width: 0;
+    padding: 0.68rem 0.75rem;
+    border-left: 1px solid rgba(147, 153, 178, 0.16);
+  }
+
+  .about__mode-cell:first-child {
+    border-left: 0;
+  }
+
+  .about__mode dt {
+    margin-bottom: 0.22rem;
+    font-size: 0.58rem;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--overlay-1);
+  }
+
+  .about__mode dd {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    line-height: 1.35;
+    color: var(--text);
+  }
+
+  .about__working-mode {
+    align-self: end;
+    display: grid;
+    grid-template-columns: 0.46fr 1fr;
+    gap: 0.75rem;
+    padding: 0.8rem;
+    border: 1px solid rgba(147, 153, 178, 0.18);
+    background: rgba(49, 50, 68, 0.22);
+  }
+
+  .about__working-title {
+    margin: 0;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--subtext-0);
+  }
+
+  .about__working-list {
+    display: grid;
+    gap: 0.36rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .about__working-list li {
+    display: flex;
+    gap: 0.45rem;
+    align-items: center;
+    font-size: 0.82rem;
+    line-height: 1.35;
+    color: var(--subtext-1);
+  }
+
+  .about__working-list span {
+    width: 5px;
+    height: 5px;
+    flex: none;
+    background: var(--mauve);
+    opacity: 0.75;
+  }
+
+  .about__terminal {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    color: var(--subtext-0);
+    font-size: 0.74rem;
+  }
+
+  .about__terminal span {
+    color: var(--mauve);
+  }
+
+  .about__terminal i {
+    width: 8px;
+    height: 14px;
+    display: inline-block;
+    background: var(--mauve);
+    animation: about-blink 1.1s steps(2, start) infinite;
+  }
+
+  @keyframes about-blink {
+    to {
+      opacity: 0;
+    }
+  }
+
+  .about__matrix {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 0.75rem;
+    padding: clamp(0.95rem, 1.8vw, 1.2rem);
+    background:
+      linear-gradient(225deg, rgba(203, 166, 247, 0.045), transparent 38%),
+      rgba(24, 24, 37, 0.62);
+  }
+
+  .about__matrix::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: calc(clamp(1rem, 2vw, 1.4rem) * -1);
+    width: clamp(1rem, 2vw, 1.4rem);
+    height: 1px;
+    background: rgba(203, 166, 247, 0.42);
+  }
+
+  .about__matrix-head h3 {
+    margin: 0 0 0.25rem;
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+
+  .about__matrix-head p {
+    margin: 0;
+    font-size: 0.66rem;
+    color: var(--overlay-1);
+  }
+
+  .about__matrix-head > span {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(147, 153, 178, 0.24);
+    color: var(--mauve);
+    font-size: 0.7rem;
+  }
+
+  .about__channels {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr;
+    align-content: stretch;
+    gap: 0.6rem;
+  }
+
+  .about__channel {
+    display: grid;
+    grid-template-columns: 2.15rem minmax(0, 1fr);
+    gap: 0.7rem;
+    align-items: stretch;
+    min-height: 6.1rem;
+    padding: 0.72rem;
+    border: 1px solid rgba(147, 153, 178, 0.2);
+    background: rgba(30, 30, 46, 0.48);
+    transition:
+      transform 0.16s ease,
+      background 0.16s ease,
+      border-color 0.16s ease;
+  }
+
+  .about__channel:hover {
+    transform: translateY(-2px);
+    border-color: rgba(203, 166, 247, 0.36);
+    background: rgba(49, 50, 68, 0.42);
+  }
+
+  .about__channel-index {
+    display: grid;
+    place-items: center;
+    border-right: 1px solid rgba(147, 153, 178, 0.18);
+    color: var(--overlay-1);
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+  }
+
+  .about__channel-body {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.52rem;
+  }
+
+  .about__channel-head {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .about__channel-icon {
+    display: grid;
+    place-items: center;
+    color: var(--mauve);
+    opacity: 0.92;
+  }
+
+  .about__channel h4 {
+    margin: 0;
+    min-width: 0;
+    font-size: 0.95rem;
+    font-weight: 650;
+    line-height: 1.1;
+    color: var(--text);
+  }
+
+  .about__channel-tag {
+    justify-self: end;
+    padding: 0.16rem 0.38rem;
+    border: 1px solid rgba(147, 153, 178, 0.24);
+    color: var(--subtext-0);
+    font-size: 0.55rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .about__channel p {
+    margin: 0;
+    max-width: 42ch;
+    font-size: 0.82rem;
     line-height: 1.45;
     color: var(--subtext-0);
   }
 
-  .about__capability-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-family: var(--font-mono);
-    font-size: 0.64rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--subtext-0);
-  }
-
-  .about__capability-dot {
-    width: 6px;
-    height: 6px;
-    background: var(--mauve);
-  }
-
-  @media (max-width: 860px) {
+  @media (max-width: 1060px) {
     .about {
       grid-template-columns: 1fr;
     }
 
-    .about__capabilities {
-      grid-template-columns: 1fr;
+    .about::before,
+    .about__matrix::after {
+      display: none;
     }
 
-    .about__motif--radar {
-      display: none;
+    .about__matrix {
+      grid-template-rows: auto auto;
+    }
+
+    .about__channels {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  @media (max-height: 760px) {
-    .about__avatar-wrap {
-      margin-bottom: 0.75rem;
+  @media (max-width: 700px) {
+    .about__panel-head,
+    .about__matrix-head {
+      align-items: flex-start;
+      flex-direction: column;
     }
 
-    .about__facts {
-      margin-top: 0.75rem;
+    .about__profile-row,
+    .about__working-mode {
+      grid-template-columns: 1fr;
+    }
+
+    .about__mode,
+    .about__channels {
+      grid-template-columns: 1fr;
+    }
+
+    .about__mode-cell,
+    .about__mode-cell:first-child {
+      border-left: 0;
+      border-top: 1px solid rgba(147, 153, 178, 0.16);
+    }
+
+    .about__mode-cell:first-child {
+      border-top: 0;
+    }
+
+    .about__channel {
+      min-height: 0;
+    }
+
+    .about__channel-head {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .about__channel-tag {
+      grid-column: 2;
+      justify-self: start;
+    }
+  }
+
+  @media (max-height: 760px) and (min-width: 1061px) {
+    .about {
+      grid-template-columns: minmax(0, 1fr) minmax(330px, 0.9fr);
+    }
+
+    .about__identity-panel,
+    .about__matrix {
+      padding: 0.9rem;
+    }
+
+    .about__identity-panel {
+      gap: 0.65rem;
+    }
+
+    .about__avatar {
+      width: 78px;
+    }
+
+    .about__name {
+      font-size: clamp(1.55rem, 3.2vw, 2.2rem);
+    }
+
+    .about__statement {
+      font-size: 0.98rem;
+      line-height: 1.5;
+    }
+
+    .about__working-mode {
+      padding: 0.65rem;
+    }
+
+    .about__channel {
+      min-height: 5.2rem;
+      padding: 0.58rem 0.64rem;
+    }
+
+    .about__channel p {
+      font-size: 0.76rem;
+      line-height: 1.38;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .about__terminal i {
+      animation: none;
+    }
+
+    .about__channel {
+      transition: none;
+    }
+
+    .about__channel:hover {
+      transform: none;
     }
   }
 </style>

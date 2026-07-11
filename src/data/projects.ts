@@ -8,6 +8,12 @@ export type ProjectLink = {
   icon?: string;
 };
 
+export type ProjectImage = {
+  src: string;
+  alt: string;
+  caption?: string;
+};
+
 export type Project = {
   id: string;
   title: string;
@@ -22,6 +28,7 @@ export type Project = {
   outcomes?: [string, string][];
   stack: string[];
   image?: string;
+  images?: ProjectImage[];
   accent?: string;
   links?: ProjectLink[];
 };
@@ -51,6 +58,19 @@ export const projects: Project[] = [
     ],
     stack: ["Nuxt", "Pinia", "Vitest", "Strapi CMS", "i18n", "Next.js", "Redux Toolkit", "Tailwind"],
     image: "/projects/tomps-saas/landing-hero.jpg",
+    images: [
+      { src: "/projects/tomps-saas/landing-hero.jpg", alt: "Tomps SaaS landing page hero", caption: "Landing page hero" },
+      { src: "/projects/tomps-saas/package-pricing.jpg", alt: "Tomps SaaS package pricing screen", caption: "Package pricing" },
+      { src: "/projects/tomps-saas/my-package.jpg", alt: "Tomps SaaS package management screen", caption: "Customer package management" },
+      { src: "/projects/tomps-saas/company-information-form.jpg", alt: "Tomps SaaS company information form", caption: "Company onboarding form" },
+      { src: "/projects/tomps-saas/order-summary.jpg", alt: "Tomps SaaS order summary screen", caption: "Order summary" },
+      { src: "/projects/tomps-saas/payment-method.jpg", alt: "Tomps SaaS payment method screen", caption: "Payment method" },
+      { src: "/projects/tomps-saas/package-waiting-payment.jpg", alt: "Tomps SaaS waiting payment status", caption: "Waiting payment state" },
+      { src: "/projects/tomps-saas/payment-instruction.jpg", alt: "Tomps SaaS payment instruction screen", caption: "Payment instruction" },
+      { src: "/projects/tomps-saas/package-active.jpg", alt: "Tomps SaaS active package state", caption: "Active package state" },
+      { src: "/projects/tomps-saas/account-company-property.jpg", alt: "Tomps SaaS company property account screen", caption: "Account company property" },
+      { src: "/projects/tomps-saas/package-payment-failed.jpg", alt: "Tomps SaaS package payment failed state", caption: "Failed payment state" },
+    ],
     accent: "mauve",
     links: [],
   },
@@ -78,6 +98,18 @@ export const projects: Project[] = [
     ],
     stack: ["Vue", "TypeScript", "Vuex", "Tailwind"],
     image: "/projects/tomps-project/map-dashboard.jpg",
+    images: [
+      { src: "/projects/tomps-project/map-dashboard.jpg", alt: "Tomps Project map dashboard", caption: "Map dashboard" },
+      { src: "/projects/tomps-project/login.jpg", alt: "Tomps Project login screen", caption: "Login screen" },
+      { src: "/projects/tomps-project/candidate-project-list.jpg", alt: "Tomps Project candidate project list", caption: "Candidate project list" },
+      { src: "/projects/tomps-project/create-project-basic.jpg", alt: "Tomps Project basic project creation form", caption: "Create project basic data" },
+      { src: "/projects/tomps-project/create-project-fields.jpg", alt: "Tomps Project project fields form", caption: "Create project fields" },
+      { src: "/projects/tomps-project/create-project-number-table.jpg", alt: "Tomps Project project number table", caption: "Project number table" },
+      { src: "/projects/tomps-project/import-project-number-modal.jpg", alt: "Tomps Project import project number modal", caption: "Import project number modal" },
+      { src: "/projects/tomps-project/project-detail.jpg", alt: "Tomps Project detail page", caption: "Project detail" },
+      { src: "/projects/tomps-project/serial-number-monitoring.jpg", alt: "Tomps Project serial number monitoring", caption: "Serial number monitoring" },
+      { src: "/projects/tomps-project/stakeholder-master-data.jpg", alt: "Tomps Project stakeholder master data", caption: "Stakeholder master data" },
+    ],
     accent: "blue",
     links: [],
   },
@@ -105,6 +137,16 @@ export const projects: Project[] = [
     ],
     stack: ["React", "TypeScript", "Redux", "Socket", "Tailwind", "Jest", "Enzyme"],
     image: "/projects/tomps-building/dashboard.jpg",
+    images: [
+      { src: "/projects/tomps-building/dashboard.jpg", alt: "Tomps Building dashboard", caption: "Building dashboard" },
+      { src: "/projects/tomps-building/complaint-detail.jpg", alt: "Tomps Building complaint detail screen", caption: "Complaint detail" },
+      { src: "/projects/tomps-building/facility-detail.jpg", alt: "Tomps Building facility detail screen", caption: "Facility detail" },
+      { src: "/projects/tomps-building/facility-transaction.jpg", alt: "Tomps Building facility transaction screen", caption: "Facility transaction" },
+      { src: "/projects/tomps-building/ipl-billings.jpg", alt: "Tomps Building IPL billings screen", caption: "IPL billings" },
+      { src: "/projects/tomps-building/maintenance-schedule.jpg", alt: "Tomps Building maintenance schedule screen", caption: "Maintenance schedule" },
+      { src: "/projects/tomps-building/other-bills.jpg", alt: "Tomps Building other bills screen", caption: "Other bills" },
+      { src: "/projects/tomps-building/unit-detail.jpg", alt: "Tomps Building unit detail screen", caption: "Unit detail" },
+    ],
     accent: "green",
     links: [],
   },
@@ -132,6 +174,14 @@ export const projects: Project[] = [
     ],
     stack: ["React", "Redux", "Tailwind", "Socket"],
     image: "/projects/bri-box/brand-splash.jpg",
+    images: [
+      { src: "/projects/bri-box/brand-splash.jpg", alt: "BRI Box brand splash screen", caption: "Brand splash" },
+      { src: "/projects/bri-box/report-recap-admin.jpg", alt: "BRI Box admin report recap", caption: "Admin report recap" },
+      { src: "/projects/bri-box/report-recap-partner.jpg", alt: "BRI Box partner report recap", caption: "Partner report recap" },
+      { src: "/projects/bri-box/reporter-management.jpg", alt: "BRI Box reporter management screen", caption: "Reporter management" },
+      { src: "/projects/bri-box/report-detail.jpg", alt: "BRI Box report detail screen", caption: "Report detail" },
+      { src: "/projects/bri-box/asset-data.jpg", alt: "BRI Box asset data screen", caption: "Asset data" },
+    ],
     accent: "peach",
     links: [],
   },
@@ -159,6 +209,10 @@ export const projects: Project[] = [
     ],
     stack: ["React", "Redux", "Material UI"],
     image: "/projects/daily-language/student-list.jpg",
+    images: [
+      { src: "/projects/daily-language/student-list.jpg", alt: "Daily Language student list dashboard", caption: "Student list" },
+      { src: "/projects/daily-language/sign-in.jpg", alt: "Daily Language sign in screen", caption: "Sign in" },
+    ],
     accent: "teal",
     links: [],
   },
@@ -222,7 +276,16 @@ export const projectFilters: { id: string; label: string }[] = [
   { id: "ongoing", label: "Ongoing" },
 ];
 
+export function normalizeProjectCategory(value: string): string {
+  return value.trim().toLowerCase();
+}
+
 export function filterProjects(filterId: string): Project[] {
-  if (filterId === "all") return projects;
-  return projects.filter((p) => p.category === filterId);
+  const normalizedFilter = normalizeProjectCategory(filterId);
+  if (normalizedFilter === "all") return projects;
+  return projects.filter((p) => {
+    const category = normalizeProjectCategory(p.category);
+    const status = normalizeProjectCategory(p.status);
+    return category === normalizedFilter || (normalizedFilter === "ongoing" && status === "ongoing");
+  });
 }

@@ -24,8 +24,16 @@ body {
   font-family: var(--font-body);
   color: var(--text);
   background:
-    radial-gradient(900px 560px at 82% 8%, rgba(203, 166, 247, 0.045), transparent 62%),
-    radial-gradient(760px 640px at 8% 88%, rgba(205, 214, 244, 0.025), transparent 64%),
+    radial-gradient(
+      900px 560px at 82% 8%,
+      rgba(203, 166, 247, 0.045),
+      transparent 62%
+    ),
+    radial-gradient(
+      760px 640px at 8% 88%,
+      rgba(205, 214, 244, 0.025),
+      transparent 64%
+    ),
     var(--crust);
   overflow-x: hidden;
   text-rendering: geometricPrecision;
@@ -64,7 +72,10 @@ a {
   border-radius: 2px;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   font-family: var(--font-heading);
   font-weight: 700;
   line-height: 1.05;
@@ -132,7 +143,10 @@ p {
   font-weight: 700;
   padding: 0.85rem 1.25rem;
   border-radius: var(--pixel-radius);
-  transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.15s ease;
+  transition:
+    transform 0.08s ease,
+    box-shadow 0.08s ease,
+    background 0.15s ease;
 }
 
 .pixel-button:hover {
@@ -223,6 +237,90 @@ html.reveal-done [data-reveal],
 html:not(.js) [data-reveal] {
   opacity: 1;
   transform: none;
+}
+
+/* ----------  Active console micro-motion  ----------
+ * These run only on the currently active section and only on small status
+ * affordances, keeping readable content static while the interface feels live.
+ */
+.section.is-active-section .hero__prompt-state,
+.section.is-active-section .hero__runtime-badge > span,
+.section.is-active-section .about__availability-dot,
+.section.is-active-section .contact__state span,
+.section.is-active-section .contact__ready span {
+  animation: console-status-pulse 4.8s ease-in-out infinite;
+}
+
+.section.is-active-section .release-log__item-status--active,
+.section.is-active-section .release-log__status,
+.section.is-active-section .lab__badge {
+  animation: console-label-breathe 6.2s ease-in-out infinite;
+}
+
+.section.is-active-section .hero__runtime,
+.section.is-active-section .contact__endpoint,
+.section.is-active-section .edu__registry {
+  position: relative;
+  overflow: clip;
+}
+
+.section.is-active-section .hero__runtime::after,
+.section.is-active-section .edu__registry::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    transparent 38%,
+    rgba(203, 166, 247, 0.055) 50%,
+    transparent 62%,
+    transparent 100%
+  );
+  opacity: 0;
+  transform: translateX(-34%);
+  animation: console-panel-signal 9s ease-in-out infinite;
+}
+
+@keyframes console-status-pulse {
+  0%,
+  100% {
+    opacity: 0.76;
+    transform: scale(1);
+    box-shadow: 0 0 0 4px rgba(203, 166, 247, 0.07);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.16);
+    box-shadow: 0 0 0 7px rgba(203, 166, 247, 0.035);
+  }
+}
+
+@keyframes console-label-breathe {
+  0%,
+  100% {
+    opacity: 0.82;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes console-panel-signal {
+  0%,
+  58%,
+  100% {
+    opacity: 0;
+    transform: translateX(-34%);
+  }
+  70% {
+    opacity: 1;
+  }
+  86% {
+    opacity: 0;
+    transform: translateX(34%);
+  }
 }
 
 /* ----------  Reduced motion  ---------- */

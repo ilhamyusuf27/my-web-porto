@@ -420,3 +420,25 @@ Before approving a section, ask:
 - Is the motif subtle enough?
 - Is the content readable without animation?
 - Does it work on short laptop viewports?
+
+## Transition Reference Direction
+
+Use the uploaded editorial/3D reference video as motion inspiration only.
+
+Do not copy its forest visuals, ecommerce layout, white/green palette, or organic object.
+
+Takeaways:
+- Sections should feel like distinct scenes, not repeated panels.
+- Transitions should use masking, matte wipes, and staged reveals.
+- The background layer should change perspective/mode during transition.
+- Section title and content should enter in a clear editorial order.
+- Motion should feel premium, calm, and intentional.
+
+For this portfolio, translate the reference into a Production Console style:
+- dark console matte wipes
+- subtle background mode morphs
+- capability/grid/path/archive patterns
+- staged text and panel reveals
+- no game effects
+- no spaceship
+- no sci-fi clutter

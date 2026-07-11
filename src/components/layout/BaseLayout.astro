@@ -1,6 +1,7 @@
 ---
 import "../../styles/global.css";
 import "../../styles/utilities.css";
+import SectionChrome from "./SectionChrome.astro";
 
 interface Props {
   title: string;
@@ -59,12 +60,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString(
   <body class="scanlines vignette">
     <a href="#main" class="skip-link">Skip to content</a>
 
-    <!-- Fixed Three.js scene layer -->
-    <div id="scene-layer" class="scene-layer" aria-hidden="true">
-      <slot name="scene" />
+    <div class="ambient-layer" aria-hidden="true">
+      <slot name="ambient" />
     </div>
 
     <slot name="nav" />
+    <SectionChrome />
 
     <main id="main" class="main-scroll">
       <slot />
@@ -91,11 +92,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString(
         transform: translateY(0);
       }
 
-      .scene-layer {
+      .ambient-layer {
         position: fixed;
         inset: 0;
         z-index: 0;
         pointer-events: none;
+        overflow: hidden;
       }
 
       main {

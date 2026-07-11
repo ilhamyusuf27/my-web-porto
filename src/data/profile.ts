@@ -49,7 +49,7 @@ export const ongoingQuests: { id: string; title: string; focus: string; progress
     title: "This portfolio",
     focus: "Retro pixel space journey built with Astro, GSAP, and Three.js.",
     progress: 70,
-    next: "Add rocket model and polish motion.",
+    next: "Polish staged motion and interface rhythm.",
     accent: "mauve",
   },
 ];

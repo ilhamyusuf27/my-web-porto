@@ -1,224 +1,720 @@
 ---
 import Section from "../layout/Section.astro";
 import Icon from "../ui/Icon.astro";
-import StackChip from "../portfolio/StackChip.astro";
 import { experiences } from "../../data/experiences";
+
+const firstExperience = experiences[0];
+
+const statusLabel = (status: string) => (status === "active" ? "Active" : "Completed");
+const roleFocus = (exp: typeof experiences[number]) => exp.highlights[0] ?? `${exp.role} at ${exp.company}.`;
 ---
 
-<Section id="experience" label="Experience" index="03" accent="mauve">
-  <header class="log__head" data-reveal>
-    <h2 class="log__title">Experience</h2>
-    <p class="log__sub">Roles in chronological order, most recent first.</p>
-  </header>
+<Section id="experience" label="Experience" index="03" accent="mauve" class="section--experience">
+  <div class="release-log" data-reveal>
+    <header class="release-log__head">
+      <div>
+        <p class="release-log__eyebrow">delivery.timeline</p>
+        <h2 class="release-log__title">Experience</h2>
+      </div>
+      <p class="release-log__sub">
+        Compact release history across client delivery, SaaS dashboards, and production-facing web interfaces.
+      </p>
+    </header>
 
-  <ol class="log" role="list">
-    {
-      experiences.map((exp) => (
-        <li class={`log__entry ${exp.status}`} data-reveal>
-          <span class="log__node" aria-hidden="true">
-            <span class="log__node-inner" />
-          </span>
+    <div class="release-log__shell" data-experience-log>
+      <aside class="release-log__rail" aria-label="Delivery timeline roles">
+        <div class="release-log__rail-head">
+          <span>Release log</span>
+          <span>{experiences.length} records</span>
+        </div>
 
-          <article class="log__card pixel-card pixel-card--custom" style="--card-accent: var(--mauve);">
-            <div class="log__card-head">
-              <div>
-                <h3 class="log__role">{exp.role}</h3>
-                <p class="log__company">
-                  <Icon name="mdi:briefcase-outline" size={16} />
-                  {exp.company}
-                </p>
-              </div>
-              <span class={`log__status log__status--${exp.status}`}>
-                <span class="log__status-dot" />
-                {exp.status === "active" ? "Active" : "Completed"}
-              </span>
-            </div>
+        <div class="release-log__items">
+          {
+            experiences.map((exp, index) => (
+              <button
+                type="button"
+                class={`release-log__item ${index === 0 ? "is-active" : ""}`}
+                data-experience-select={exp.id}
+                aria-current={index === 0 ? "true" : "false"}
+                aria-pressed={index === 0 ? "true" : "false"}
+              >
+                <span class="release-log__node" aria-hidden="true" />
+                <span class="release-log__item-main">
+                  <span class="release-log__item-role">{exp.role}</span>
+                  <span class="release-log__item-company">{exp.company}</span>
+                </span>
+                <span class="release-log__item-meta">
+                  <span>{exp.period}</span>
+                  <span class={`release-log__item-status release-log__item-status--${exp.status}`}>
+                    {statusLabel(exp.status)}
+                  </span>
+                </span>
+              </button>
+            ))
+          }
+        </div>
+      </aside>
 
-            <div class="log__meta">
-              <span><Icon name="mdi:calendar" size={14} /> {exp.period}</span>
-              <span><Icon name="mdi:map-marker-radius" size={14} /> {exp.location}</span>
-            </div>
+      <article class="release-log__detail" data-experience-detail aria-live="polite">
+        <div class="release-log__detail-top">
+          <div>
+            <p class="release-log__detail-kicker">Release file / <span data-exp-company>{firstExperience.company}</span></p>
+            <h3 data-exp-role>{firstExperience.role}</h3>
+          </div>
+          <span class="release-log__status" data-exp-status>{statusLabel(firstExperience.status)}</span>
+        </div>
 
-            <ul class="log__highlights" role="list">
-              {exp.highlights.map((item) => (
-                <li>
-                  <Icon name="mdi:chevron-right" size={14} />
-                  <span>{item}</span>
-                </li>
-              ))}
+        <dl class="release-log__meta-grid">
+          <div>
+            <dt>Company</dt>
+            <dd data-exp-company-meta>{firstExperience.company}</dd>
+          </div>
+          <div>
+            <dt>Period</dt>
+            <dd data-exp-period>{firstExperience.period}</dd>
+          </div>
+          <div>
+            <dt>Location</dt>
+            <dd data-exp-location>{firstExperience.location}</dd>
+          </div>
+        </dl>
+
+        <section class="release-log__summary">
+          <h4>Role focus</h4>
+          <p data-exp-focus>{roleFocus(firstExperience)}</p>
+        </section>
+
+        <div class="release-log__detail-grid">
+          <section class="release-log__panel release-log__panel--deliveries">
+            <h4>Key deliveries</h4>
+            <ul class="release-log__highlights" data-exp-highlights>
+              {
+                firstExperience.highlights.map((item) => (
+                  <li>
+                    <Icon name="mdi:chevron-right" size={14} decorative />
+                    <span>{item}</span>
+                  </li>
+                ))
+              }
             </ul>
+          </section>
 
-            <div class="log__stack">
-              {exp.stack.map((s) => (
-                <StackChip label={s} />
-              ))}
-            </div>
-          </article>
-        </li>
-      ))
-    }
-  </ol>
+          <aside class="release-log__panel release-log__panel--scope">
+            <h4>Delivery scope</h4>
+            <dl class="release-log__scope">
+              <div>
+                <dt>Status</dt>
+                <dd data-exp-status-meta>{statusLabel(firstExperience.status)}</dd>
+              </div>
+              <div>
+                <dt>Tools</dt>
+                <dd data-exp-tool-count>{firstExperience.stack.length} tools</dd>
+              </div>
+              <div>
+                <dt>Notes</dt>
+                <dd data-exp-note-count>{firstExperience.highlights.length} delivery notes</dd>
+              </div>
+            </dl>
+          </aside>
+        </div>
+
+        <section class="release-log__stack-block">
+          <div class="release-log__stack-head">
+            <h4>Stack / Tools</h4>
+            <span data-exp-stack-count>{firstExperience.stack.length} items</span>
+          </div>
+          <div class="release-log__stack" data-exp-stack>
+            {firstExperience.stack.map((item) => <span>{item}</span>)}
+          </div>
+        </section>
+      </article>
+    </div>
+  </div>
 </Section>
 
+<script type="application/json" id="experience-data" set:html={JSON.stringify(experiences)} is:inline />
+
+<script>
+  type ExperiencePayload = {
+    id: string;
+    company: string;
+    role: string;
+    period: string;
+    location: string;
+    status: "active" | "done";
+    stack: string[];
+    highlights: string[];
+  };
+
+  const statusLabel = (status: ExperiencePayload["status"]) => (status === "active" ? "Active" : "Completed");
+
+  const data = document.getElementById("experience-data");
+  const root = document.querySelector<HTMLElement>("[data-experience-log]");
+
+  if (data && root) {
+    let experiences: ExperiencePayload[] = [];
+    try {
+      experiences = JSON.parse(data.textContent || "[]");
+    } catch {
+      experiences = [];
+    }
+
+    const buttons = root.querySelectorAll<HTMLButtonElement>("[data-experience-select]");
+    const detail = root.querySelector<HTMLElement>("[data-experience-detail]");
+    const company = root.querySelector<HTMLElement>("[data-exp-company]");
+    const role = root.querySelector<HTMLElement>("[data-exp-role]");
+    const status = root.querySelector<HTMLElement>("[data-exp-status]");
+    const statusMeta = root.querySelector<HTMLElement>("[data-exp-status-meta]");
+    const companyMeta = root.querySelector<HTMLElement>("[data-exp-company-meta]");
+    const period = root.querySelector<HTMLElement>("[data-exp-period]");
+    const location = root.querySelector<HTMLElement>("[data-exp-location]");
+    const focus = root.querySelector<HTMLElement>("[data-exp-focus]");
+    const highlights = root.querySelector<HTMLElement>("[data-exp-highlights]");
+    const stack = root.querySelector<HTMLElement>("[data-exp-stack]");
+    const toolCount = root.querySelector<HTMLElement>("[data-exp-tool-count]");
+    const noteCount = root.querySelector<HTMLElement>("[data-exp-note-count]");
+    const stackCount = root.querySelector<HTMLElement>("[data-exp-stack-count]");
+
+    const render = (id: string) => {
+      const selected = experiences.find((item) => item.id === id);
+      if (!selected) return;
+
+      buttons.forEach((button) => {
+        const active = button.dataset.experienceSelect === id;
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-current", active ? "true" : "false");
+        button.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+
+      if (company) company.textContent = selected.company;
+      if (companyMeta) companyMeta.textContent = selected.company;
+      if (role) role.textContent = selected.role;
+      if (status) status.textContent = statusLabel(selected.status);
+      if (statusMeta) statusMeta.textContent = statusLabel(selected.status);
+      if (period) period.textContent = selected.period;
+      if (location) location.textContent = selected.location;
+      if (focus) focus.textContent = selected.highlights[0] ?? `${selected.role} at ${selected.company}.`;
+      if (toolCount) toolCount.textContent = `${selected.stack.length} tools`;
+      if (noteCount) noteCount.textContent = `${selected.highlights.length} delivery notes`;
+      if (stackCount) stackCount.textContent = `${selected.stack.length} items`;
+
+      if (highlights) {
+        highlights.innerHTML = "";
+        selected.highlights.forEach((item) => {
+          const li = document.createElement("li");
+          const marker = document.createElement("span");
+          marker.className = "release-log__marker";
+          marker.setAttribute("aria-hidden", "true");
+          marker.textContent = "›";
+          const text = document.createElement("span");
+          text.textContent = item;
+          li.append(marker, text);
+          highlights.appendChild(li);
+        });
+      }
+
+      if (stack) {
+        stack.innerHTML = "";
+        selected.stack.forEach((item) => {
+          const chip = document.createElement("span");
+          chip.textContent = item;
+          stack.appendChild(chip);
+        });
+      }
+
+      if (detail) {
+        detail.classList.remove("is-updating");
+        void detail.offsetWidth;
+        detail.classList.add("is-updating");
+        window.setTimeout(() => detail.classList.remove("is-updating"), 260);
+      }
+    };
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => render(button.dataset.experienceSelect || ""));
+    });
+  }
+</script>
+
 <style>
-  .log__head {
-    margin-bottom: 1.75rem;
+  :global(.section--experience) {
+    height: 100vh;
+    min-height: 100vh;
+    padding-block: clamp(4.8rem, 8vh, 6rem) clamp(1.25rem, 3vh, 2rem);
   }
 
-  .log__title {
-    font-size: clamp(1.75rem, 5vw, 2.75rem);
-    margin-bottom: 0.5rem;
+  :global(.section--experience .section__inner) {
+    height: 100%;
+    min-height: 0;
   }
 
-  .log__sub {
+  .release-log {
+    height: 100%;
+    min-height: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: clamp(0.85rem, 1.8vh, 1.15rem);
+  }
+
+  .release-log__head {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(280px, 0.9fr);
+    align-items: end;
+    gap: 1.25rem;
+  }
+
+  .release-log__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mauve);
+    margin-bottom: 0.35rem;
+  }
+
+  .release-log__title {
+    font-size: clamp(1.55rem, 4.6vw, 2.55rem);
+  }
+
+  .release-log__sub {
+    justify-self: end;
+    max-width: 58ch;
     color: var(--subtext-1);
     font-family: var(--font-mono);
-    font-size: 0.95rem;
+    font-size: clamp(0.78rem, 1.5vw, 0.9rem);
+    line-height: 1.55;
   }
 
-  .log {
-    list-style: none;
-    margin: 0;
-    padding: 0 0 0 1.5rem;
+  .release-log__shell {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(300px, 0.78fr) minmax(0, 1.22fr);
+    border: 1px solid var(--border-dim);
+    background: linear-gradient(180deg, rgba(49, 50, 68, 0.32), rgba(17, 17, 27, 0.18));
+    box-shadow: 0 18px 60px rgba(17, 17, 27, 0.3);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    animation: release-log-in 0.48s ease both;
+  }
+
+  .release-log__rail,
+  .release-log__detail {
+    min-height: 0;
+    background: rgba(24, 24, 37, 0.76);
+  }
+
+  .release-log__rail {
+    border-right: 1px solid var(--border-dim);
+  }
+
+  .release-log__rail-head {
+    min-height: 2.55rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.7rem 0.85rem;
+    border-bottom: 1px solid var(--border-dim);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--subtext-0);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .release-log__items {
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
-    border-left: 1px dashed rgba(147, 153, 178, 0.42);
-    position: relative;
+    padding: 0.75rem;
+    gap: 0.5rem;
   }
 
-  .log__entry {
-    position: relative;
-  }
-
-  .log__node {
+  .release-log__items::before {
+    content: "";
     position: absolute;
-    left: calc(-1.5rem - 9px);
-    top: 1.5rem;
-    width: 16px;
-    height: 16px;
+    left: 1.62rem;
+    top: 1.05rem;
+    bottom: 1.05rem;
+    width: 1px;
+    background: linear-gradient(to bottom, rgba(203, 166, 247, 0.38), rgba(147, 153, 178, 0.12));
+  }
+
+  .release-log__item {
+    position: relative;
     display: grid;
-    place-items: center;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.7rem;
+    width: 100%;
+    min-height: 4.15rem;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text);
+    padding: 0.65rem 0.68rem;
+    text-align: left;
+    border-radius: 3px;
+    transition: transform 0.14s ease, background 0.14s ease, border-color 0.14s ease;
+    animation: release-item-in 0.36s ease both;
+  }
+
+  .release-log__item:hover,
+  .release-log__item:focus-visible {
+    background: rgba(49, 50, 68, 0.56);
+    border-color: var(--border-dim);
+  }
+
+  .release-log__item:hover,
+  .release-log__item:focus-visible {
+    transform: translateX(2px);
+  }
+
+  .release-log__item.is-active {
+    background:
+      linear-gradient(90deg, rgba(203, 166, 247, 0.12), rgba(49, 50, 68, 0.58));
+    border-color: rgba(203, 166, 247, 0.42);
+    box-shadow: inset 2px 0 0 var(--mauve);
+  }
+
+  .release-log__item:not(.is-active) {
+    color: var(--subtext-1);
+  }
+
+  .release-log__node {
+    position: relative;
+    z-index: 1;
+    width: 0.74rem;
+    height: 0.74rem;
+    border: 1px solid rgba(203, 166, 247, 0.42);
     background: var(--crust);
-    border: 1px solid var(--border-dim);
   }
 
-  .log__entry.active .log__node {
-    border-color: rgba(203, 166, 247, 0.5);
-  }
-
-  .log__node-inner {
-    width: 6px;
-    height: 6px;
+  .release-log__item.is-active .release-log__node {
     background: var(--mauve);
   }
 
-  .log__entry.active .log__node-inner {
-    background: var(--yellow);
-    box-shadow: none;
+  .release-log__item-main {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.24rem;
   }
 
-  .log__card {
-    padding: 1.1rem 1.25rem;
+  .release-log__item-role {
+    font-family: var(--font-heading);
+    font-size: 0.98rem;
+    font-weight: 600;
+    line-height: 1.15;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .log__card-head {
+  .release-log__item-company,
+  .release-log__item-meta {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    line-height: 1.35;
+    color: var(--subtext-0);
+  }
+
+  .release-log__item-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.18rem;
+    white-space: nowrap;
+  }
+
+  .release-log__item-status {
+    color: var(--subtext-0);
+  }
+
+  .release-log__item-status--active {
+    color: var(--mauve);
+  }
+
+  .release-log__detail {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.72rem, 1.5vh, 0.95rem);
+    padding: clamp(1rem, 2vw, 1.35rem);
+    background: rgba(30, 30, 46, 0.88);
+    overflow: auto;
+    scrollbar-width: thin;
+  }
+
+  .release-log__detail.is-updating {
+    animation: release-detail-change 0.24s ease both;
+  }
+
+  .release-log__detail-top {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 1rem;
   }
 
-  .log__role {
-    font-family: var(--font-heading);
-    font-size: 1.35rem;
-    color: var(--text);
-    margin: 0 0 0.25rem;
-  }
-
-  .log__company {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-family: var(--font-mono);
-    font-size: 0.9rem;
-    color: var(--subtext-1);
-  }
-
-  .log__status {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-family: var(--font-pixel);
-    font-size: 0.48rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 0.3rem 0.5rem;
-    border: 1px solid var(--border-dim);
-    flex: none;
-  }
-
-  .log__status-dot {
-    width: 6px;
-    height: 6px;
-    background: currentColor;
-  }
-
-  .log__status--active {
-    color: var(--yellow);
-    border-color: var(--yellow);
-  }
-
-  .log__status--done {
-    color: var(--mauve);
-    border-color: var(--green);
-  }
-
-  .log__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin: 0.85rem 0;
+  .release-log__detail-kicker {
     font-family: var(--font-mono);
     font-size: 0.8rem;
-    color: var(--subtext-0);
+    color: var(--mauve);
+    margin-bottom: 0.35rem;
   }
 
-  .log__meta span {
+  .release-log__detail h3 {
+    max-width: 18ch;
+    font-size: clamp(1.45rem, 3.2vw, 2.12rem);
+    line-height: 1.1;
+  }
+
+  .release-log__status {
+    flex: none;
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
+    border: 1px solid rgba(203, 166, 247, 0.4);
+    color: var(--text);
+    background: rgba(203, 166, 247, 0.1);
+    padding: 0.38rem 0.58rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    border-radius: 2px;
   }
 
-  .log__highlights {
+  .release-log__meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 0.82fr 1fr;
+    gap: 0.55rem;
+    margin: 0;
+  }
+
+  .release-log__meta-grid div,
+  .release-log__scope div {
+    border-top: 1px solid var(--border-dim);
+    padding-top: 0.55rem;
+  }
+
+  .release-log__meta-grid dt,
+  .release-log__scope dt {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--subtext-0);
+    margin-bottom: 0.24rem;
+  }
+
+  .release-log__meta-grid dd,
+  .release-log__scope dd {
+    margin: 0;
+    color: var(--text);
+    font-size: 0.84rem;
+    line-height: 1.35;
+  }
+
+  .release-log__summary {
+    padding-block: 0.2rem 0.35rem;
+  }
+
+  .release-log__summary h4,
+  .release-log__panel h4,
+  .release-log__stack-head h4 {
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mauve);
+    margin: 0;
+  }
+
+  .release-log__summary h4 {
+    margin-bottom: 0.38rem;
+  }
+
+  .release-log__summary p {
+    max-width: 72ch;
+    color: var(--text);
+    font-size: 0.96rem;
+    line-height: 1.5;
+  }
+
+  .release-log__detail-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(180px, 0.65fr);
+    gap: 0.8rem;
+    align-items: stretch;
+  }
+
+  .release-log__panel,
+  .release-log__stack-block {
+    border: 1px solid var(--border-dim);
+    background: rgba(49, 50, 68, 0.28);
+    padding: clamp(0.78rem, 1.5vw, 0.95rem);
+  }
+
+  .release-log__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.68rem;
+  }
+
+  .release-log__highlights {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: 0.45rem;
   }
 
-  .log__highlights li {
+  .release-log__highlights li {
     display: flex;
     align-items: flex-start;
-    gap: 0.4rem;
+    gap: 0.45rem;
     color: var(--subtext-1);
-    line-height: 1.5;
+    font-size: 0.9rem;
+    line-height: 1.45;
   }
 
-  .log__highlights :global(svg) {
-    color: var(--green);
+  .release-log__highlights :global(svg),
+  :global(.release-log__marker) {
     flex: none;
-    margin-top: 3px;
+    margin-top: 0.12rem;
+    color: var(--mauve);
+    font-family: var(--font-mono);
   }
 
-  .log__stack {
+  .release-log__scope {
+    display: grid;
+    gap: 0.72rem;
+    margin: 0;
+  }
+
+  .release-log__stack-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.62rem;
+  }
+
+  .release-log__stack-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .release-log__stack-head span {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--subtext-0);
+  }
+
+  .release-log__stack {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-top: 0.85rem;
-    padding-top: 0.85rem;
-    border-top: 2px dashed var(--surface-2);
+    gap: 0.36rem;
+  }
+
+  .release-log__stack span {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--text);
+    background: rgba(49, 50, 68, 0.58);
+    border: 1px solid var(--border-dim);
+    border-left: 2px solid rgba(203, 166, 247, 0.42);
+    padding: 0.28rem 0.5rem;
+    border-radius: 2px;
+    line-height: 1.25;
+  }
+
+  @keyframes release-log-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+
+  @keyframes release-item-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+
+  @keyframes release-detail-change {
+    from {
+      opacity: 0.72;
+      transform: translateY(4px);
+    }
+  }
+
+  @media (max-width: 980px) {
+    :global(.section--experience) {
+      height: auto;
+      min-height: 100vh;
+    }
+
+    .release-log__head {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    .release-log__sub {
+      justify-self: start;
+    }
+
+    .release-log__shell {
+      grid-template-columns: 1fr;
+    }
+
+    .release-log__meta-grid,
+    .release-log__detail-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .release-log__rail {
+      border-right: 0;
+      border-bottom: 1px solid var(--border-dim);
+    }
+  }
+
+  @media (max-width: 640px) {
+    :global(.section--experience) {
+      padding-block: 6rem 2.5rem;
+    }
+
+    .release-log__items {
+      padding: 0.65rem;
+    }
+
+    .release-log__item {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .release-log__item-meta {
+      grid-column: 2;
+      align-items: flex-start;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    .release-log__detail-top {
+      flex-direction: column;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .release-log__shell,
+    .release-log__item,
+    .release-log__detail.is-updating {
+      animation: none;
+    }
+
+    .release-log__item:hover,
+    .release-log__item:focus-visible {
+      transform: none;
+    }
   }
 </style>

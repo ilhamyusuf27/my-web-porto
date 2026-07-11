@@ -2,7 +2,7 @@
 import BaseLayout from "../components/layout/BaseLayout.astro";
 import ScrollProgress from "../components/layout/ScrollProgress.astro";
 import HudNav from "../components/layout/HudNav.astro";
-import SpaceSceneCanvas from "../components/scene/SpaceSceneCanvas.astro";
+import ConsoleBackgroundScene from "../components/scene/ConsoleBackgroundScene.astro";
 import HeroSection from "../components/sections/HeroSection.astro";
 import AboutSection from "../components/sections/AboutSection.astro";
 import SkillsSection from "../components/sections/SkillsSection.astro";
@@ -16,12 +16,12 @@ import { profile } from "../data/profile";
 ---
 
 <BaseLayout
-  title={`${profile.name} - ${profile.role} | Pixel Space Portfolio`}
-  description="Ilham Yusuf - frontend and fullstack-capable developer. A retro pixel-art space journey through projects, skills, and experience built with Astro, GSAP, and Three.js."
+  title={`${profile.name} - ${profile.role} | Production Systems Portfolio`}
+  description="Ilham Yusuf - frontend and fullstack-capable developer building maintainable web interfaces, client systems, and reliability-minded product experiences."
 >
   <ScrollProgress slot="nav" />
   <HudNav slot="nav" />
-  <SpaceSceneCanvas slot="scene" />
+  <ConsoleBackgroundScene slot="ambient" />
 
   <HeroSection />
   <AboutSection />

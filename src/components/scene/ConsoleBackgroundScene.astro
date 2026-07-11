@@ -1,0 +1,63 @@
+<canvas class="console-background" data-console-background aria-hidden="true"></canvas>
+
+<script>
+  const canvas = document.querySelector<HTMLCanvasElement>("[data-console-background]");
+  const compactViewport = window.matchMedia("(max-width: 760px)");
+
+  const canUseWebGL = () => {
+    try {
+      const test = document.createElement("canvas");
+      return Boolean(test.getContext("webgl2") || test.getContext("webgl"));
+    } catch {
+      return false;
+    }
+  };
+
+  const shouldSkip = () => compactViewport.matches || !canUseWebGL();
+
+  const start = () => {
+    if (!canvas || shouldSkip()) return;
+
+    const load = async () => {
+      const { AmbientSystemScene } = await import("./AmbientSystemScene");
+      new AmbientSystemScene({ canvas });
+    };
+
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(() => void load(), { timeout: 1200 });
+    } else {
+      window.setTimeout(() => void load(), 120);
+    }
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start, { once: true });
+  } else {
+    start();
+  }
+</script>
+
+<style>
+  .console-background {
+    width: 100%;
+    height: 100%;
+    opacity: 0.48;
+    display: block;
+    background:
+      radial-gradient(circle at 66% 38%, rgba(203, 166, 247, 0.075), transparent 32%),
+      linear-gradient(145deg, rgba(166, 173, 200, 0.11), transparent 44%),
+      linear-gradient(25deg, rgba(69, 71, 90, 0.14), transparent 58%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .console-background {
+      opacity: 0.34;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .console-background {
+      display: none;
+    }
+  }
+</style>

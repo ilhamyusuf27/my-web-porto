@@ -1,7 +1,11 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import { getActiveSection, setActiveSection } from "./sectionStore";
+import {
+  cueSectionTransition,
+  getActiveSection,
+  setActiveSection,
+} from "./sectionStore";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -13,25 +17,58 @@ const isTouch = window.matchMedia("(max-width: 768px)").matches;
 
 let sectionEls: HTMLElement[] = [];
 let hudDesktopItems: NodeListOf<HTMLElement> | null = null;
-let hudMobileItems: NodeListOf<HTMLElement> | null = null;
 let isTransitioning = false;
 let scrollTween: gsap.core.Animation | null = null;
 let wheelGestureLocked = false;
 let wheelReleaseTimer = 0;
-
-type SectionTransitionStyle = {
-  outgoing: gsap.TweenVars;
-  incoming: gsap.TweenVars;
-  scene: gsap.TweenVars;
-  enterDuration?: number;
-  exitDuration?: number;
-};
 
 type SectionTransitionStage = {
   root: HTMLElement;
   outgoing: HTMLElement[];
   incoming: HTMLElement[];
   restore: () => void;
+};
+
+type SectionTransitionConfig = {
+  x?: number;
+  y?: number;
+  scale?: number;
+  duration?: number;
+  ease?: string;
+  stagger?: number;
+  enterDelay?: number;
+  exitDistance?: number;
+  exitScale?: number;
+};
+
+const SECTION_TRANSITIONS: Record<string, SectionTransitionConfig> = {
+  hero: { y: 12, duration: 0.42, ease: "power2.out", exitDistance: 0.42 },
+  about: { x: 14, y: 2, duration: 0.46, exitDistance: 0.5 },
+  skills: { y: 11, scale: 0.988, duration: 0.5, stagger: 0.014 },
+  experience: { y: 16, duration: 0.48, stagger: 0.01, exitDistance: 0.48 },
+  projects: {
+    y: 5,
+    scale: 0.992,
+    duration: 0.4,
+    stagger: 0,
+    exitDistance: 0.35,
+  },
+  experimental: { x: 10, y: 8, duration: 0.5, stagger: 0.01 },
+  ongoing: { x: 15, y: 3, duration: 0.48, exitDistance: 0.52 },
+  education: { x: 4, y: 9, duration: 0.44, exitDistance: 0.42 },
+  contact: { y: 13, duration: 0.46, ease: "power2.out" },
+};
+
+const DEFAULT_TRANSITION: Required<SectionTransitionConfig> = {
+  x: 0,
+  y: 10,
+  scale: 1,
+  duration: 0.46,
+  ease: "power3.out",
+  stagger: 0.008,
+  enterDelay: 0.035,
+  exitDistance: 0.45,
+  exitScale: 0.997,
 };
 
 /** Desktop-only GSAP snapping + reveals + progress + active-section tracking. */
@@ -86,7 +123,7 @@ function initNativeReveals(sections: HTMLElement[]): void {
 
 /**
  * Controlled navigation owns content motion on larger screens. Reveal targets
- * are made readable up front, then the currently visible mission screen gets
+ * are made readable up front, then the currently visible section screen gets
  * one restrained entrance on initial load.
  */
 function prepareControlledSectionMotion(sections: HTMLElement[]): void {
@@ -110,7 +147,8 @@ function prepareControlledSectionMotion(sections: HTMLElement[]): void {
       duration: 0.64,
       stagger: 0.04,
       ease: "power3.out",
-      clearProps: "opacity,visibility,transform,transformOrigin,clipPath,willChange",
+      clearProps:
+        "opacity,visibility,transform,transformOrigin,clipPath,willChange",
     }
   );
 }
@@ -125,36 +163,41 @@ function prepareControlledSectionMotion(sections: HTMLElement[]): void {
 function initControlledSectionNavigation(sections: HTMLElement[]): void {
   initAnchorNavigation(sections, false);
 
-  window.addEventListener("wheel", (event) => {
-    if (shouldIgnoreNavigationEvent(event.target)) return;
+  window.addEventListener(
+    "wheel",
+    (event) => {
+      if (shouldIgnoreNavigationEvent(event.target)) return;
 
-    if (isTransitioning || wheelGestureLocked) {
-      event.preventDefault();
-      queueWheelGestureRelease();
-      return;
-    }
+      if (isTransitioning || wheelGestureLocked) {
+        event.preventDefault();
+        queueWheelGestureRelease();
+        return;
+      }
 
-    const direction = Math.sign(event.deltaY);
-    if (direction === 0) return;
+      const direction = Math.sign(event.deltaY);
+      if (direction === 0) return;
 
-    const currentIndex = getCurrentSectionIndex(sections);
-    if (canReadTallSection(sections[currentIndex], direction)) return;
+      const currentIndex = getCurrentSectionIndex(sections);
+      if (canReadTallSection(sections[currentIndex], direction)) return;
 
-    const nextIndex = clampIndex(currentIndex + direction, sections);
-    if (nextIndex === currentIndex) {
+      const nextIndex = clampIndex(currentIndex + direction, sections);
+      if (nextIndex === currentIndex) {
+        event.preventDefault();
+        lockWheelGesture();
+        scrollToSection(currentIndex, { immediate: false });
+        return;
+      }
+
       event.preventDefault();
       lockWheelGesture();
-      scrollToSection(currentIndex, { immediate: false });
-      return;
-    }
-
-    event.preventDefault();
-    lockWheelGesture();
-    scrollToSection(nextIndex, { immediate: false });
-  }, { passive: false });
+      scrollToSection(nextIndex, { immediate: false });
+    },
+    { passive: false }
+  );
 
   document.addEventListener("keydown", (event) => {
-    if (shouldIgnoreNavigationEvent(event.target) || event.defaultPrevented) return;
+    if (shouldIgnoreNavigationEvent(event.target) || event.defaultPrevented)
+      return;
     if (event.altKey || event.ctrlKey || event.metaKey) return;
 
     const currentIndex = getCurrentSectionIndex(sections);
@@ -196,7 +239,11 @@ function initScrollSettle(sections: HTMLElement[]): void {
   const settle = () => {
     window.clearTimeout(settleTimer);
     settleTimer = window.setTimeout(() => {
-      if (isTransitioning || shouldIgnoreNavigationEvent(document.activeElement)) return;
+      if (
+        isTransitioning ||
+        shouldIgnoreNavigationEvent(document.activeElement)
+      )
+        return;
 
       const nearestIndex = getNearestSectionIndex(sections);
       if (isInsideTallReadableArea(sections[nearestIndex])) return;
@@ -229,12 +276,11 @@ function initProgress(): void {
 
 /**
  * Detect the active section via a thin center band and broadcast it through
- * the shared store (drives HUD + rocket). Falls back to scroll-position math
+ * the shared store (drives HUD and progress state). Falls back to scroll-position math
  * when IntersectionObserver is unavailable.
  */
 function initActiveSection(sections: HTMLElement[]): void {
   hudDesktopItems = document.querySelectorAll<HTMLElement>("[data-hud-item]");
-  hudMobileItems = document.querySelectorAll<HTMLElement>("[data-hud-mobile-item]");
 
   if (!("IntersectionObserver" in window)) {
     const onScroll = () => {
@@ -257,7 +303,10 @@ function initActiveSection(sections: HTMLElement[]): void {
       const visible = entries
         .filter((e) => e.isIntersecting)
         .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (visible) syncActiveSection(visible.target.getAttribute("data-section") ?? "hero");
+      if (visible)
+        syncActiveSection(
+          visible.target.getAttribute("data-section") ?? "hero"
+        );
     },
     { rootMargin: "-45% 0px -45% 0px", threshold: [0, 0.25, 0.5, 1] }
   );
@@ -266,29 +315,34 @@ function initActiveSection(sections: HTMLElement[]): void {
   sections.forEach((section) => observer.observe(section));
 }
 
-function initAnchorNavigation(sections: HTMLElement[], immediate: boolean): void {
-  document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((anchor) => {
-    const hash = anchor.getAttribute("href");
-    if (!hash || hash === "#") return;
+function initAnchorNavigation(
+  sections: HTMLElement[],
+  immediate: boolean
+): void {
+  document
+    .querySelectorAll<HTMLAnchorElement>('a[href^="#"]')
+    .forEach((anchor) => {
+      const hash = anchor.getAttribute("href");
+      if (!hash || hash === "#") return;
 
-    const id = decodeURIComponent(hash.slice(1));
-    const index = sections.findIndex((section) => section.id === id);
-    if (index === -1) return;
+      const id = decodeURIComponent(hash.slice(1));
+      const index = sections.findIndex((section) => section.id === id);
+      if (index === -1) return;
 
-    anchor.addEventListener("click", (event) => {
-      if (shouldIgnoreNavigationEvent(event.target)) return;
-      event.preventDefault();
-      if (isTransitioning) return;
+      anchor.addEventListener("click", (event) => {
+        if (shouldIgnoreNavigationEvent(event.target)) return;
+        event.preventDefault();
+        if (isTransitioning) return;
 
-      if (immediate) {
-        sections[index].scrollIntoView({ block: "start" });
-        syncActiveSection(sections[index].id);
-        return;
-      }
+        if (immediate) {
+          sections[index].scrollIntoView({ block: "start" });
+          syncActiveSection(sections[index].id);
+          return;
+        }
 
-      scrollToSection(index, { immediate: false });
+        scrollToSection(index, { immediate: false });
+      });
     });
-  });
 }
 
 function scrollToSection(index: number, opts: { immediate: boolean }): void {
@@ -300,8 +354,6 @@ function scrollToSection(index: number, opts: { immediate: boolean }): void {
   const id = target.getAttribute("data-section") ?? target.id;
 
   scrollTween?.kill();
-  syncActiveSection(id);
-
   if (opts.immediate || prefersReducedMotion) {
     window.scrollTo({ top: y, behavior: "auto" });
     syncActiveSection(id);
@@ -328,9 +380,9 @@ function scrollToSection(index: number, opts: { immediate: boolean }): void {
 }
 
 /**
- * Stage the current and destination screens in a fixed viewport layer. The
- * document jumps to its new section behind that layer, so the only visible
- * movement is the authored panel transition rather than page travel.
+ * Crossfade cloned section content while the document settles at the target.
+ * This preserves the snap system without a visible full-page cover or long
+ * interaction lock.
  */
 function createSectionTransition(
   currentIndex: number,
@@ -344,18 +396,25 @@ function createSectionTransition(
     sectionEls[targetIndex],
     y
   );
-  const outgoing = stage.outgoing;
-  const incoming = stage.incoming;
-  const outgoingStyle = getSectionTransitionStyle(sectionEls[currentIndex], direction);
-  const incomingStyle = getSectionTransitionStyle(sectionEls[targetIndex], direction);
-  const sceneLayer = getSceneLayer();
-  const cleanupTargets = [...outgoing, ...incoming, sceneLayer].filter(
-    (element): element is HTMLElement => element !== null
+  const outgoingConfig = getSectionTransitionConfig(sectionEls[currentIndex]);
+  const incomingConfig = getSectionTransitionConfig(sectionEls[targetIndex]);
+  const duration = getTransitionDuration(
+    incomingConfig.duration,
+    Math.abs(targetIndex - currentIndex)
   );
+  const incomingStagger = getTransitionStagger(
+    stage.incoming.length,
+    duration,
+    incomingConfig.stagger
+  );
+  const enterDelay = Math.min(incomingConfig.enterDelay, duration * 0.18);
+  const cleanupTargets = [...stage.outgoing, ...stage.incoming];
 
-  gsap.set(cleanupTargets, { willChange: "transform,opacity,clip-path" });
-  gsap.set([...outgoing, ...incoming], { transformOrigin: "50% 50%" });
-  gsap.set(incoming, { autoAlpha: 0, ...incomingStyle.incoming });
+  gsap.set(cleanupTargets, {
+    willChange: "transform,opacity",
+    transformOrigin: "50% 50%",
+  });
+  gsap.set(stage.incoming, getIncomingState(incomingConfig, direction));
 
   const timeline = gsap.timeline({
     onComplete: () => finishSectionTransition(id, cleanupTargets, stage),
@@ -364,51 +423,30 @@ function createSectionTransition(
 
   timeline
     .to(
-      outgoing,
+      stage.outgoing,
       {
         autoAlpha: 0,
-        ...outgoingStyle.outgoing,
-        duration: outgoingStyle.exitDuration ?? 0.26,
-        stagger: 0.025,
+        ...getOutgoingState(outgoingConfig, direction),
+        duration: Math.min(0.18, duration * 0.38),
+        stagger: Math.min(0.008, outgoingConfig.stagger),
         ease: "power2.out",
       },
       0
     )
+    .call(() => cueSectionTransition(id), [], 0)
+    .call(() => jumpDocumentBehindStage(y), [], Math.min(0.08, duration * 0.18))
     .to(
-      sceneLayer,
-      {
-        ...incomingStyle.scene,
-        duration: 0.34,
-        ease: "power2.out",
-      },
-      0
-    )
-    .call(() => jumpDocumentBehindStage(y), [], 0.14)
-    .to(
-      sceneLayer,
-      {
-        x: 0,
-        y: 0,
-        scale: 1,
-        rotate: 0,
-        duration: 0.46,
-        ease: "power3.out",
-      },
-      0.28
-    )
-    .to(
-      incoming,
+      stage.incoming,
       {
         autoAlpha: 1,
         x: 0,
         y: 0,
         scale: 1,
-        clipPath: "inset(0% 0% 0% 0%)",
-        duration: incomingStyle.enterDuration ?? 0.42,
-        stagger: 0.04,
-        ease: "power3.out",
+        duration,
+        stagger: incomingStagger,
+        ease: incomingConfig.ease,
       },
-      0.26
+      enterDelay
     );
 
   return timeline;
@@ -440,7 +478,11 @@ function createSectionTransitionStage(
     pointerEvents: "none",
   });
 
-  const outgoingSection = cloneSectionForStage(current, currentRect.top, currentRect);
+  const outgoingSection = cloneSectionForStage(
+    current,
+    currentRect.top,
+    currentRect
+  );
   const targetTop = target.offsetTop - targetY;
   const incomingSection = cloneSectionForStage(target, targetTop, targetRect);
 
@@ -467,12 +509,12 @@ function cloneSectionForStage(
   const clone = source.cloneNode(true) as HTMLElement;
 
   clone.removeAttribute("id");
-  clone.querySelectorAll<HTMLElement>("[id]").forEach((element) =>
-    element.removeAttribute("id")
-  );
-  clone.querySelectorAll<HTMLElement>("a, button, input, textarea, select").forEach(
-    (element) => element.setAttribute("tabindex", "-1")
-  );
+  clone
+    .querySelectorAll<HTMLElement>("[id]")
+    .forEach((element) => element.removeAttribute("id"));
+  clone
+    .querySelectorAll<HTMLElement>("a, button, input, textarea, select")
+    .forEach((element) => element.setAttribute("tabindex", "-1"));
 
   Object.assign(clone.style, {
     position: "absolute",
@@ -504,7 +546,8 @@ function finishSectionTransition(
 ): void {
   if (cleanupTargets.length) {
     gsap.set(cleanupTargets, {
-      clearProps: "opacity,visibility,transform,transformOrigin,clipPath,willChange",
+      clearProps:
+        "opacity,visibility,transform,transformOrigin,clipPath,willChange",
     });
   }
   stage?.restore();
@@ -515,20 +558,70 @@ function finishSectionTransition(
   ScrollTrigger.refresh();
 }
 
-function getSectionMotionTargets(section: HTMLElement | undefined): HTMLElement[] {
+function getSectionMotionTargets(
+  section: HTMLElement | undefined
+): HTMLElement[] {
   if (!section) return [];
 
-  return [
-    section.querySelector<HTMLElement>(".section__chrome"),
-    section.querySelector<HTMLElement>(".section__inner"),
-  ].filter((element): element is HTMLElement => element !== null);
+  const revealRoots = Array.from(
+    section.querySelectorAll<HTMLElement>("[data-reveal]")
+  ).filter((element) => !element.parentElement?.closest("[data-reveal]"));
+
+  return revealRoots.filter(
+    (element): element is HTMLElement => element !== null
+  );
 }
 
-function getSceneLayer(): HTMLElement | null {
-  return document.getElementById("scene-layer");
+function getSectionTransitionConfig(
+  section: HTMLElement | undefined
+): Required<SectionTransitionConfig> {
+  const id = section?.getAttribute("data-section") ?? section?.id ?? "";
+  return { ...DEFAULT_TRANSITION, ...SECTION_TRANSITIONS[id] };
 }
 
-function getInitialSectionMotion(section: HTMLElement | undefined): gsap.TweenVars {
+function getTransitionDuration(baseDuration: number, distance: number): number {
+  return Math.min(0.68, baseDuration + Math.max(0, distance - 1) * 0.04);
+}
+
+function getTransitionStagger(
+  targetCount: number,
+  duration: number,
+  preferred: number
+): number {
+  if (targetCount < 2 || preferred <= 0) return 0;
+  const maxTotal = 0.66;
+  return Math.min(
+    preferred,
+    Math.max(0, (maxTotal - duration) / (targetCount - 1))
+  );
+}
+
+function getIncomingState(
+  config: Required<SectionTransitionConfig>,
+  direction: number
+): gsap.TweenVars {
+  return {
+    autoAlpha: 0,
+    x: config.x * direction,
+    y: config.y * direction,
+    scale: config.scale,
+  };
+}
+
+function getOutgoingState(
+  config: Required<SectionTransitionConfig>,
+  direction: number
+): gsap.TweenVars {
+  return {
+    x: config.x ? config.x * direction * -config.exitDistance : 0,
+    y: config.y * direction * -config.exitDistance,
+    scale: config.exitScale,
+  };
+}
+
+function getInitialSectionMotion(
+  section: HTMLElement | undefined
+): gsap.TweenVars {
   const id = section?.getAttribute("data-section") ?? section?.id ?? "";
 
   if (id === "hero" || id === "about") return { x: 14, y: 0 };
@@ -538,90 +631,17 @@ function getInitialSectionMotion(section: HTMLElement | undefined): gsap.TweenVa
   return { y: 14 };
 }
 
-function getSectionTransitionStyle(
-  section: HTMLElement | undefined,
-  direction: number
-): SectionTransitionStyle {
-  const id = section?.getAttribute("data-section") ?? section?.id ?? "";
-
-  if (id === "hero" || id === "about") {
-    return {
-      outgoing: {
-        x: direction * -22,
-        y: 0,
-        clipPath: direction > 0 ? "inset(0% 8% 0% 0%)" : "inset(0% 0% 0% 8%)",
-      },
-      incoming: {
-        x: direction * 18,
-        y: 0,
-        clipPath: direction > 0 ? "inset(0% 0% 0% 10%)" : "inset(0% 10% 0% 0%)",
-      },
-      scene: { x: direction * -10, y: -2, scale: 1.012 },
-    };
-  }
-
-  if (id === "projects") {
-    return {
-      outgoing: { autoAlpha: 0, scale: 0.972, y: direction * -6 },
-      incoming: {
-        scale: 0.965,
-        y: direction * 6,
-        clipPath: "inset(4% 4% 4% 4%)",
-      },
-      scene: { x: direction * -6, y: direction * -4, scale: 1.022 },
-      enterDuration: 0.5,
-      exitDuration: 0.3,
-    };
-  }
-
-  if (id === "experimental" || id === "ongoing") {
-    return {
-      outgoing: {
-        x: direction * -14,
-        y: direction * -12,
-        clipPath: "inset(0% 6% 6% 0%)",
-      },
-      incoming: {
-        x: direction * 14,
-        y: direction * 12,
-        clipPath: "inset(6% 0% 0% 6%)",
-      },
-      scene: { x: direction * -8, y: direction * -6, scale: 1.016 },
-    };
-  }
-
-  if (id === "education" || id === "contact") {
-    return {
-      outgoing: { x: direction * -5, y: direction * -8 },
-      incoming: {
-        x: direction * 5,
-        y: direction * 10,
-        clipPath: direction > 0 ? "inset(3% 0% 0% 0%)" : "inset(0% 0% 3% 0%)",
-      },
-      scene: { x: direction * -5, y: direction * -5, scale: 1.01 },
-      enterDuration: 0.4,
-    };
-  }
-
-  return {
-    outgoing: { y: direction * -14, clipPath: "inset(0% 0% 5% 0%)" },
-    incoming: {
-      y: direction * 16,
-      clipPath: direction > 0 ? "inset(5% 0% 0% 0%)" : "inset(0% 0% 5% 0%)",
-    },
-    scene: { x: direction * -6, y: direction * -4, scale: 1.014 },
-  };
-}
-
 function syncActiveSection(id: string): void {
   setActiveSection(id);
-  hudDesktopItems?.forEach((el) =>
-    el.setAttribute("aria-current", el.dataset.hudItem === id ? "true" : "false")
-  );
-  hudMobileItems?.forEach((el) => {
-    if (el.dataset.hudMobileItem === id) el.setAttribute("aria-current", "true");
-    else el.removeAttribute("aria-current");
+  sectionEls.forEach((section) => {
+    section.classList.toggle("is-active-section", section.id === id);
   });
+  hudDesktopItems?.forEach((el) =>
+    el.setAttribute(
+      "aria-current",
+      el.dataset.hudItem === id ? "true" : "false"
+    )
+  );
 }
 
 function getCurrentSectionIndex(sections: HTMLElement[]): number {
@@ -655,7 +675,10 @@ function getNearestSectionIndex(sections: HTMLElement[]): number {
   return nearest;
 }
 
-function canReadTallSection(section: HTMLElement | undefined, direction: number): boolean {
+function canReadTallSection(
+  section: HTMLElement | undefined,
+  direction: number
+): boolean {
   if (!section) return false;
 
   const height = section.offsetHeight;
@@ -701,6 +724,7 @@ function shouldIgnoreNavigationEvent(target: EventTarget | null): boolean {
   if (document.documentElement.hasAttribute("data-modal-open")) return true;
   if (!(target instanceof Element)) return false;
   if (target.closest("[data-modal]")) return true;
-  if (target.closest("input, textarea, select, [contenteditable='true']")) return true;
+  if (target.closest("input, textarea, select, [contenteditable='true']"))
+    return true;
   return Boolean(target.closest("[data-scroll-native]"));
 }

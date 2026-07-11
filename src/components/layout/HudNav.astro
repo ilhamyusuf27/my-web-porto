@@ -3,14 +3,14 @@ import Icon from "../ui/Icon.astro";
 import { profile } from "../../data/profile";
 
 const navItems = [
-  { id: "hero", label: "Start", icon: "mdi:rocket-launch" },
+  { id: "hero", label: "System", icon: "mdi:server" },
   { id: "about", label: "Profile", icon: "mdi:account" },
-  { id: "skills", label: "Inventory", icon: "mdi:code-tags" },
-  { id: "experience", label: "Log", icon: "mdi:briefcase-outline" },
-  { id: "projects", label: "Archive", icon: "mdi:folder" },
+  { id: "skills", label: "Matrix", icon: "mdi:code-tags" },
+  { id: "experience", label: "Delivery", icon: "mdi:briefcase-outline" },
+  { id: "projects", label: "Work", icon: "mdi:folder" },
   { id: "experimental", label: "Lab", icon: "mdi:flask-empty-outline" },
-  { id: "ongoing", label: "Quests", icon: "mdi:target" },
-  { id: "education", label: "Training", icon: "mdi:school" },
+  { id: "ongoing", label: "Build", icon: "mdi:target" },
+  { id: "education", label: "Records", icon: "mdi:school" },
   { id: "contact", label: "Contact", icon: "mdi:send" },
 ];
 ---
@@ -42,69 +42,30 @@ const navItems = [
       ))
     }
   </ul>
-
-  <button class="hud__menu only-mobile" type="button" aria-expanded="false" aria-controls="hud-mobile" data-hud-toggle>
-    <Icon name="mdi:menu" size={22} />
-    <span class="sr-only">Toggle navigation</span>
-  </button>
-
-  <div class="hud__mobile only-mobile" id="hud-mobile" data-hud-mobile hidden>
-    {
-      navItems.map((item) => (
-        <a class="hud__mobile-item" href={`#${item.id}`} data-hud-mobile-item={item.id}>
-          <Icon name={item.icon} size={18} />
-          <span>{item.label}</span>
-        </a>
-      ))
-    }
-  </div>
 </nav>
-
-<script is:inline>
-  (() => {
-    const toggle = document.querySelector("[data-hud-toggle]");
-    const menu = document.querySelector("[data-hud-mobile]");
-    if (!toggle || !menu) return;
-
-    const setOpen = (open) => {
-      menu.hidden = !open;
-      toggle.setAttribute("aria-expanded", open ? "true" : "false");
-    };
-
-    toggle.addEventListener("click", () =>
-      setOpen(menu.hidden)
-    );
-
-    menu.querySelectorAll("a").forEach((a) =>
-      a.addEventListener("click", () => setOpen(false))
-    );
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && !menu.hidden) setOpen(false);
-    });
-  })();
-</script>
 
 <style>
   .hud {
     position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
+    inset: 0;
     z-index: 9400;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.25rem;
-    padding: 1rem 0.5rem;
-    width: 72px;
+    pointer-events: none;
+  }
+
+  :global(html[data-modal-open]) .hud {
+    opacity: 0;
+    visibility: hidden;
   }
 
   .hud__brand {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
     display: grid;
     place-items: center;
     width: 48px;
     height: 48px;
+    pointer-events: auto;
     background: rgba(30, 30, 46, 0.78);
     border: 1px solid rgba(203, 166, 247, 0.42);
     box-shadow: 2px 2px 0 rgba(17, 17, 27, 0.72);
@@ -122,13 +83,31 @@ const navItems = [
   }
 
   .hud__list {
+    position: fixed;
+    left: 50%;
+    bottom: calc(1rem + env(safe-area-inset-bottom));
+    transform: translateX(-50%);
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 0.4rem;
     display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
+    flex-direction: row;
+    gap: 0.25rem;
     align-items: center;
+    max-width: calc(100vw - 1.5rem);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    pointer-events: auto;
+    background: rgba(17, 17, 27, 0.82);
+    border: 1px solid var(--border-dim);
+    box-shadow: 0 10px 26px rgba(17, 17, 27, 0.36);
+    backdrop-filter: blur(8px);
+    border-radius: 6px;
+    scrollbar-width: none;
+  }
+
+  .hud__list::-webkit-scrollbar {
+    display: none;
   }
 
   .hud__item {
@@ -139,12 +118,17 @@ const navItems = [
     height: 44px;
     color: var(--overlay-1);
     border: 1px solid transparent;
-    border-radius: 2px;
-    transition: color 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+    border-radius: 4px;
+    transition:
+      color 0.12s ease,
+      background 0.12s ease,
+      border-color 0.12s ease,
+      transform 0.12s ease;
   }
 
   .hud__item:hover,
   .hud__item:focus-visible {
+    transform: translateY(-2px);
     color: var(--text);
     background: rgba(49, 50, 68, 0.52);
     border-color: var(--border-dim);
@@ -156,11 +140,10 @@ const navItems = [
   }
 
   .hud__text {
-    display: none;
     position: absolute;
-    left: calc(100% + 10px);
-    top: 50%;
-    transform: translateY(-50%);
+    left: 50%;
+    bottom: calc(100% + 0.55rem);
+    transform: translateX(-50%) translateY(2px);
     white-space: nowrap;
     background: var(--surface-0);
     border: 1px solid var(--border-dim);
@@ -173,21 +156,24 @@ const navItems = [
     color: var(--text);
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.12s ease;
+    transition:
+      opacity 0.12s ease,
+      transform 0.12s ease;
   }
 
   .hud__item:hover .hud__text,
   .hud__item:focus-visible .hud__text {
     opacity: 1;
+    transform: translateX(-50%) translateY(0);
   }
 
   .hud__pip {
     position: absolute;
-    left: -10px;
-    top: 50%;
-    transform: translateY(-50%) scale(0);
-    width: 8px;
-    height: 8px;
+    left: 50%;
+    bottom: 5px;
+    transform: translateX(-50%) scaleX(0);
+    width: 16px;
+    height: 2px;
     background: var(--mauve);
     box-shadow: none;
     transition: transform 0.12s ease;
@@ -201,84 +187,57 @@ const navItems = [
   }
 
   .hud__item[aria-current="true"] .hud__pip {
-    transform: translateY(-50%) scale(1);
+    transform: translateX(-50%) scaleX(1);
   }
 
-  .hud__menu {
-    display: none;
-  }
-
-  .hud__mobile {
-    display: none;
-  }
-
-  /* ---------- Mobile: top bar + dropdown ---------- */
-  @media (max-width: 768px) {
-    .hud {
-      flex-direction: row;
-      justify-content: space-between;
-      bottom: auto;
-      width: 100%;
-      height: 56px;
-      padding: 0 1rem;
-      background: rgba(17, 17, 27, 0.85);
-      backdrop-filter: blur(6px);
-      border-bottom: 1px solid var(--border-dim);
+  @media (prefers-reduced-motion: reduce) {
+    .hud__item,
+    .hud__text,
+    .hud__pip {
+      transition: none;
     }
 
+    .hud__item:hover,
+    .hud__item:focus-visible {
+      transform: none;
+    }
+  }
+
+  @media (max-width: 768px) {
     .hud__brand {
-      width: auto;
+      top: 0.65rem;
+      left: 0.75rem;
+      width: 42px;
       height: 36px;
-      padding: 0 0.6rem;
+      font-size: 0.62rem;
     }
 
     .hud__list {
+      bottom: calc(0.65rem + env(safe-area-inset-bottom));
+      gap: 0.15rem;
+      padding: 0.32rem;
+      max-width: calc(100vw - 0.9rem);
+    }
+
+    .hud__item {
+      width: 38px;
+      height: 38px;
+    }
+
+    .hud__text {
       display: none;
     }
+  }
 
-    .hud__menu {
-      display: grid;
-      place-items: center;
-      width: 40px;
-      height: 40px;
-      background: rgba(49, 50, 68, 0.72);
-      border: 1px solid var(--border-dim);
-      color: var(--text);
-      border-radius: 2px;
+  @media (max-width: 420px) {
+    .hud__item {
+      width: 34px;
+      height: 36px;
     }
 
-    .hud__mobile {
-      position: absolute;
-      top: 56px;
-      right: 0;
-      left: 0;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.5rem;
-      padding: 1rem;
-      background: var(--mantle);
-      border-bottom: 1px solid var(--border-dim);
-    }
-
-    .hud__mobile[hidden] {
-      display: none;
-    }
-
-    .hud__mobile-item {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.6rem 0.75rem;
-      border: 1px solid var(--border-dim);
-      background: var(--surface-0);
-      color: var(--text);
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-    }
-
-    .hud__mobile-item[aria-current="true"] {
-      border-color: var(--mauve);
-      color: var(--mauve);
+    .hud__icon :global(svg) {
+      width: 16px;
+      height: 16px;
     }
   }
 </style>
