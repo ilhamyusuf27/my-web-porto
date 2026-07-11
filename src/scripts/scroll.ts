@@ -16,8 +16,8 @@ let hudDesktopItems: NodeListOf<HTMLElement> | null = null;
 let hudMobileItems: NodeListOf<HTMLElement> | null = null;
 let isTransitioning = false;
 let scrollTween: gsap.core.Animation | null = null;
-
-const SECTION_TRANSITION_DURATION = 0.72;
+let wheelGestureLocked = false;
+let wheelReleaseTimer = 0;
 
 type SectionTransitionStyle = {
   outgoing: gsap.TweenVars;
@@ -25,6 +25,13 @@ type SectionTransitionStyle = {
   scene: gsap.TweenVars;
   enterDuration?: number;
   exitDuration?: number;
+};
+
+type SectionTransitionStage = {
+  root: HTMLElement;
+  outgoing: HTMLElement[];
+  incoming: HTMLElement[];
+  restore: () => void;
 };
 
 /** Desktop-only GSAP snapping + reveals + progress + active-section tracking. */
@@ -121,8 +128,9 @@ function initControlledSectionNavigation(sections: HTMLElement[]): void {
   window.addEventListener("wheel", (event) => {
     if (shouldIgnoreNavigationEvent(event.target)) return;
 
-    if (isTransitioning) {
+    if (isTransitioning || wheelGestureLocked) {
       event.preventDefault();
+      queueWheelGestureRelease();
       return;
     }
 
@@ -135,11 +143,13 @@ function initControlledSectionNavigation(sections: HTMLElement[]): void {
     const nextIndex = clampIndex(currentIndex + direction, sections);
     if (nextIndex === currentIndex) {
       event.preventDefault();
+      lockWheelGesture();
       scrollToSection(currentIndex, { immediate: false });
       return;
     }
 
     event.preventDefault();
+    lockWheelGesture();
     scrollToSection(nextIndex, { immediate: false });
   }, { passive: false });
 
@@ -163,9 +173,21 @@ function initControlledSectionNavigation(sections: HTMLElement[]): void {
     if (targetIndex === null) return;
 
     event.preventDefault();
-    if (isTransitioning) return;
+    if (event.repeat || isTransitioning) return;
     scrollToSection(targetIndex, { immediate: false });
   });
+}
+
+function lockWheelGesture(): void {
+  wheelGestureLocked = true;
+  queueWheelGestureRelease();
+}
+
+function queueWheelGestureRelease(): void {
+  window.clearTimeout(wheelReleaseTimer);
+  wheelReleaseTimer = window.setTimeout(() => {
+    wheelGestureLocked = false;
+  }, 180);
 }
 
 function initScrollSettle(sections: HTMLElement[]): void {
@@ -306,9 +328,9 @@ function scrollToSection(index: number, opts: { immediate: boolean }): void {
 }
 
 /**
- * One timeline coordinates page travel and both mission-panel states. Content
- * between non-adjacent anchor targets is temporarily hidden so a long jump
- * does not read as several normal stacked sections flying past.
+ * Stage the current and destination screens in a fixed viewport layer. The
+ * document jumps to its new section behind that layer, so the only visible
+ * movement is the authored panel transition rather than page travel.
  */
 function createSectionTransition(
   currentIndex: number,
@@ -317,29 +339,27 @@ function createSectionTransition(
   id: string
 ): gsap.core.Timeline {
   const direction = targetIndex > currentIndex ? 1 : -1;
-  const outgoing = getSectionMotionTargets(sectionEls[currentIndex]);
-  const incoming = getSectionMotionTargets(sectionEls[targetIndex]);
+  const stage = createSectionTransitionStage(
+    sectionEls[currentIndex],
+    sectionEls[targetIndex],
+    y
+  );
+  const outgoing = stage.outgoing;
+  const incoming = stage.incoming;
   const outgoingStyle = getSectionTransitionStyle(sectionEls[currentIndex], direction);
   const incomingStyle = getSectionTransitionStyle(sectionEls[targetIndex], direction);
   const sceneLayer = getSceneLayer();
-  const intermediate = sectionEls
-    .slice(
-      Math.min(currentIndex, targetIndex) + 1,
-      Math.max(currentIndex, targetIndex)
-    )
-    .flatMap(getSectionMotionTargets);
-  const cleanupTargets = [...outgoing, ...incoming, ...intermediate, sceneLayer].filter(
+  const cleanupTargets = [...outgoing, ...incoming, sceneLayer].filter(
     (element): element is HTMLElement => element !== null
   );
 
   gsap.set(cleanupTargets, { willChange: "transform,opacity,clip-path" });
   gsap.set([...outgoing, ...incoming], { transformOrigin: "50% 50%" });
   gsap.set(incoming, { autoAlpha: 0, ...incomingStyle.incoming });
-  gsap.set(intermediate, { autoAlpha: 0 });
 
   const timeline = gsap.timeline({
-    onComplete: () => finishSectionTransition(id, cleanupTargets),
-    onInterrupt: () => finishSectionTransition(id, cleanupTargets),
+    onComplete: () => finishSectionTransition(id, cleanupTargets, stage),
+    onInterrupt: () => finishSectionTransition(id, cleanupTargets, stage),
   });
 
   timeline
@@ -363,16 +383,7 @@ function createSectionTransition(
       },
       0
     )
-    .to(
-      window,
-      {
-        scrollTo: { y, autoKill: false },
-        duration: SECTION_TRANSITION_DURATION,
-        ease: "power3.inOut",
-        overwrite: true,
-      },
-      0
-    )
+    .call(() => jumpDocumentBehindStage(y), [], 0.14)
     .to(
       sceneLayer,
       {
@@ -403,12 +414,100 @@ function createSectionTransition(
   return timeline;
 }
 
-function finishSectionTransition(id: string, cleanupTargets: HTMLElement[] = []): void {
+/**
+ * Clone two complete sections so their scoped component styles and exact
+ * layout are retained. Only these two screens exist in the visual stage, so
+ * sidebar jumps never expose the sections between them.
+ */
+function createSectionTransitionStage(
+  current: HTMLElement,
+  target: HTMLElement,
+  targetY: number
+): SectionTransitionStage {
+  const main = document.querySelector<HTMLElement>(".main-scroll");
+  const previousMainVisibility = main?.style.visibility ?? "";
+  const root = document.createElement("div");
+  const currentRect = current.getBoundingClientRect();
+  const targetRect = target.getBoundingClientRect();
+
+  root.setAttribute("aria-hidden", "true");
+  root.dataset.sectionStage = "true";
+  Object.assign(root.style, {
+    position: "fixed",
+    inset: "0",
+    zIndex: "2",
+    overflow: "hidden",
+    pointerEvents: "none",
+  });
+
+  const outgoingSection = cloneSectionForStage(current, currentRect.top, currentRect);
+  const targetTop = target.offsetTop - targetY;
+  const incomingSection = cloneSectionForStage(target, targetTop, targetRect);
+
+  root.append(outgoingSection, incomingSection);
+  document.body.append(root);
+  if (main) main.style.visibility = "hidden";
+
+  return {
+    root,
+    outgoing: getSectionMotionTargets(outgoingSection),
+    incoming: getSectionMotionTargets(incomingSection),
+    restore: () => {
+      if (main) main.style.visibility = previousMainVisibility;
+      root.remove();
+    },
+  };
+}
+
+function cloneSectionForStage(
+  source: HTMLElement,
+  top: number,
+  sourceRect: DOMRect
+): HTMLElement {
+  const clone = source.cloneNode(true) as HTMLElement;
+
+  clone.removeAttribute("id");
+  clone.querySelectorAll<HTMLElement>("[id]").forEach((element) =>
+    element.removeAttribute("id")
+  );
+  clone.querySelectorAll<HTMLElement>("a, button, input, textarea, select").forEach(
+    (element) => element.setAttribute("tabindex", "-1")
+  );
+
+  Object.assign(clone.style, {
+    position: "absolute",
+    top: `${top}px`,
+    left: `${sourceRect.left}px`,
+    width: `${sourceRect.width}px`,
+    height: `${sourceRect.height}px`,
+    minHeight: `${sourceRect.height}px`,
+    margin: "0",
+    visibility: "visible",
+    pointerEvents: "none",
+  });
+
+  return clone;
+}
+
+function jumpDocumentBehindStage(y: number): void {
+  const root = document.documentElement;
+  const previousScrollBehavior = root.style.scrollBehavior;
+  root.style.scrollBehavior = "auto";
+  window.scrollTo(0, y);
+  root.style.scrollBehavior = previousScrollBehavior;
+}
+
+function finishSectionTransition(
+  id: string,
+  cleanupTargets: HTMLElement[] = [],
+  stage?: SectionTransitionStage
+): void {
   if (cleanupTargets.length) {
     gsap.set(cleanupTargets, {
       clearProps: "opacity,visibility,transform,transformOrigin,clipPath,willChange",
     });
   }
+  stage?.restore();
   isTransitioning = false;
   scrollTween = null;
   document.documentElement.removeAttribute("data-section-transitioning");
