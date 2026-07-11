@@ -731,3 +731,55 @@ Preferred implementation:
 3. Avoid classic toy rocket shape.
 
 The ship should be smaller, more restrained, and should support the layout instead of dominating the page.
+## 21. Section Scene System
+
+The current design direction is not to make every section share the same dark space panel. The site should feel like one coherent retro-space journey, but each section needs a different scene identity.
+
+Use `SECTION_STYLES.md` as the source of truth for section-specific visual direction.
+
+Core rule:
+
+```txt
+Same identity, different environment per section.
+```
+
+Do not create variety by adding many colors or more ornaments. Create variety through:
+
+- composition
+- panel structure
+- background motif
+- section density
+- ship placement
+- transition behavior
+- content rhythm
+
+### Section concepts
+
+| Section | Scene concept | Visual purpose |
+|---|---|---|
+| Intro | Launch Console | confident first impression |
+| About | Cockpit / Pilot Profile | personal capability profile |
+| Expertise | Toolkit Bay | practical grouped tools |
+| Experience | Flight Path / Career Route | chronological reliability |
+| Selected Work | Mission Archive / Gallery | curated case-study archive |
+| Experiments | Research Lab | prototypes and learning |
+| Currently Building | Construction Bay | active focus and next steps |
+| Education | Archive / Records Room | calm credential history |
+| Contact | Transmission / Docking Bay | strong final CTA |
+
+### Section variety rules
+
+- Each section must have a distinct composition or background motif.
+- Adjacent sections should not use the exact same card rhythm.
+- The ship should have a different role per section: idle, parked, passing, following route, observing, docked, or transmitting.
+- Keep the ship secondary to the content.
+- Preserve the professional dark style.
+- Avoid colorful arcade styling, extra explosions, weapons, shields, random stars, and excessive glow.
+
+### Implementation order
+
+1. About + Expertise first.
+2. Experience + Currently Building second.
+3. Contact third.
+4. Spacecraft positions after section layouts are stable.
+5. Optional micro-effects last.

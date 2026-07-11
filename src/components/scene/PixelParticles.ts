@@ -13,7 +13,7 @@ type Particle = {
 
 /**
  * Recycled thruster-trail particles emitted behind a moving point (the
- * rocket). Cheap CPU simulation over a fixed pool rendered as a single
+ * ship). Cheap CPU simulation over a fixed pool rendered as a single
  * THREE.Points cloud.
  */
 export class PixelParticles {
@@ -40,7 +40,7 @@ export class PixelParticles {
 
     this.positions = new Float32Array(count * 3);
     this.colors = new Float32Array(count * 3);
-    this.warm = new THREE.Color("#cdd6f4");
+    this.warm = new THREE.Color("#89b4fa");
     this.cool = new THREE.Color("#cba6f7");
 
     // Park all particles offscreen until emitted.
@@ -53,10 +53,10 @@ export class PixelParticles {
     geometry.setAttribute("color", new THREE.BufferAttribute(this.colors, 3));
 
     const material = new THREE.PointsMaterial({
-      size: 0.4,
+      size: 0.28,
       map: this.makeSprite(),
       transparent: true,
-      opacity: 0.38,
+      opacity: 0.22,
       vertexColors: true,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
@@ -65,19 +65,21 @@ export class PixelParticles {
     this.points = new THREE.Points(geometry, material);
   }
 
-  /** Emit from a world position (the rocket nozzle). */
-  emit(worldPos: THREE.Vector3, intensity = 1): void {
+  /** Emit from a world position and drift away along the supplied direction. */
+  emit(worldPos: THREE.Vector3, intensity = 1, direction = new THREE.Vector3(0, -1, 0)): void {
     const toSpawn = Math.ceil(intensity * 2);
+    const dir = direction.clone().normalize();
     for (let s = 0; s < toSpawn; s++) {
       const p = this.particles.find((pt) => pt.life <= 0);
       if (!p) return;
-      p.x = worldPos.x + (Math.random() - 0.5) * 0.1;
-      p.y = worldPos.y;
-      p.z = worldPos.z + (Math.random() - 0.5) * 0.1;
-      p.vx = (Math.random() - 0.5) * 0.4;
-      p.vy = -1.4 - Math.random() * 1.2;
-      p.vz = (Math.random() - 0.5) * 0.4;
-      p.maxLife = 0.5 + Math.random() * 0.4;
+      const speed = 0.55 + Math.random() * 0.45;
+      p.x = worldPos.x + (Math.random() - 0.5) * 0.06;
+      p.y = worldPos.y + (Math.random() - 0.5) * 0.04;
+      p.z = worldPos.z + (Math.random() - 0.5) * 0.06;
+      p.vx = dir.x * speed + (Math.random() - 0.5) * 0.16;
+      p.vy = dir.y * speed + (Math.random() - 0.5) * 0.12;
+      p.vz = dir.z * speed + (Math.random() - 0.5) * 0.16;
+      p.maxLife = 0.28 + Math.random() * 0.24;
       p.life = p.maxLife;
     }
   }
@@ -94,7 +96,9 @@ export class PixelParticles {
       p.x += p.vx * dt;
       p.y += p.vy * dt;
       p.z += p.vz * dt;
-      p.vy *= 0.96;
+      p.vx *= 0.98;
+      p.vy *= 0.98;
+      p.vz *= 0.98;
 
       this.positions[i3] = p.x;
       this.positions[i3 + 1] = p.y;
@@ -102,9 +106,10 @@ export class PixelParticles {
 
       const t = Math.max(0, p.life / p.maxLife);
       const color = this.cool.clone().lerp(this.warm, t);
-      this.colors[i3] = color.r * t;
-      this.colors[i3 + 1] = color.g * t;
-      this.colors[i3 + 2] = color.b * t;
+      const fade = t * 0.78;
+      this.colors[i3] = color.r * fade;
+      this.colors[i3 + 1] = color.g * fade;
+      this.colors[i3 + 2] = color.b * fade;
     }
     this.points.geometry.getAttribute("position").needsUpdate = true;
     this.points.geometry.getAttribute("color").needsUpdate = true;

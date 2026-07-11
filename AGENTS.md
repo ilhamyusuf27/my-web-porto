@@ -2,7 +2,7 @@
 
 ## Project Intent
 
-You are building a one-page portfolio website for Ilham Yusuf. The website should feel like a retro pixel-art space game with a rocket/spacecraft moving as the user scrolls. Ilham works as a frontend developer and also handles many fullstack responsibilities, so the portfolio should communicate both strong frontend craft and fullstack capability.
+You are building a one-page portfolio website for Ilham Yusuf. The website should feel like an elegant dark developer portfolio with subtle retro pixel-space influence. A spacecraft moves through the experience, but the content and professional credibility must stay more important than the game metaphor. Ilham works as a frontend developer and also handles many fullstack responsibilities, so the portfolio should communicate both strong frontend craft and fullstack capability.
 
 Use Astro, GSAP, and Three.js. Keep the code modular, readable, and component-based.
 
@@ -12,7 +12,7 @@ Use Astro, GSAP, and Three.js. Keep the code modular, readable, and component-ba
 - Use icons instead of emoji.
 - Use Astro as the main framework.
 - Use GSAP ScrollTrigger for scroll animation.
-- Use Three.js for the rocket/space scene.
+- Use Three.js for the spacecraft/space scene.
 - Keep the website as a single page.
 - Each main section must be `min-height: 100vh`.
 - Scrolling should snap or auto-move to the next section.
@@ -159,17 +159,19 @@ Tone:
 - No emoji
 - Avoid overly childish language
 
-Use game labels such as:
+Use professional section headings as the primary navigation:
 
-- Start Mission
-- Player Profile
-- Skill Inventory
-- Mission Log
-- Project Archive
-- Experimental Lab
-- Active Quests
-- Training Records
-- Final Transmission
+- Intro
+- About
+- Expertise
+- Experience
+- Selected Work
+- Experiments
+- Currently Building
+- Education
+- Contact
+
+Mission/game terminology may appear only as small HUD metadata. It must not become the main information architecture.
 
 ## Data Files
 
@@ -703,21 +705,49 @@ Important interpretation:
 
 - The site should be professional and elegant first.
 - Retro pixel/game influence should be subtle.
-- The current implementation is too colorful, too ornamental, and too childish.
+- The current implementation was too colorful, too ornamental, and too repetitive.
 - Do not add more decorative game UI.
 - Remove visual noise before adding new effects.
 
+
+## Section Scene Direction
+
+Use `SECTION_STYLES.md` as the source of truth for section-specific visual direction.
+
+Current problem to avoid: every section using the same dark space background, same card language, same ship behavior, and same layout rhythm.
+
+The site should keep one coherent identity, but each section needs a different scene:
+
+1. Intro — Launch Console
+2. About — Cockpit / Pilot Profile
+3. Expertise — Toolkit Bay
+4. Experience — Flight Path / Career Route
+5. Selected Work — Mission Archive / Gallery
+6. Experiments — Research Lab
+7. Currently Building — Construction Bay
+8. Education — Archive / Records Room
+9. Contact — Transmission / Docking Bay
+
+Rules:
+
+- Create variety through composition, panel structure, background motif, section density, and ship placement.
+- Do not create variety by adding random colors, ornaments, glows, shields, weapons, explosions, or arcade effects.
+- Keep the spacecraft secondary to content.
+- Do not redesign all sections in one pass.
+- Implement section identity gradually: About + Expertise first, then Experience + Currently Building, then Contact.
+
 ## Current Fix Priority
+
+The visual cleanup, layout density, project modal polish, staged section transitions, and approved spacecraft sprite integration are already in progress. The next priority is section identity.
 
 Work in this order:
 
-1. Update visual system rules.
-2. Remove excessive ornaments and colors.
-3. Neutralize card borders.
-4. Replace skill progress bars with grouped skill cards.
-5. Fix GSAP section snapping.
-6. Replace toy rocket with Space Impact-inspired spacecraft.
-7. Reduce whitespace section by section.
-8. Polish responsive layout.
+1. Apply the section scene system from `SECTION_STYLES.md`.
+2. Redesign About + Expertise as distinct scenes, not repeated card grids.
+3. Redesign Experience + Currently Building with route/dock motifs.
+4. Polish Contact as a final transmission/docking scene.
+5. Revisit spacecraft anchor positions after section layouts are stable.
+6. Add optional micro-effects only after the core scenes feel distinct.
+7. Run responsive, accessibility, and performance checks.
 
 Do not attempt all tasks in one pass.

@@ -42,22 +42,22 @@ Implemented by GSAP `ScrollTrigger` in `src/scripts/scroll.ts`.
 - **No competing systems:** CSS `scroll-snap-type` is OFF; GSAP is the only
   snap authority.
 - **Single source of truth:** the active section (IntersectionObserver, center
-  band) drives snapping feedback, HUD highlight, progress bar, and rocket state
+  band) drives snapping feedback, HUD highlight, progress bar, and spacecraft state
   through `src/scripts/sectionStore.ts`.
 
-## 5. Rocket journey (acceptance criteria)
+## 5. Spacecraft journey (acceptance criteria)
 
-Implemented in `src/components/scene/RocketJourney.ts`.
+Implemented in `src/components/scene/RocketJourney.ts / ShipJourney equivalent`.
 
 - One authored state (position, rotation, scale) per section.
-- The ship animates to a section's state on activation (short eased tween),
+- The spacecraft animates to a section's state on activation (short eased tween),
   with a small idle bob at rest.
-- The ship stays on the right of the viewport and never overlaps centered or
+- The spacecraft stays on the right of the viewport and never overlaps centered or
   left-aligned content.
 - Contact section has a distinct launch animation (exits toward top).
 - Motion is event-driven (active-section changes), not mapped to raw scroll.
 
-## 6. Rocket visual direction
+## 6. Spacecraft visual direction
 
 - Final asset: an angular spacecraft/shuttle with a technical silhouette.
   Dark neutral materials dominate, with one or two restrained accents.
@@ -93,7 +93,7 @@ Implemented in `src/components/scene/RocketJourney.ts`.
 ## 10. Reduced motion (`prefers-reduced-motion: reduce`)
 
 - No scroll scrub, no snapping, no particle trail, no idle bob.
-- Rocket is static at one unobtrusive fixed position.
+- The spacecraft is static at one unobtrusive fixed position.
 - Anchor navigation jumps immediately.
 - All content remains visible; reveals are skipped.
 
@@ -115,7 +115,35 @@ Implemented in `src/components/scene/RocketJourney.ts`.
 - GLTFLoader is not fetched while no GLB ships.
 - Lighthouse performance: target `>= 90` on desktop for the static shell.
 
-## 13. Definition of done (per section)
+
+## 13. Section scene variety acceptance criteria
+
+The portfolio must not feel like the same dark space layout repeated nine times. Each section should share the same visual system, but have its own scene identity.
+
+Required section identities:
+
+1. Intro — Launch Console
+2. About — Cockpit / Pilot Profile
+3. Expertise — Toolkit Bay
+4. Experience — Flight Path / Career Route
+5. Selected Work — Mission Archive / Gallery
+6. Experiments — Research Lab
+7. Currently Building — Construction Bay
+8. Education — Archive / Records Room
+9. Contact — Transmission / Docking Bay
+
+Acceptance criteria:
+
+- Every section has a distinct composition, background motif, or content rhythm.
+- Section variety is created through layout and motif, not random colors.
+- Mauve remains the primary accent; other colors are reserved for meaningful states.
+- The ship has an authored role per section and does not dominate the page.
+- No section adds excessive ornaments, weapons, shields, explosions, rainbow borders, or arcade effects.
+- Adjacent sections should not feel like duplicated card grids with different text.
+- The experience still feels like one coherent portfolio journey.
+- `SECTION_STYLES.md` is the implementation reference for section identity.
+
+## 14. Definition of done (per section)
 
 - Section is `min-height: 100vh`, content never clipped, real content present.
 - Heading is professional; game terms only as small HUD metadata.
@@ -123,7 +151,7 @@ Implemented in `src/components/scene/RocketJourney.ts`.
 - Layout holds at 375px, 768px, 1024px, and 1440px widths.
 - No emoji; icons only; palette from CSS variables.
 
-## 14. Out of scope
+## 15. Out of scope
 
 - Backend, CMS, auth, analytics.
 - Multi-page routes (the site is intentionally single-page).

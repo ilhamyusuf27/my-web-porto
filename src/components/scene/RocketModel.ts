@@ -3,7 +3,11 @@ import * as THREE from "three";
 export type Rocket = {
   group: THREE.Group;
   /** Engine glow mesh; the scene pulses it subtly. */
-  flame: THREE.Mesh;
+  flame: THREE.Mesh | null;
+  /** Local-space origin for the restrained particle trail. */
+  nozzleOffset: THREE.Vector3;
+  /** Local-space direction for the trail to drift away from the engine. */
+  trailDirection: THREE.Vector3;
 };
 
 // Restrained palette: dark neutral hull + one mauve accent + a dim sky engine
@@ -124,7 +128,55 @@ export function createRocket(): Rocket {
   glow.position.y = -1.72;
   group.add(glow);
 
-  return { group, flame: glow };
+  return {
+    group,
+    flame: glow,
+    nozzleOffset: new THREE.Vector3(0, -1.9, 0),
+    trailDirection: new THREE.Vector3(0, -1, 0),
+  };
+}
+
+/**
+ * Load the approved transparent pixel spacecraft as a camera-facing plane.
+ * The procedural shuttle remains the caller's fallback if loading fails.
+ */
+export async function loadRocketSprite(url: string): Promise<Rocket | null> {
+  try {
+    const texture = await new THREE.TextureLoader().loadAsync(url);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.magFilter = THREE.NearestFilter;
+    texture.minFilter = THREE.NearestFilter;
+    texture.generateMipmaps = false;
+    texture.wrapS = THREE.ClampToEdgeWrapping;
+    texture.wrapT = THREE.ClampToEdgeWrapping;
+    texture.needsUpdate = true;
+
+    const material = new THREE.MeshBasicMaterial({
+      map: texture,
+      color: new THREE.Color("#9298b8"),
+      transparent: true,
+      opacity: 0.92,
+      alphaTest: 0.08,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      toneMapped: false,
+    });
+    const sprite = new THREE.Mesh(new THREE.PlaneGeometry(1.42, 1.42), material);
+    sprite.rotation.z = -Math.PI / 2;
+
+    const group = new THREE.Group();
+    group.rotation.z = -0.08;
+    group.add(sprite);
+
+    return {
+      group,
+      flame: null,
+      nozzleOffset: new THREE.Vector3(-0.52, -0.02, 0),
+      trailDirection: new THREE.Vector3(-1, -0.08, 0),
+    };
+  } catch {
+    return null;
+  }
 }
 
 /**

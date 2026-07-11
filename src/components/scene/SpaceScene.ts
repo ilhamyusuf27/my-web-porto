@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { Starfield } from "./Starfield";
 import { PixelParticles } from "./PixelParticles";
-import { createRocket, type Rocket } from "./RocketModel";
+import { createRocket, loadRocketSprite, type Rocket } from "./RocketModel";
 import { RocketJourney } from "./RocketJourney";
 import { onActiveSection, getActiveSection } from "../../scripts/sectionStore";
 
@@ -37,6 +37,8 @@ export class SpaceScene {
   private readonly isMobile: boolean;
   private readonly reducedMotion: boolean;
   private readonly nozzleWorld = new THREE.Vector3();
+  private readonly trailDirection = new THREE.Vector3();
+  private readonly trailQuaternion = new THREE.Quaternion();
 
   constructor({ canvas }: SpaceSceneOptions) {
     this.isMobile = window.matchMedia("(max-width: 768px)").matches;
@@ -80,12 +82,14 @@ export class SpaceScene {
     document.addEventListener("visibilitychange", this.handleVisibility);
   }
 
-  private initRocket(): void {
-    // No GLB ships yet, so we use the procedural shuttle directly. To ship a
-    // real model later: drop public/assets/models/rocket.glb, then dynamically
-    // import loadRocketGlb() here (keeps GLTFLoader out of the default bundle).
-    const rocket = createRocket();
-    if (this.disposed) return;
+  private async initRocket(): Promise<void> {
+    const spriteUrl =
+      "/assets/ships/void-main-ship/main-ship-base.png";
+    const rocket = (await loadRocketSprite(spriteUrl)) ?? createRocket();
+    if (this.disposed) {
+      this.disposeRocket(rocket);
+      return;
+    }
 
     this.rocket = rocket;
     this.journey = new RocketJourney(rocket, this.scene, {
@@ -132,17 +136,21 @@ export class SpaceScene {
 
     this.starfield.update(dt, 0.8);
 
-    // Subtle engine-glow pulse (no cartoon flame).
+    // Subtle engine treatment: pulse the fallback glow when present, while
+    // the approved sprite uses only the existing restrained particle trail.
     if (this.rocket) {
-      const pulse = 0.34 + Math.sin(elapsed * 6) * 0.06;
-      const mat = this.rocket.flame.material as THREE.MeshBasicMaterial;
-      mat.opacity = pulse;
-      this.rocket.flame.scale.setScalar(0.78 + Math.sin(elapsed * 6) * 0.04);
+      if (this.rocket.flame) {
+        const pulse = 0.34 + Math.sin(elapsed * 6) * 0.06;
+        const mat = this.rocket.flame.material as THREE.MeshBasicMaterial;
+        mat.opacity = pulse;
+        this.rocket.flame.scale.setScalar(0.78 + Math.sin(elapsed * 6) * 0.04);
+      }
 
       // Thruster trail from the engine nozzle (world space).
-      const offset = new THREE.Vector3(0, -1.9, 0);
-      this.rocket.group.localToWorld(this.nozzleWorld.copy(offset));
-      this.particles.emit(this.nozzleWorld, 0.35);
+      this.rocket.group.localToWorld(this.nozzleWorld.copy(this.rocket.nozzleOffset));
+      this.rocket.group.getWorldQuaternion(this.trailQuaternion);
+      this.trailDirection.copy(this.rocket.trailDirection).applyQuaternion(this.trailQuaternion);
+      this.particles.emit(this.nozzleWorld, 0.22, this.trailDirection);
     }
 
     this.particles.update(dt);
@@ -175,15 +183,25 @@ export class SpaceScene {
     document.removeEventListener("visibilitychange", this.handleVisibility);
     this.starfield.dispose();
     this.particles.dispose();
-    this.rocket?.group.traverse((obj) => {
+    if (this.rocket) this.disposeRocket(this.rocket);
+    this.renderer.dispose();
+  }
+
+  private disposeRocket(rocket: Rocket): void {
+    rocket.group.traverse((obj) => {
       const mesh = obj as THREE.Mesh;
       if (mesh.isMesh) {
         mesh.geometry?.dispose();
         const mat = mesh.material;
-        if (Array.isArray(mat)) mat.forEach((m) => m.dispose());
-        else mat?.dispose();
+        const materials = Array.isArray(mat) ? mat : [mat];
+        materials.forEach((material) => {
+          if ("map" in material) {
+            const map = (material as THREE.MeshBasicMaterial).map;
+            map?.dispose();
+          }
+          material?.dispose();
+        });
       }
     });
-    this.renderer.dispose();
   }
 }
