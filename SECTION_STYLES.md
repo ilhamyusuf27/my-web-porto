@@ -1,326 +1,422 @@
-# SECTION_STYLES: Section-by-Section Scene Direction
+# SECTION_STYLES: Production Systems Portfolio
 
-This file defines how each section should feel visually. The goal is to avoid a boring repeated dark-space layout while keeping the same professional retro-space identity.
+This document defines the section-by-section visual identity for the new Production Systems Portfolio concept.
 
-The site should feel like a cinematic developer portfolio journey, not a colorful arcade dashboard. Every section must have its own environment, composition, and spacecraft role, while still sharing the same dark Catppuccin palette, neutral cards, mauve accent, readable typography, and restrained pixel details.
+The goal is to prevent every section from feeling like the same dark card layout. Each section should have its own composition, motif, and interaction feel, while staying inside one coherent dark technical system.
 
-## Global scene rules
+## Global rules
 
-- Professional first; retro/pixel-space second.
-- Keep Catppuccin dark colors as the foundation.
-- Use Mauve `#cba6f7` as the primary accent.
-- Use Blue/Sky only for subtle technical highlights.
-- Do not use new random colors to make sections feel different.
-- Do not add excessive stars, plus signs, glows, explosions, weapons, shields, or arcade effects.
-- Create variety using layout, density, panel shape, background motif, section composition, and spacecraft placement.
-- Keep each main section `min-height: 100vh`.
-- Preserve the staged screen-to-screen transition architecture.
-- The spacecraft is the continuity object, not the main content.
-- The spacecraft must never cover important text, cards, or CTAs.
-- Reduced-motion users must get a stable readable version without animated scene dependency.
+- Professional first, stylized second.
+- No spaceship/rocket as the central concept.
+- No game/player/mission/cockpit/quest/transmission language.
+- Use technical metaphors: system, operator, capability, delivery, case study, R&D, build queue, records, handshake.
+- Use Catppuccin dark base and Mauve as the main accent.
+- Do not add many colors to create variety.
+- Create variety through layout, motif, typography hierarchy, and scene behavior.
+- Use icons, not emoji.
+- Keep all motifs low opacity and content-safe.
 
-## Section map
-
-| Section | Scene concept | Main feeling | Background motif | Spacecraft role |
-|---|---|---|---|---|
-| Intro | Launch Console | clear, confident, minimal | sparse terminal grid | ready to depart |
-| About | Cockpit / Pilot Profile | personal, capable, grounded | cockpit/radar scan | parked beside profile |
-| Expertise | Toolkit Bay | practical, organized, technical | inventory/grid slots | passes through tool bay |
-| Experience | Flight Path / Career Route | chronological, reliable | route line/checkpoints | follows career path |
-| Selected Work | Mission Archive / Gallery | curated, case-study focused | archive/browser frame | supports gallery depth |
-| Experiments | Research Lab | exploratory, prototype-driven | lab notes/scanner grid | observes test bench |
-| Currently Building | Construction Bay | active, in-progress, focused | build queue/dock rails | docked near active work |
-| Education | Archive / Records Room | quiet, credentialed, factual | record rail/index | low presence/background |
-| Contact | Transmission / Docking Bay | decisive, final CTA | signal panel/docking line | arrives or sends signal |
-
----
-
-## 1. Intro — Launch Console
+## 1. Hero — System Online
 
 ### Purpose
-Create a strong first impression and immediately communicate name, role, and CTA.
 
-### Visual vibe
-- Minimal launch terminal.
-- Sparse, premium, dark.
-- Large typography with a small command-line detail.
-- The user should feel like the portfolio is starting, not like a game menu.
+Introduce Ilham and immediately establish credibility.
+
+### Vibe
+
+A system boot screen combined with a polished landing hero.
 
 ### Layout direction
-- Left-focused hero content.
-- Name and role remain the main focal point.
-- Keep CTA buttons close to the intro copy.
-- Keep status cards compact and secondary.
+
+- Left/main content: name, role, value statement, CTAs.
+- Right/support: compact system-status panel or abstract node boot visual.
+- Use a terminal command line sparingly.
 
 ### Background motif
-- Very subtle terminal grid or launch-line detail.
-- Sparse stars only.
-- No colorful crosses or decorative noise.
 
-### Spacecraft role
-- Positioned away from the main name/CTA.
-- Reads as ready to depart.
-- Subtle idle movement only.
+- boot grid
+- faint system signal lines
+- small active node pulse
 
-### Avoid
-- Big decorative rocket moment.
-- Too many status cards.
-- Arcade “press start” feeling.
+### Copy style
 
----
+Use terms like:
 
-## 2. About — Cockpit / Pilot Profile
+- system.online
+- interface ready
+- frontend / fullstack / reliability-minded
+- available for selected work
+
+Avoid:
+
+- launch mission
+- start game
+- rocket ready
+
+### Scene role
+
+The Three.js/network layer should show a system coming online: one or a few nodes pulsing subtly.
+
+## 2. About — Operator Profile
 
 ### Purpose
-Explain who Ilham is and why frontend/fullstack capability matters.
 
-### Visual vibe
-- Cockpit profile screen.
-- Personal but still technical.
-- Stronger identity than generic cards.
+Explain who Ilham is, how he works, and what kind of developer he is.
+
+### Vibe
+
+Developer profile panel / operator identity screen.
 
 ### Layout direction
-- One dominant profile/capability panel.
-- Supporting capability cards arranged like cockpit readouts.
-- Use hierarchy: bio first, details second, capability tags third.
+
+- One strong profile panel.
+- Supporting cards for working style and focus areas.
+- Keep content human and professional.
 
 ### Background motif
-- Subtle radar circle, cockpit grid, or scanline panel behind content.
-- Motif must be low opacity and not decorative clutter.
 
-### Spacecraft role
-- Parked beside or behind the cockpit panel.
-- Should not compete with profile copy.
+- subtle identity grid
+- profile-card framing
+- access-control style lines
 
-### Avoid
-- Fake skill percentages.
-- Player-profile language as main heading.
-- Floating cards without a composition anchor.
+### Suggested content blocks
 
----
+- Role focus
+- Location / timezone
+- Work style
+- Current direction
+- Reliability mindset
 
-## 3. Expertise — Toolkit Bay
+### Terms to use
+
+- Operator Profile
+- Working Context
+- Focus Area
+- Current Direction
+
+### Terms to avoid
+
+- Pilot
+- Player
+- Cockpit
+- Stats
+
+### Scene role
+
+Network scene can cluster around an "operator" node, but must remain abstract.
+
+## 3. Expertise — Capability Matrix
 
 ### Purpose
-Show practical tools and current working capability.
 
-### Visual vibe
-- Developer toolkit inventory.
-- Organized modules, not RPG inventory.
-- Functional and scannable.
+Show practical technical coverage without fake scores.
+
+### Vibe
+
+Capability matrix / stack map.
 
 ### Layout direction
-- Grouped skill cards by practical usage or domain.
-- Cards may feel like slots/modules, but keep the style professional.
-- Each group should have a small icon and compact chip list.
+
+- Grid of modules.
+- Each module has title, category description, chips, and usage level.
+- Keep compact and scannable.
+
+### Skill groups
+
+- Frontend
+- Backend
+- WordPress / Client Delivery
+- Animation / UI
+- DevOps / SRE Learning
+- Tools / Workflow
 
 ### Background motif
-- Subtle technical grid or tool-bay rails.
-- Slightly more structured than Intro/About.
 
-### Spacecraft role
-- Small visual guide moving across the bay.
-- Do not place it over skill chips.
+- matrix grid
+- module slot lines
+- architecture map hints
 
-### Avoid
-- Numeric progress bars.
-- Too many icons per card.
-- Color-coded card borders.
+### Terms to use
 
----
+- Capability Matrix
+- Daily Use
+- Comfortable
+- Learning
+- Workflow
 
-## 4. Experience — Flight Path / Career Route
+### Terms to avoid
+
+- Inventory
+- Loadout
+- Skill power
+- Level
+
+### Scene role
+
+Network nodes can arrange into a grid/matrix representing capability modules.
+
+## 4. Experience — Delivery Timeline
 
 ### Purpose
-Show career growth and reliability through real roles.
 
-### Visual vibe
-- Mission route / flight path.
-- Chronological, stable, professional.
+Show professional history as delivery and production responsibility.
+
+### Vibe
+
+Release log / delivery timeline.
 
 ### Layout direction
-- Timeline should feel like a route with checkpoints.
-- Job cards can be connected by a subtle rail or waypoint system.
-- Most recent role should have strongest visual weight.
+
+- Timeline rail.
+- Each job as a delivery record.
+- Most recent first.
+- Strong role and company hierarchy.
 
 ### Background motif
-- Subtle route line, waypoint dots, or map-like grid.
-- Keep text-heavy content readable.
 
-### Spacecraft role
-- Aligns with the route concept.
-- Can appear near the current/active role, but must not overlap job text.
+- release timeline
+- pipeline line
+- deployment checkpoints
 
-### Avoid
-- Making every experience card identical.
-- Overusing “mission log” language.
-- Excessive timeline decoration.
+### Terms to use
 
----
+- Delivery Timeline
+- Release History
+- Responsibility
+- Systems Delivered
+- Client Delivery
 
-## 5. Selected Work — Mission Archive / Gallery
+### Terms to avoid
+
+- Mission Log
+- Checkpoint as game language
+
+### Scene role
+
+System scene can form a path or pipeline beside the timeline.
+
+## 5. Selected Work — Case Study Index
 
 ### Purpose
-Present the strongest portfolio projects and open detail modals.
 
-### Visual vibe
-- Curated archive/gallery.
-- This should remain one of the most content-dense and useful sections.
+Show real project work and prove capability.
+
+### Vibe
+
+Case-study index / system archive.
 
 ### Layout direction
-- Keep the project grid as the core structure.
-- Project cards should read like case-study entries, not game cards.
-- Modal should feel like a professional case-study popup.
+
+- Keep the current card grid if it works.
+- Prioritize readability.
+- Project modal should feel like a professional case-study file.
 
 ### Background motif
-- Archive browser, file index, or gallery frame.
-- Keep motif subtle because project screenshots already carry visual weight.
 
-### Spacecraft role
-- Secondary depth element.
-- It can sit behind/near the grid but must not cover cards.
+- subtle index/browser frame
+- light grid supporting cards
+- no heavy decoration
 
-### Avoid
-- Rebuilding this section unless necessary.
-- Adding more game labels.
-- Increasing visual noise around project screenshots.
+### Terms to use
 
----
+- Selected Work
+- Case Study Index
+- Client Work
+- Product Module
+- System Overview
 
-## 6. Experiments — Research Lab
+### Terms to avoid
+
+- Mission Archive
+- View mission
+
+### Scene role
+
+Scene should be minimal here so cards stay dominant.
+
+## 6. Experiments — R&D Lab
 
 ### Purpose
-Show prototypes, browser add-ons, tools, and learning experiments.
 
-### Visual vibe
-- Research lab / prototype bench.
-- More exploratory than Selected Work.
+Show prototypes, add-ons, tools, and experiments.
+
+### Vibe
+
+Research and development notes.
 
 ### Layout direction
-- Use lab-note cards or two-column experiment/result cards.
-- Show “goal”, “learned”, and “stack” clearly.
-- It should not look like another project grid.
+
+- Lab note panels.
+- Clear split between what was built and what was learned.
+- Smaller than case studies, but meaningful.
+
+### Suggested structure
+
+- Hypothesis
+- Prototype
+- What I learned
+- Next iteration
 
 ### Background motif
-- Lab scanner line, faint measurement grid, or test-bench frame.
-- Keep it restrained.
 
-### Spacecraft role
-- Observing the lab or moving diagonally through the scene.
-- Lower visual priority than content.
+- subtle branching nodes
+- prototype graph
+- lab-note divider lines
 
-### Avoid
-- Explosions, weapons, or arcade laboratory effects.
-- Reusing the exact Selected Work card rhythm.
+### Terms to use
 
----
+- R&D Lab
+- Prototype
+- Experiment Goal
+- Learning
+- Iteration
 
-## 7. Currently Building — Construction Bay
+### Terms to avoid
+
+- Test chamber as sci-fi game
+- Power-up language
+
+### Scene role
+
+Network scene can branch into small experimental clusters.
+
+## 7. Currently Building — Build Queue / Roadmap
 
 ### Purpose
-Show active learning/building direction and current focus.
 
-### Visual vibe
-- Build queue / construction dock.
-- Focused, in-progress, technical.
+Show current projects, active learning, and direction.
+
+### Vibe
+
+Build queue / deployment roadmap.
 
 ### Layout direction
-- Cards can look like active tickets, build queue items, or dock modules.
-- Show current status, next step, and why it matters.
-- Use progress indicators only when they communicate real status; avoid fake skill-like metrics.
+
+- Queue or pipeline cards.
+- Show current focus and next milestone.
+- Use qualitative progress, not fake percentages.
 
 ### Background motif
-- Dock rails, build queue line, or subtle construction grid.
-- No warning-stripe overload.
 
-### Spacecraft role
-- Docked or passing through the build bay.
-- Subtle movement; do not dominate.
+- pipeline segments
+- queue lanes
+- build status lines
 
-### Avoid
-- Too much yellow/orange.
-- Fake progress bars without meaning.
-- Making it feel like a task-management dashboard.
+### Terms to use
 
----
+- Build Queue
+- Roadmap
+- Current Focus
+- Next Milestone
+- Risk / Blocker
 
-## 8. Education — Archive / Records Room
+### Terms to avoid
+
+- Active Quest
+- Level progress
+
+### Scene role
+
+Network scene can become a pipeline moving from backlog to shipped.
+
+## 8. Education — Credentials Archive
 
 ### Purpose
-Show formal education and credentials clearly.
 
-### Visual vibe
-- Quiet record archive.
-- Stable, factual, low-noise.
+Show formal education and certifications.
+
+### Vibe
+
+Records system / credentials archive.
 
 ### Layout direction
-- Credential timeline or record cards.
-- Certificates index can sit in a secondary panel.
-- Keep spacing compact and readable.
+
+- Keep clean and calm.
+- Timeline or archive cards.
+- Certificates as index list.
 
 ### Background motif
-- Archive rail, record lines, or subtle document index.
-- This should be one of the calmer sections.
 
-### Spacecraft role
-- Minimal presence.
-- Should feel like it slows down or passes behind the archive.
+- archive lines
+- document grid
+- record markers
 
-### Avoid
-- Over-designing credentials.
-- Too many badges.
-- Making education feel like a game achievement screen.
+### Terms to use
 
----
+- Credentials Archive
+- Records
+- Degree
+- Certificate
+- Learning Path
 
-## 9. Contact — Transmission / Docking Bay
+### Terms to avoid
+
+- Training Records as game academy
+
+### Scene role
+
+Network scene should be quiet, like archived nodes.
+
+## 9. Contact — Secure Handshake
 
 ### Purpose
-End with a strong CTA and frictionless contact path.
 
-### Visual vibe
-- Final transmission / docking bay.
-- Calm, decisive, useful.
+Convert the visitor into a contact.
+
+### Vibe
+
+Secure connection endpoint.
 
 ### Layout direction
-- Main CTA should be prominent.
-- Direct email and social links should be easy to find.
-- Contact details can be presented as a signal/direct panel.
+
+- Strong CTA.
+- Direct email panel.
+- Availability/location/focus snapshot.
+- Social links.
 
 ### Background motif
-- Transmission line, signal grid, docking marker, or final route endpoint.
-- Keep the ending clean and memorable.
 
-### Spacecraft role
-- Arrives, docks, or sends a signal.
-- It should support the final CTA, not act as decoration only.
+- two endpoint nodes
+- handshake pulse
+- connection line
+- signal confirmation
 
-### Avoid
-- Empty ending screen.
-- Overly gamey “final transmission” copy.
-- Large decorative launch effects.
+### Terms to use
 
----
+- Secure Handshake
+- Connection Endpoint
+- Open Channel
+- Availability
+- Contact Protocol
 
-## Implementation priority for section variety
+### Terms to avoid
 
-Implement section identities gradually. Do not redesign every section in one pass.
+- Final Transmission
+- Launch away
+- Rocket exit
 
-1. Document section identities and constraints.
-2. Apply scene identity to About + Expertise first.
-3. Apply route/dock identity to Experience + Currently Building.
-4. Apply final composition to Contact.
-5. Revisit spacecraft section positions after layouts are stable.
-6. Only then consider optional micro-effects.
+### Scene role
+
+Show subtle signal handshake between two endpoints.
+
+## Implementation order
+
+1. Replace the ship scene with a system/network scene.
+2. Update UI labels globally to remove game language.
+3. Rework Hero and About into system/operator language.
+4. Rework Expertise into Capability Matrix.
+5. Rework Experience and Currently Building into timeline/pipeline language.
+6. Keep Selected Work structure but update modal/card labels.
+7. Final polish Education and Contact.
 
 ## Acceptance checklist
 
-A section is not complete until:
+Before approving a section, ask:
 
-- It has a distinct scene concept.
-- It uses the shared palette without adding random colors.
-- It has a different composition or motif from adjacent sections.
-- It does not rely on extra ornaments for personality.
-- The spacecraft has a clear role or is intentionally quiet.
-- The content remains more important than the scene.
-- It works on short laptop viewports and mobile.
+- Does this section feel different from the previous section?
+- Does it still belong to the same design system?
+- Does it avoid spaceship/game language?
+- Does it communicate professional developer capability?
+- Is the motif subtle enough?
+- Is the content readable without animation?
+- Does it work on short laptop viewports?

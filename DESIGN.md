@@ -1,40 +1,88 @@
-# DESIGN: Retro Pixel Space Portfolio
+# DESIGN: Production Systems Portfolio
 
-## 1. Design Direction
+## 1. Design direction
 
-The website should feel like a retro pixel-art space game interface, but it must still work as a professional developer portfolio. The visual design should combine game HUD panels, pixel borders, starfield backgrounds, low-poly or pixel-styled space assets, and clean readable content.
+The website is no longer a retro space-game portfolio. The new direction is an elegant dark technical portfolio inspired by production interfaces: terminals, observability dashboards, deployment pipelines, architecture diagrams, API graphs, incident timelines, and release logs.
 
-The design must not feel childish. It should feel playful, technical, and memorable.
+The design should communicate frontend craft, fullstack capability, and a reliability mindset. It should feel professional, calm, technical, and memorable.
 
-## 2. Core Concept
+## 2. Concept
 
-The visitor enters the website like starting a retro game mission. A rocket/spacecraft guides the visitor through each section. Each scroll movement feels like moving to the next game level or mission stage.
+### Concept name
 
-Main metaphor:
+Production Systems Portfolio
 
-- Hero: Start screen
-- About: Player profile
-- Skills: Inventory
-- Experience: Mission log
-- Projects: Mission archive
-- Experimental projects: Lab / test chamber
-- Ongoing projects: Active quests
-- Education: Training records
-- Contact: Final transmission
+### Core idea
 
-## 3. Visual Principles
+The visitor moves through a set of production-system views:
 
-1. Retro first, readable always.
-2. Pixel UI elements should support the content, not hide it.
-3. Use motion to guide attention, not distract.
-4. Keep large sections cinematic with enough breathing space.
-5. Use icons instead of emoji.
-6. Prefer custom SVG/pixel icons or icon-library icons with a consistent stroke weight.
-7. Every section should have a clear visual identity but remain part of the same space journey.
+- System Online
+- Operator Profile
+- Capability Matrix
+- Delivery Timeline
+- Case Study Index
+- R&D Lab
+- Build Queue
+- Credentials Archive
+- Secure Handshake
 
-## 4. Color Palette
+Each section should feel like a different technical screen within one coherent system.
 
-Use the supplied palette as CSS variables.
+## 3. Design principles
+
+1. Professional first, stylized second.
+2. Technical clarity beats decorative complexity.
+3. Every section needs a distinct scene identity.
+4. Visual variety should come from composition, motifs, and information architecture, not more colors.
+5. Motion should feel staged and intentional, not arcade-like.
+6. Pixel/retro details can remain only as subtle texture or micro UI flavor.
+7. The site should look credible for frontend/fullstack roles and DevOps/SRE learning.
+
+## 4. What to remove
+
+Avoid these as primary direction:
+
+- spaceship / rocket as main character
+- starfield as dominant identity
+- game, mission, player, cockpit, pilot, quest, final transmission wording
+- weapons, shields, bullets, explosions
+- arcade effects
+- colorful borders per card
+- excessive scanlines/glow
+- fake dashboard percentages
+- childish pixel-art styling
+
+## 5. Visual keywords
+
+Use:
+
+- dark
+- technical
+- elegant
+- operational
+- structured
+- reliable
+- systemized
+- restrained
+- observability-inspired
+- terminal-inspired
+- architecture-driven
+
+Avoid:
+
+- cute
+- toy-like
+- colorful arcade
+- game dashboard
+- spaceship adventure
+- generic AI card UI
+- glow everywhere
+
+## 6. Color system
+
+Use Catppuccin Mocha as the base.
+
+### Base colors
 
 ```css
 :root {
@@ -67,719 +115,403 @@ Use the supplied palette as CSS variables.
 }
 ```
 
-## 5. Color Usage
+### Usage rules
 
-### Background
+- Background: Crust / Mantle / Base.
+- Cards: Surface0 with subtle transparency.
+- Borders: neutral text/surface alpha, not rainbow accents.
+- Primary accent: Mauve.
+- Secondary accent: Blue/Sky only for small system signals.
+- Green: successful/available/online state only.
+- Yellow: warning/in-progress state only.
+- Red: error/risk state only.
 
-- Main background: `--crust` or `--mantle`
-- Section panels: `--base`
-- Cards: `--surface-0`
-- Elevated cards: `--surface-1`
-- Borders: `--surface-2` or accent colors
+Do not use many accent colors in one section.
 
-### Text
+## 7. Typography
 
-- Main text: `--text`
-- Secondary text: `--subtext-1`
-- Muted text: `--subtext-0`
-- Disabled text: `--overlay-0`
+### Recommended
 
-### Accents
-
-- Primary action: `--mauve`
-- Secondary action: `--blue`
-- Success/status: `--green`
-- Warning/active mission: `--yellow` or `--peach`
-- Danger/error: `--red`
-- Interactive hover glow: `--sky` or `--teal`
-
-## 6. Typography
-
-### Recommended Pairing
-
-- Heading / game labels: pixel-style font such as "Press Start 2P", "Pixelify Sans", or another self-hosted pixel font.
-- Body: Inter, Geist, or system sans-serif.
-- Code/stack chips: JetBrains Mono or a readable monospace font.
+- Major headings: Space Grotesk, Sora, Geist, or similar geometric sans.
+- Body: Inter or system sans.
+- Technical metadata: JetBrains Mono or IBM Plex Mono.
+- Pixel font: only for tiny section indexes or metadata, if retained.
 
 ### Rules
 
-- Do not use pixel font for long body text.
-- Use uppercase sparingly for HUD labels and small headings.
-- Body text should stay between 16px and 18px on desktop.
-- Avoid line lengths longer than 70 characters.
+- Do not use playful pixel font for major headings.
+- Do not use pixel font for paragraphs.
+- Keep body text readable at 16px+.
+- Use uppercase for small labels only.
+- Keep line length comfortable.
 
-## 7. Layout System
+## 8. Layout language
 
-### Page Layout
+The old repeated card-on-starfield pattern should be replaced by section-specific compositions.
 
-- One-page vertical scroll.
-- Each section uses `min-height: 100vh`.
-- Section content is centered in a max-width container.
-- Use CSS scroll snap or GSAP snap.
-- Avoid placing important content behind the rocket scene.
+Shared layout qualities:
 
-### Suggested Section Layout
+- strong alignment
+- clear hierarchy
+- compact technical metadata
+- balanced negative space
+- neutral panels
+- subtle system motifs
 
-```txt
-+--------------------------------------------------+
-| HUD nav / progress                               |
-|                                                  |
-|  [section label]                                 |
-|  Large title                                     |
-|  Short description                               |
-|                                                  |
-|  Primary content panel       Rocket / scene      |
-|  Secondary cards             Floating elements   |
-|                                                  |
-+--------------------------------------------------+
-```
+Use different motifs per section:
 
-## 8. Component Design
+- terminal boot screen
+- profile identity panel
+- matrix/grid
+- timeline/release log
+- case-study browser
+- prototype notes
+- roadmap queue
+- credential records
+- handshake endpoint
 
-### Pixel Button
+## 9. Section scene system
 
-Use for CTAs and modal actions.
+Each section needs a different vibe while staying inside the same visual system.
 
-Visual details:
+### Hero — System Online
 
-- Hard border: 2px
-- No soft border radius or only small radius
-- Pixelated shadow offset
-- Hover: slight translate and accent glow
-- Focus: clear outline
+Vibe: terminal boot and system status.
 
-States:
+Use:
 
-- Default
-- Hover
-- Active/pressed
-- Disabled
-- Focus-visible
+- command line prompt
+- status row
+- system health style cards
+- strong name and role
+- subtle network/boot visualization
 
-### Pixel Card
+Avoid:
 
-Use for skills, projects, experience items.
+- Start Mission
+- spaceship launch
+- game start screen
 
-Visual details:
+### About — Operator Profile
 
-- Background: `--surface-0`
-- Border: 1px or 2px solid `--surface-2`
-- Accent corner or top border
-- Optional small HUD label
-- Minimal glow only on hover
+Vibe: developer profile / operating context.
 
-### HUD Navigation
+Use:
 
-Position:
+- profile panel
+- working style cards
+- identity metadata
+- subtle access-control or profile-grid motif
 
-- Desktop: fixed left or top
-- Mobile: bottom compact nav or hidden behind menu button
+Avoid:
 
-Content:
+- Pilot/Profile cockpit language
+- game stats
 
-- Section icon
-- Section label
-- Active section indicator
-- Scroll progress
+### Expertise — Capability Matrix
 
-### Project Modal
+Vibe: stack map / capability matrix.
 
-Visual style:
+Use:
 
-- Looks like an opened mission file.
-- Use dark overlay.
-- Modal frame should use pixel border.
-- Header includes project title, status, and close button.
-- Content uses clear sections: overview, contribution, stack, links.
+- grouped modules
+- category chips
+- status labels like Daily, Comfortable, Learning
+- subtle grid or matrix background
 
-## 9. Icon Direction
+Avoid:
 
-Use icons instead of emoji. Recommended icons:
+- skill percentage bars
+- inventory/loadout language
 
-- Rocket / spaceship: hero, scroll guide
-- User / ID card: about
-- Code brackets: skills
-- Briefcase: experience
-- Folder / archive: projects
-- Flask / lab: experimental
-- Activity / progress: ongoing
-- Graduation cap: education
-- Mail / send: contact
-- External link: project links
-- GitHub: repository links
+### Experience — Delivery Timeline
 
-Icon style:
+Vibe: release history / production delivery log.
 
-- Stroke icons with 1.5px to 2px stroke
-- Consistent sizing
-- Use accent colors but avoid too many colors per card
+Use:
 
-## 10. Section Design Details
+- timeline rail
+- deployment/checkpoint markers
+- role entries as release cards
+- contribution bullets
 
-### 10.1 Hero / Start Screen
+Avoid:
 
-Theme: Game start screen.
+- mission log language
 
-Elements:
+### Selected Work — Case Study Index
 
-- Large pixel title
-- Subtitle with role
-- CTA buttons
-- Small command prompt style text
-- Rocket scene visible
-- Starfield/parallax background
+Vibe: case study browser.
 
-Suggested copy layout:
+Use:
 
-```txt
-ILHAM YUSUF
-Frontend Developer / Fullstack-Capable Developer
-Building interactive, performant, and maintainable web experiences.
-[Start Mission] [View Projects]
-```
+- filter tabs
+- project cards
+- readable project summaries
+- professional detail modal
 
-### 10.2 About / Player Profile
+Avoid:
 
-Theme: Character profile card.
+- mission archive/game file framing
 
-Elements:
+### Experiments — R&D Lab
 
-- Pixel avatar or portrait frame
-- Short bio
-- Stats cards:
-  - Frontend
-  - WordPress
-  - Fullstack
-  - UI Animation
+Vibe: prototype notes / technical exploration.
 
-### 10.3 Skills / Inventory
+Use:
 
-Theme: Inventory grid.
+- hypothesis/outcome/learning structure
+- lab-note panels
+- small technical annotations
 
-Elements:
+Avoid:
 
-- Skill categories as item slots
-- Stack chips
-- Active skill highlight
-- Optional hover tooltip
+- chaotic sci-fi lab decorations
 
-### 10.4 Experience / Mission Log
+### Currently Building — Build Queue / Roadmap
 
-Theme: Chronological mission log.
+Vibe: active development board.
 
-Elements:
+Use:
 
-- Timeline line
-- Company cards
-- Role and period
-- Highlight bullets using icon markers, not emoji
+- queue cards
+- roadmap stages
+- next milestone
+- risk/blocker when useful
+- pipeline motif
 
-### 10.5 Projects / Mission Archive
+Avoid:
 
-Theme: Select mission screen.
+- active quest language
 
-Elements:
+### Education — Credentials Archive
 
-- Filter tabs: All, Work, Personal, WordPress, Fullstack
-- Project cards
-- Project status tags
-- Detail modal on click
+Vibe: credential records.
 
-### 10.6 Experimental / Lab
+Use:
 
-Theme: Test chamber.
+- archive cards
+- certificate index
+- clean timeline
 
-Elements:
+Avoid:
 
-- Cards styled like prototypes
-- Highlight add-ons, plugins, browser tools, small apps
-- "Experiment goal" and "What I learned" fields
+- training/game academy framing
 
-### 10.7 Ongoing / Active Quests
+### Contact — Secure Handshake
 
-Theme: Active mission board.
+Vibe: connection endpoint.
 
-Elements:
+Use:
 
-- Progress bars or status indicators
-- Current focus
-- Next milestone
-
-### 10.8 Education / Training Records
-
-Theme: Academy/training terminal.
-
-Elements:
-
-- University card
-- Certificates
-- Learning path cards
-
-### 10.9 Contact / Final Transmission
-
-Theme: Communication terminal.
-
-Elements:
-
-- Closing statement
-- Email button
+- email CTA
+- availability/status
+- contact protocol panel
 - GitHub/LinkedIn links
-- Optional resume button
-- Final rocket animation exiting upward
 
-## 11. Motion Design
+Avoid:
 
-### Scroll Motion
+- final transmission / rocket exit
 
-- Each section transition should feel like entering a new stage.
-- Use `scrub` animation for the rocket.
-- Use snap to align each full-screen section.
-- Text/card reveals should be short and snappy.
-
-### Rocket Motion
-
-Possible motion path:
-
-1. Hero: rocket idle floats near the title.
-2. About: rocket moves to right side and rotates slightly.
-3. Skills: rocket passes through floating skill chips.
-4. Experience: rocket follows timeline path.
-5. Projects: rocket hovers near project archive.
-6. Experimental: rocket enters lab zone.
-7. Ongoing: rocket moves through active quest board.
-8. Education: rocket slows near academy panel.
-9. Contact: rocket launches away.
-
-### Particle Motion
-
-- Small star particles move slowly.
-- Thruster trail appears behind rocket.
-- Avoid too many particles on mobile.
-
-### Reduced Motion
-
-When reduced motion is enabled:
-
-- Disable scroll scrub.
-- Disable particle trail.
-- Keep rocket static or use a simple image.
-- Keep all content visible.
-
-## 12. 3D Art Direction
-
-### Rocket/Ship Model
-
-Preferred style:
-
-- Low-poly 3D rocket or spaceship
-- Flat colors
-- Slight pixelated texture overlay
-- Color accents from Mauve, Sky, Peach, and Green
-
-Implementation notes:
-
-- Use `.glb` format.
-- Keep file size as small as possible.
-- Use a low-poly model from Kenney Space Kit or Quaternius when possible.
-- If using Poly Pizza, verify the individual asset license.
-- Store model in `public/assets/models/rocket.glb`.
-
-### Background Scene
-
-- Starfield using Three.js points or CSS radial gradients.
-- Optional low-poly planets/asteroids.
-- Use parallax layers to create depth.
-- Do not use a photorealistic background unless it is heavily stylized.
-
-## 13. CSS Patterns
-
-### Full Screen Section
-
-```css
-.section {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  position: relative;
-  scroll-snap-align: start;
-  overflow: hidden;
-}
-```
-
-### Pixel Border Card
-
-```css
-.pixel-card {
-  background: var(--surface-0);
-  color: var(--text);
-  border: 2px solid var(--surface-2);
-  box-shadow: 6px 6px 0 var(--crust);
-}
-```
-
-### Pixel Button
-
-```css
-.pixel-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: var(--mauve);
-  color: var(--crust);
-  border: 2px solid var(--text);
-  box-shadow: 4px 4px 0 var(--crust);
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.pixel-button:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 var(--crust);
-}
-```
-
-### Scanline Overlay
-
-```css
-.scanlines::after {
-  content: '';
-  pointer-events: none;
-  position: fixed;
-  inset: 0;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.025),
-    rgba(255, 255, 255, 0.025) 1px,
-    transparent 1px,
-    transparent 4px
-  );
-  mix-blend-mode: screen;
-}
-```
-
-## 14. Responsive Design
-
-### Desktop
-
-- Full animation enabled.
-- Rocket/Three.js scene visible.
-- HUD nav fixed.
-- Project cards use grid layout.
-
-### Tablet
-
-- Keep section snapping.
-- Reduce particle count.
-- Reduce 3D model scale.
-- Use two-column project grid.
-
-### Mobile
-
-- Consider disabling strict scroll snapping.
-- Use simpler rocket animation.
-- Use stacked layouts.
-- Keep modal content scrollable.
-- Use smaller heading sizes.
-
-## 15. Accessibility Requirements
-
-- All buttons must be real `button` or `a` elements.
-- Modal must have correct `role="dialog"` and `aria-modal="true"`.
-- Modal close button must have an accessible label.
-- Decorative icons should use `aria-hidden="true"`.
-- Informative icons must have accessible text.
-- Respect `prefers-reduced-motion`.
-- Keep text contrast high.
-- Do not make essential content only appear after animation.
-
-## 16. Performance Requirements
-
-- Lazy-load the Three.js scene if possible.
-- Optimize `.glb` model.
-- Compress images.
-- Use CSS for simple decorations instead of heavy images.
-- Avoid many large textures.
-- Keep particle count reasonable.
-- Use `requestAnimationFrame` carefully.
-- Dispose Three.js resources when needed.
-
-## 17. Interaction States
+## 10. Component direction
 
 ### Buttons
 
-- Default
-- Hover
-- Active
-- Focus-visible
-- Disabled
+Use for CTAs.
+
+Style:
+
+- clear rectangular shape
+- subtle border
+- mauve fill for primary CTA
+- neutral secondary CTA
+- visible focus state
+- minimal motion
+
+Avoid chunky arcade button styling.
 
 ### Cards
 
-- Default
-- Hover
-- Focus-visible
-- Selected/open
+Use for projects, experience, capability groups.
 
-### Project Modal
+Style:
 
-- Closed
-- Opening
-- Open
-- Closing
-
-### HUD Navigation
-
-- Default
-- Active section
-- Hover
-- Focus-visible
-
-## 18. Asset List
-
-Recommended initial assets:
-
-```txt
-public/assets/models/rocket.glb
-public/assets/images/avatar/pixel-avatar.png
-public/assets/images/projects/*.webp
-public/assets/textures/noise.png
-public/assets/sprites/particle-star.svg
-public/assets/icons/*.svg
-public/assets/fonts/pixel-heading.woff2
-```
-
-## 19. Do and Do Not
-
-### Do
-
-- Use icons instead of emoji.
-- Keep content readable.
-- Keep interactions meaningful.
-- Use the palette consistently.
-- Use pixel details intentionally.
-- Optimize all assets.
-
-### Do Not
-
-- Do not turn every text block into pixel font.
-- Do not use too many glow effects.
-- Do not block scroll with fragile custom logic.
-- Do not use unclear asset licenses.
-- Do not use huge 3D models.
-- Do not make project details inaccessible behind hover-only states.
-
-
-## Updated Visual Direction
-
-The design direction is:
-
-Elegant dark developer portfolio with subtle retro pixel-space influence.
-
-The portfolio must not look like a colorful arcade UI. It should feel technical, premium, calm, and professional while still having personality.
-
-### Reference Folder
-
-Use `/references` as the visual source of truth.
-
-Before making visual changes, inspect the reference images/videos in `/references` and extract:
-
-- spacing
-- typography mood
-- color restraint
-- composition
-- density
-- motion feeling
-- pixel treatment
-- object style
-
-Do not copy the references exactly. Use them to guide the mood and quality bar.
-
-### Visual Keywords
-
-Use:
-
-- dark
-- elegant
-- technical
-- cinematic
-- restrained
-- pixel-detailed
-- space-inspired
-- professional
+- dark surface
+- neutral border
+- subtle shadow or none
+- strong typography hierarchy
+- small metadata row
 
 Avoid:
 
-- childish
-- colorful arcade
-- toy rocket
-- rainbow borders
-- excessive ornaments
-- excessive glow
-- fake dashboard metrics
-- generic AI-generated card style
+- per-card colored border systems
+- thick pixel shadows
+- excessive hover glow
 
-### Color Usage
+### HUD / navigation
 
-Use Catppuccin Mocha as the base.
+The HUD can remain, but it should feel like a system navigation rail, not a game HUD.
 
-Main background:
+Use labels such as:
 
-- Crust `#11111b`
-- Mantle `#181825`
-- Base `#1e1e2e`
-- Surface0 `#313244`
+- Online
+- Profile
+- Matrix
+- Timeline
+- Work
+- R&D
+- Roadmap
+- Records
+- Contact
 
-Text:
+Avoid labels such as:
 
-- Text `#cdd6f4`
-- Subtext1 `#bac2de`
-- Subtext0 `#a6adc8`
+- Start
+- Player
+- Inventory
+- Mission
+- Archive as game archive
+- Quest
+- Training
+- Transmission
 
-Primary accent:
+### Modal
 
-- Mauve `#cba6f7`
+The project modal should feel like a professional case-study panel.
 
-Secondary accent, only when necessary:
+Sections:
 
-- Blue `#89b4fa`
-- Sky `#89dceb`
+- Overview
+- Problem / Context
+- Contribution
+- Stack
+- Outcome / Notes
+- Links
 
-Do not use many accent colors at the same time. Green, yellow, peach, pink, and red should only be used for meaningful states such as status, warning, or small badges.
+Avoid "Mission brief" and game labels.
 
-### Ornament Rules
+## 11. Motion design
 
-Reduce ornaments aggressively.
+### Page transition
+
+The existing staged screen-to-screen transition direction is appropriate.
+
+Desired feel:
+
+- screen switching
+- restrained fade/mask/slide
+- no visible long-page scrolling on desktop
+- no bounce/elastic arcade motion
+- no huge movement
+
+### Scene motion
+
+The scene should be an abstract system/network visual.
 
 Allowed:
 
-- subtle stars
-- very low-opacity scanline/noise
-- small HUD labels
-- minimal sidebar indicators
-- small pixel details
+- node pulses
+- edge highlights
+- subtle topology shifts
+- pipeline segment animation
+- observability waveform
 
 Avoid:
 
+- spaceship movement
+- rocket trails
+- particle fireworks
+- combat effects
+
+### Reduced motion
+
+When reduced motion is enabled:
+
+- skip staged transitions
+- skip node/pulse animation
+- keep content visible
+- allow direct section jumps
+
+## 12. Three.js scene direction
+
+Replace the current ship/spacecraft scene with an abstract system visualization.
+
+Potential implementation:
+
+- nodes as points or small planes
+- edges as thin lines
+- signal pulse moving through edges
+- subtle layout changes per active section
+- low opacity, never covering content
+
+Section states:
+
+- Hero: boot node activates
+- About: identity/profile cluster
+- Expertise: capability matrix layout
+- Experience: timeline path
+- Work: index grid support
+- Experiments: branching prototype cluster
+- Building: pipeline queue
+- Education: archive nodes
+- Contact: handshake pulse between two endpoints
+
+## 13. Background motifs
+
+Use subtle CSS motifs, not heavy assets.
+
+Allowed:
+
+- low-opacity grid
+- terminal scan at very low opacity
+- masked radial gradient
+- thin architecture lines
+- tiny system node dots
+
+Avoid:
+
+- dense stars everywhere
 - many colorful plus signs
-- random bright stars
 - large decorative crosses
-- excessive dashed lines
-- heavy glow behind every object
-- colorful borders on every card
+- big glow fields
+- random ornaments
 
-### Card Style
+## 14. Responsive behavior
 
-Cards should be neutral and professional.
+### Desktop
 
-Use:
+- staged section transitions enabled
+- system/network scene visible but restrained
+- navigation rail visible
 
-- dark translucent surface
-- subtle neutral border
-- clean hierarchy
-- limited accent usage
-- small status badge
+### Tablet
 
-Avoid:
+- staged transitions can remain if smooth
+- reduce scene density
+- two-column layouts where appropriate
 
-- different border color for every card
-- thick colorful outlines
-- glowing card edges
-- overused pixel shadow
+### Mobile
 
-### Typography
+- native scrolling preferred
+- scene can be hidden or simplified
+- content takes priority
+- modal must remain scrollable
 
-Use clean typography for professional content.
+## 15. Accessibility
 
-Recommended:
+- Real buttons/links.
+- Modal accessibility maintained.
+- Clear focus states.
+- Sufficient contrast.
+- Scene visuals decorative unless explicitly labelled.
+- Do not rely on animation to communicate content.
 
-- Headings: Space Grotesk, Sora, Geist, or similar geometric sans
-- Body: JetBrains Mono or IBM Plex Mono
-- Pixel font: only for small HUD labels, section numbers, and tiny metadata
+## 16. Implementation priority
 
-Do not use a playful pixel font for large hero text or long body content.
-
-### Skills Display
-
-Do not use numeric progress bars for skills.
-
-Use grouped skill cards instead:
-
-- Daily use
-- Comfortable
-- Currently learning
-- Experimental
-
-Or use technical categories:
-
-- Frontend
-- Backend
-- WordPress
-- Animation/UI
-- DevOps/Tools
-- Data/API
-
-### Spacecraft Direction
-
-Rename the visual concept from "rocket" to "spacecraft" or "ship".
-
-The ship should feel inspired by Space Impact, not a cartoon rocket.
-
-Preferred implementation:
-
-1. Pixel-art sprite or sprite sheet for the clearest pixel result.
-2. Three.js only if the result can be made angular, pixelated, and mature.
-3. Avoid classic toy rocket shape.
-
-The ship should be smaller, more restrained, and should support the layout instead of dominating the page.
-## 21. Section Scene System
-
-The current design direction is not to make every section share the same dark space panel. The site should feel like one coherent retro-space journey, but each section needs a different scene identity.
-
-Use `SECTION_STYLES.md` as the source of truth for section-specific visual direction.
-
-Core rule:
-
-```txt
-Same identity, different environment per section.
-```
-
-Do not create variety by adding many colors or more ornaments. Create variety through:
-
-- composition
-- panel structure
-- background motif
-- section density
-- ship placement
-- transition behavior
-- content rhythm
-
-### Section concepts
-
-| Section | Scene concept | Visual purpose |
-|---|---|---|
-| Intro | Launch Console | confident first impression |
-| About | Cockpit / Pilot Profile | personal capability profile |
-| Expertise | Toolkit Bay | practical grouped tools |
-| Experience | Flight Path / Career Route | chronological reliability |
-| Selected Work | Mission Archive / Gallery | curated case-study archive |
-| Experiments | Research Lab | prototypes and learning |
-| Currently Building | Construction Bay | active focus and next steps |
-| Education | Archive / Records Room | calm credential history |
-| Contact | Transmission / Docking Bay | strong final CTA |
-
-### Section variety rules
-
-- Each section must have a distinct composition or background motif.
-- Adjacent sections should not use the exact same card rhythm.
-- The ship should have a different role per section: idle, parked, passing, following route, observing, docked, or transmitting.
-- Keep the ship secondary to the content.
-- Preserve the professional dark style.
-- Avoid colorful arcade styling, extra explosions, weapons, shields, random stars, and excessive glow.
-
-### Implementation order
-
-1. About + Expertise first.
-2. Experience + Currently Building second.
-3. Contact third.
-4. Spacecraft positions after section layouts are stable.
-5. Optional micro-effects last.
+1. Update docs to remove game/ship concept.
+2. Replace ship/space scene with production-system node scene.
+3. Update section labels and UI copy.
+4. Reframe Hero/About/Expertise.
+5. Reframe Experience/Currently Building.
+6. Keep Selected Work structure but update labels to case-study language.
+7. Final responsive and accessibility pass.

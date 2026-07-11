@@ -34,33 +34,41 @@ const practicalSkillGroups = [
     summary: "Creative and interaction-heavy tools explored for richer interfaces.",
     skills: ["GSAP", "Three.js", "Canvas", "Framer Motion", "Socket", "Cloudflare"],
   },
-];
+  ];
+
+const moduleCount = `${practicalSkillGroups.length} modules`;
 ---
 
 <Section id="skills" label="Expertise" index="02" accent="mauve" class="section--dense">
+  <div class="skills__motif" aria-hidden="true"></div>
+
   <header class="skills__head" data-reveal>
-    <h2 class="skills__title">Expertise</h2>
-    <p class="skills__sub">Grouped by how the tools show up in real work.</p>
+    <div class="skills__head-text">
+      <h2 class="skills__title">Expertise</h2>
+      <p class="skills__sub">Grouped by how the tools show up in real work.</p>
+    </div>
+    <span class="skills__head-meta">{moduleCount}</span>
   </header>
 
   <div class="skills__grid">
     {
-      practicalSkillGroups.map((group) => (
+      practicalSkillGroups.map((group, i) => (
         <article
           class="skill-slot"
           data-reveal
           tabindex="0"
           aria-label={`${group.title} skills`}
         >
-          <div class="skill-slot__head">
+          <header class="skill-slot__head">
             <span class="skill-slot__icon">
               <Icon name={group.icon} size={20} />
             </span>
-            <div>
+            <div class="skill-slot__head-text">
+              <span class="skill-slot__index">M-{String(i + 1).padStart(2, "0")}</span>
               <h3 class="skill-slot__title">{group.title}</h3>
-              <p class="skill-slot__summary">{group.summary}</p>
             </div>
-          </div>
+          </header>
+          <p class="skill-slot__summary">{group.summary}</p>
           <div class="skill-slot__chips">
             {group.skills.map((skill) => (
               <StackChip label={skill} />
@@ -73,13 +81,40 @@ const practicalSkillGroups = [
 </Section>
 
 <style>
+  .skills__motif {
+    position: absolute;
+    inset: -1.5rem;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, rgba(147, 153, 178, 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(147, 153, 178, 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(147, 153, 178, 0.05) 1px, transparent 1px);
+    background-size:
+      44px 44px,
+      44px 44px,
+      100% 44px;
+    -webkit-mask-image: radial-gradient(ellipse at 50% 35%, #000 0%, transparent 82%);
+    mask-image: radial-gradient(ellipse at 50% 35%, #000 0%, transparent 82%);
+  }
+
   .skills__head {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
     margin-bottom: 1.2rem;
-    max-width: 680px;
+  }
+
+  .skills__head-text {
+    max-width: 620px;
   }
 
   .skills__title {
     font-size: clamp(1.75rem, 5vw, 2.75rem);
+    line-height: 1.1;
     margin-bottom: 0.4rem;
   }
 
@@ -89,7 +124,21 @@ const practicalSkillGroups = [
     font-size: 0.95rem;
   }
 
+  .skills__head-meta {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.02em;
+    color: var(--subtext-0);
+    background: var(--bg-card);
+    border: 1px solid var(--border-dim);
+    padding: 0.4rem 0.65rem;
+    white-space: nowrap;
+  }
+
   .skills__grid {
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 0.85rem;
@@ -97,12 +146,24 @@ const practicalSkillGroups = [
 
   .skill-slot {
     --accent: var(--mauve);
+    position: relative;
     background: var(--bg-card);
     border: 1px solid var(--border-dim);
     border-top: 1px solid rgba(203, 166, 247, 0.34);
     box-shadow: 4px 4px 0 rgba(17, 17, 27, 0.72);
     padding: 0.95rem 1rem;
     transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+
+  /* small module notch in the corner (structural detail, not an ornament) */
+  .skill-slot::after {
+    content: "";
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 8px;
+    height: 8px;
+    background: rgba(147, 153, 178, 0.32);
   }
 
   .skill-slot:nth-child(1),
@@ -124,10 +185,10 @@ const practicalSkillGroups = [
   .skill-slot__head {
     display: flex;
     align-items: flex-start;
-    gap: 0.6rem;
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.65rem;
-    border-bottom: 1px dashed rgba(147, 153, 178, 0.36);
+    gap: 0.65rem;
+    margin-bottom: 0.65rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px dashed rgba(147, 153, 178, 0.32);
   }
 
   .skill-slot__icon {
@@ -138,21 +199,38 @@ const practicalSkillGroups = [
     color: var(--mauve);
     background: var(--mantle);
     border: 1px solid var(--border-dim);
+    flex: none;
+  }
+
+  .skill-slot__head-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .skill-slot__index {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--subtext-0);
   }
 
   .skill-slot__title {
     font-family: var(--font-heading);
     font-weight: 600;
-    font-size: 1.15rem;
+    font-size: 1.1rem;
+    line-height: 1.15;
     color: var(--text);
-    margin: 0 0 0.2rem;
+    margin: 0;
   }
 
   .skill-slot__summary {
     font-family: var(--font-mono);
     font-size: 0.75rem;
-    line-height: 1.4;
+    line-height: 1.45;
     color: var(--subtext-0);
+    margin: 0 0 0.7rem;
   }
 
   .skill-slot__chips {
@@ -174,6 +252,10 @@ const practicalSkillGroups = [
   @media (max-width: 640px) {
     .skills__grid {
       grid-template-columns: 1fr;
+    }
+
+    .skills__motif {
+      inset: -1rem;
     }
   }
 </style>

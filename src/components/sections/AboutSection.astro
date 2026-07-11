@@ -25,22 +25,33 @@ const capabilityCards = [
     icon: "mdi:motion-play-outline",
     note: "GSAP, Three.js, Canvas, interaction polish.",
   },
-];
+  ];
 ---
 
 <Section id="about" label="About" index="01" accent="mauve" class="section--dense">
   <div class="about">
+    <div class="about__motif about__motif--grid" aria-hidden="true"></div>
+    <div class="about__motif about__motif--radar" aria-hidden="true"></div>
+
     <div class="about__intro" data-reveal>
-      <PixelCard accent="mauve" hud="profile-01">
+      <PixelCard accent="mauve" hud="pilot // 01">
+        <div class="about__screen-head">
+          <span class="about__screen-id">Pilot // Profile</span>
+          <span class="about__screen-status">
+            <span class="about__screen-dot" aria-hidden="true"></span>
+            Active
+          </span>
+        </div>
+
         <div class="about__avatar-wrap">
           <div class="about__avatar">
             <img src={profile.avatar} alt={`Pixel portrait of ${profile.name}`} loading="lazy" decoding="async" />
             <span class="about__avatar-frame" aria-hidden="true"></span>
           </div>
           <div class="about__id">
-            <span class="about__id-label">Player ID</span>
+            <span class="about__id-label">Callsign</span>
             <strong class="about__id-name">{profile.callsign}</strong>
-            <span class="about__id-class">{profile.role}</span>
+            <span class="about__id-class">{profile.role} · {profile.subrole}</span>
           </div>
         </div>
 
@@ -66,15 +77,20 @@ const capabilityCards = [
 
     <div class="about__capabilities">
       {
-        capabilityCards.map((card) => (
+        capabilityCards.map((card, i) => (
           <article class="about__capability" data-reveal>
             <div class="about__capability-head">
               <span class="about__capability-icon">
-                <Icon name={card.icon} size={20} />
+                <Icon name={card.icon} size={18} />
               </span>
               <h3>{card.label}</h3>
+              <span class="about__capability-idx">SYS {String(i + 1).padStart(2, "0")}</span>
             </div>
             <p>{card.note}</p>
+            <span class="about__capability-status">
+              <span class="about__capability-dot" aria-hidden="true"></span>
+              Online
+            </span>
           </article>
         ))
       }
@@ -84,10 +100,86 @@ const capabilityCards = [
 
 <style>
   .about {
+    position: relative;
     display: grid;
-    grid-template-columns: 1.2fr 1fr;
+    grid-template-columns: 1.25fr 1fr;
     gap: clamp(0.9rem, 2.2vw, 1.5rem);
     align-items: start;
+  }
+
+  /* ---------- Cockpit motifs (CSS only, low opacity, decorative) ---------- */
+  .about__motif {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .about__motif--grid {
+    inset: -1.5rem;
+    background-image:
+      linear-gradient(to right, rgba(147, 153, 178, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(147, 153, 178, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px;
+    -webkit-mask-image: radial-gradient(ellipse at 28% 35%, #000 0%, transparent 72%);
+    mask-image: radial-gradient(ellipse at 28% 35%, #000 0%, transparent 72%);
+  }
+
+  .about__motif--radar {
+    width: 420px;
+    height: 420px;
+    left: -90px;
+    top: -70px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle, rgba(147, 153, 178, 0.16) 0 1.5px, transparent 2px) center / 100% 100% no-repeat,
+      radial-gradient(circle, transparent 64px, rgba(147, 153, 178, 0.10) 64px 65px, transparent 66px),
+      radial-gradient(circle, transparent 124px, rgba(147, 153, 178, 0.08) 124px 125px, transparent 126px),
+      radial-gradient(circle, transparent 184px, rgba(147, 153, 178, 0.05) 184px 185px, transparent 186px),
+      conic-gradient(from 210deg, rgba(203, 166, 247, 0.05), transparent 55deg);
+    -webkit-mask-image: radial-gradient(circle, #000 58%, transparent 70%);
+    mask-image: radial-gradient(circle, #000 58%, transparent 70%);
+  }
+
+  .about__intro,
+  .about__capabilities {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---------- Profile / cockpit screen ---------- */
+  .about__screen-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.95rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px dashed rgba(147, 153, 178, 0.3);
+  }
+
+  .about__screen-id {
+    font-family: var(--font-pixel);
+    font-size: 0.5rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--subtext-0);
+  }
+
+  .about__screen-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mauve);
+  }
+
+  .about__screen-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--mauve);
   }
 
   .about__avatar-wrap {
@@ -99,8 +191,8 @@ const capabilityCards = [
 
   .about__avatar {
     position: relative;
-    width: 96px;
-    height: 96px;
+    width: 88px;
+    height: 88px;
     flex: none;
     border: 1px solid var(--border-dim);
     box-shadow: 4px 4px 0 rgba(17, 17, 27, 0.75);
@@ -129,8 +221,8 @@ const capabilityCards = [
   }
 
   .about__id-label {
-    font-family: var(--font-pixel);
-    font-size: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--subtext-0);
@@ -144,13 +236,14 @@ const capabilityCards = [
 
   .about__id-class {
     font-family: var(--font-mono);
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     color: var(--subtext-0);
   }
 
   .about__title {
     font-family: var(--font-heading);
     font-size: clamp(1.5rem, 4vw, 2.25rem);
+    line-height: 1.15;
     margin: 0 0 0.5rem;
   }
 
@@ -183,39 +276,58 @@ const capabilityCards = [
     color: var(--mauve);
   }
 
+  /* ---------- Capability readouts ---------- */
   .about__capabilities {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.75rem;
+    align-content: start;
   }
 
   .about__capability {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     background: var(--bg-card);
     border: 1px solid var(--border-dim);
     border-left: 2px solid rgba(203, 166, 247, 0.42);
     box-shadow: 3px 3px 0 rgba(17, 17, 27, 0.75);
-    padding: 0.85rem 0.9rem;
+    padding: 0.85rem 0.95rem;
   }
 
   .about__capability-head {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
+    gap: 0.55rem;
   }
 
   .about__capability-icon {
     display: grid;
     place-items: center;
+    width: 30px;
+    height: 30px;
     color: var(--mauve);
+    background: var(--mantle);
+    border: 1px solid var(--border-dim);
+    flex: none;
   }
 
   .about__capability h3 {
     font-family: var(--font-heading);
-    font-size: 1rem;
+    font-weight: 600;
+    font-size: 0.98rem;
     line-height: 1.1;
     color: var(--text);
     margin: 0;
+  }
+
+  .about__capability-idx {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--subtext-0);
   }
 
   .about__capability p {
@@ -225,6 +337,23 @@ const capabilityCards = [
     color: var(--subtext-0);
   }
 
+  .about__capability-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--subtext-0);
+  }
+
+  .about__capability-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--mauve);
+  }
+
   @media (max-width: 860px) {
     .about {
       grid-template-columns: 1fr;
@@ -232,6 +361,20 @@ const capabilityCards = [
 
     .about__capabilities {
       grid-template-columns: 1fr;
+    }
+
+    .about__motif--radar {
+      display: none;
+    }
+  }
+
+  @media (max-height: 760px) {
+    .about__avatar-wrap {
+      margin-bottom: 0.75rem;
+    }
+
+    .about__facts {
+      margin-top: 0.75rem;
     }
   }
 </style>

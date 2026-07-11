@@ -1,752 +1,244 @@
-# CLAUDE.md: Implementation Guide for Astro Retro Game Portfolio
+# CLAUDE.md: Coding Agent Guide for Production Systems Portfolio
 
-## Project Intent
+## Read this first
 
-You are building a one-page portfolio website for Ilham Yusuf. The website should feel like an elegant dark developer portfolio with subtle retro pixel-space influence. A spacecraft moves through the experience, but the content and professional credibility must stay more important than the game metaphor. Ilham works as a frontend developer and also handles many fullstack responsibilities, so the portfolio should communicate both strong frontend craft and fullstack capability.
+You are working on Ilham Yusuf's one-page portfolio.
 
-Use Astro, GSAP, and Three.js. Keep the code modular, readable, and component-based.
+The project has pivoted away from the previous retro spaceship/game concept. The new concept is **Production Systems Portfolio**.
 
-## Hard Rules
+The website should feel like an elegant dark technical portfolio inspired by production dashboards, terminals, observability tools, deployment pipelines, architecture diagrams, API/network graphs, release logs, and reliability engineering.
 
-- Do not use emoji anywhere in the UI.
-- Use icons instead of emoji.
-- Use Astro as the main framework.
-- Use GSAP ScrollTrigger for scroll animation.
-- Use Three.js for the spacecraft/space scene.
-- Keep the website as a single page.
-- Each main section must be `min-height: 100vh`.
-- Scrolling should snap or auto-move to the next section.
-- Store reusable components inside `src/components`.
-- Store public assets inside `public/assets`.
-- Project detail must open in a popup/modal, not a separate page.
-- Respect `prefers-reduced-motion`.
-- Keep content readable and accessible.
-- Do not add backend code unless explicitly requested.
-- Do not invent external URLs for projects. Use placeholders when links are unknown.
-- Do not use unclear asset licenses. Prefer CC0 assets.
+Do not continue the old spaceship/game direction.
 
-## Recommended Stack
+## Main goal
+
+Present Ilham Yusuf as:
+
+- a frontend developer with strong UI craft
+- a fullstack-capable developer
+- a developer learning DevOps/SRE and reliability practices
+- a reliable person for client/product delivery
+
+The portfolio must feel professional, technical, dark, elegant, and readable.
+
+## Stack
+
+Use the existing stack:
 
 ```txt
 Astro
 TypeScript
 GSAP
-GSAP ScrollTrigger
 Three.js
 CSS / SCSS
-Icon library: astro-icon, lucide, or local SVG icons
 ```
 
-## Commands
+Keep components modular and readable.
 
-Use these commands unless the existing project already has a different package manager.
+## Hard constraints
+
+- No emoji in UI.
+- Use icons instead of emoji.
+- Keep the site as one page.
+- Keep project detail in a modal.
+- Do not invent external project URLs.
+- Do not add backend code.
+- Do not use unclear assets/licenses.
+- Respect reduced motion.
+- Preserve accessibility.
+- Run `pnpm build` after edits.
+
+## New section system
+
+Use these section names and concepts:
+
+1. Hero — System Online
+2. About — Operator Profile
+3. Expertise — Capability Matrix
+4. Experience — Delivery Timeline
+5. Selected Work — Case Study Index
+6. Experiments — R&D Lab
+7. Currently Building — Build Queue / Roadmap
+8. Education — Credentials Archive
+9. Contact — Secure Handshake
+
+## Language rules
+
+### Use
+
+- system
+- operator
+- capability
+- matrix
+- delivery
+- timeline
+- case study
+- R&D
+- prototype
+- build queue
+- roadmap
+- credentials
+- records
+- handshake
+- endpoint
+- observability
+- deployment
+- reliability
+
+### Avoid
+
+- rocket
+- spaceship
+- mission
+- player
+- cockpit
+- pilot
+- quest
+- launch
+- final transmission
+- weapons
+- shields
+- bullets
+- explosions
+- arcade effects
+
+If old component or file names still contain `Rocket`, do not rename everything at once unless it is safe. You may keep compatibility names internally while changing user-facing language and direction.
+
+## Visual rules
+
+- Professional first, stylized second.
+- Dark Catppuccin base.
+- Mauve primary accent.
+- Blue/Sky only as small supporting accents.
+- Green/yellow/red only for meaningful states.
+- Neutral card borders.
+- No rainbow borders.
+- No excessive glow.
+- No random ornaments.
+- No dense starfield as main visual identity.
+- Pixel/terminal details only as subtle texture.
+
+## Three.js scene direction
+
+The current ship/space scene should be replaced with an abstract production-system scene.
+
+Preferred elements:
+
+- network nodes
+- architecture edges
+- signal pulses
+- deployment pipeline paths
+- observability waveform
+- section-specific topology
+
+Avoid:
+
+- central spacecraft object
+- rocket trails
+- game particles
+- combat effects
+- colorful sprite effects
+
+Reduced motion:
+
+- scene becomes static or nearly static
+- no pulses/trails
+- no idle motion
+
+## Motion direction
+
+The staged section transition architecture can stay.
+
+Motion should feel like:
+
+- changing system panels
+- switching between technical views
+- controlled and premium
+
+Avoid:
+
+- arcade bounce
+- elastic motion
+- huge movement
+- attention-grabbing animation loops
+
+## Section style expectations
+
+### Hero — System Online
+
+Boot/status screen. Use a strong intro, terminal command, and system status indicators.
+
+### About — Operator Profile
+
+Developer/operator profile with working context. Avoid pilot/player language.
+
+### Expertise — Capability Matrix
+
+Grouped skills as capability modules. No fake skill percentages.
+
+### Experience — Delivery Timeline
+
+Work history as delivery/release timeline.
+
+### Selected Work — Case Study Index
+
+Professional project cards and case-study modal. Keep current good structure where possible.
+
+### Experiments — R&D Lab
+
+Prototype/learning notes. Use hypothesis, prototype, learning, next iteration.
+
+### Currently Building — Build Queue / Roadmap
+
+Current active projects and learning path as build queue/pipeline.
+
+### Education — Credentials Archive
+
+Clean record/archive layout.
+
+### Contact — Secure Handshake
+
+Strong contact CTA, email, social links, availability snapshot.
+
+## Implementation discipline
+
+Do not do broad rewrites. Work in small passes.
+
+Recommended order:
+
+1. Replace scene concept from ship to system/network.
+2. Update global user-facing labels from game language to system language.
+3. Rework Hero/About/Expertise.
+4. Rework Experience/Currently Building.
+5. Update Selected Work labels and modal wording only.
+6. Polish Education/Contact.
+7. Final responsive/accessibility/performance pass.
+
+## Current recommended next task
+
+Replace the current ship/spacecraft scene with an abstract production-system network scene.
+
+Task boundaries:
+
+- Do not change project data.
+- Do not redesign all sections.
+- Do not change colors globally.
+- Do not modify project cards/modal unless necessary.
+- Do not add ornaments.
+- Preserve transitions, reduced motion, and modal protections.
+
+## Build and verification
+
+After edits:
 
 ```bash
-npm create astro@latest
-npm install gsap three
-npm install -D typescript
+pnpm build
 ```
 
-Optional icon package:
-
-```bash
-npm install astro-icon
-```
-
-If the project uses pnpm:
-
-```bash
-pnpm create astro@latest
-pnpm add gsap three
-pnpm add -D typescript
-pnpm add astro-icon
-```
-
-## Folder Structure
-
-Create or follow this structure:
-
-```txt
-src/
-  components/
-    layout/
-      BaseLayout.astro
-      Section.astro
-      HudNav.astro
-      ScrollProgress.astro
-    scene/
-      SpaceScene.ts
-      RocketModel.ts
-      Starfield.ts
-      PixelParticles.ts
-    sections/
-      HeroSection.astro
-      AboutSection.astro
-      SkillsSection.astro
-      ExperienceSection.astro
-      ProjectsSection.astro
-      ExperimentalSection.astro
-      OngoingSection.astro
-      EducationSection.astro
-      ContactSection.astro
-    portfolio/
-      ProjectCard.astro
-      ProjectGrid.astro
-      ProjectModal.astro
-      StackChip.astro
-    ui/
-      PixelButton.astro
-      PixelCard.astro
-      PixelFrame.astro
-      Icon.astro
-      Modal.astro
-  data/
-    projects.ts
-    experiences.ts
-    education.ts
-    skills.ts
-    socials.ts
-  pages/
-    index.astro
-  scripts/
-    scroll.ts
-    modal.ts
-  styles/
-    global.css
-    tokens.css
-    utilities.css
-
-public/
-  assets/
-    models/
-      rocket.glb
-    images/
-      projects/
-      avatar/
-      backgrounds/
-    icons/
-    sprites/
-    textures/
-    fonts/
-```
-
-## Section Order
-
-Build sections in this order:
-
-1. HeroSection
-2. AboutSection
-3. SkillsSection
-4. ExperienceSection
-5. ProjectsSection
-6. ExperimentalSection
-7. OngoingSection
-8. EducationSection
-9. ContactSection
-
-Each section should use the shared `Section.astro` component.
-
-## Content Strategy
-
-Write content in English.
-
-Tone:
-
-- Clear
-- Professional
-- Developer-focused
-- Slightly game-like
-- No emoji
-- Avoid overly childish language
-
-Use professional section headings as the primary navigation:
-
-- Intro
-- About
-- Expertise
-- Experience
-- Selected Work
-- Experiments
-- Currently Building
-- Education
-- Contact
-
-Mission/game terminology may appear only as small HUD metadata. It must not become the main information architecture.
-
-## Data Files
-
-### `src/data/projects.ts`
-
-Use this shape:
-
-```ts
-export type ProjectStatus = 'completed' | 'experimental' | 'ongoing';
-
-export type ProjectCategory = 'work' | 'personal' | 'experimental' | 'ongoing';
-
-export type Project = {
-  id: string;
-  title: string;
-  category: ProjectCategory;
-  status: ProjectStatus;
-  summary: string;
-  problem?: string;
-  contribution?: string[];
-  stack: string[];
-  image?: string;
-  links?: {
-    label: string;
-    url: string;
-    icon?: string;
-  }[];
-};
-
-export const projects: Project[] = [
-  {
-    id: 'moneyflow',
-    title: 'MoneyFlow',
-    category: 'personal',
-    status: 'ongoing',
-    summary: 'A personal finance web app for tracking accounts, income, expenses, and categories.',
-    problem: 'Managing personal cash flow needs a clear dashboard and maintainable transaction flow.',
-    contribution: [
-      'Built the frontend architecture with reusable UI components.',
-      'Designed the account, category, and transaction structure.',
-      'Worked on backend API patterns using NestJS, Prisma, and PostgreSQL.'
-    ],
-    stack: ['Next.js', 'NestJS', 'Prisma', 'PostgreSQL', 'TypeScript'],
-    image: '/assets/images/projects/moneyflow.webp',
-    links: []
-  },
-  {
-    id: 'write-mate',
-    title: 'Write-Mate Add-on',
-    category: 'experimental',
-    status: 'experimental',
-    summary: 'A browser add-on experiment for grammar, rewriting, and translation assistance near text inputs.',
-    contribution: [
-      'Explored browser extension UX for inline writing assistance.',
-      'Planned API-key based provider integration.',
-      'Designed popup and settings flow for user configuration.'
-    ],
-    stack: ['JavaScript', 'Browser Extension', 'API Integration'],
-    image: '/assets/images/projects/write-mate.webp',
-    links: []
-  }
-];
-```
-
-Add more projects later from the real portfolio content.
-
-### `src/data/skills.ts`
-
-```ts
-export const skillGroups = [
-  {
-    title: 'Frontend',
-    icon: 'code',
-    skills: ['Astro', 'React', 'Next.js', 'Vue', 'Nuxt', 'TypeScript', 'SCSS', 'Tailwind']
-  },
-  {
-    title: 'Animation & UI',
-    icon: 'sparkles-icon-replacement',
-    skills: ['GSAP', 'Three.js', 'Framer Motion', 'Canvas', 'CSS Animation']
-  },
-  {
-    title: 'WordPress',
-    icon: 'layout',
-    skills: ['Elementor', 'WooCommerce', 'ACF', 'WPML', 'Custom Themes']
-  },
-  {
-    title: 'Backend',
-    icon: 'server',
-    skills: ['Node.js', 'NestJS', 'Express', 'Prisma', 'PostgreSQL']
-  },
-  {
-    title: 'Tools',
-    icon: 'terminal',
-    skills: ['Git', 'Docker', 'Linux', 'Cloudflare', 'CI/CD']
-  }
-];
-```
-
-Replace `sparkles-icon-replacement` with a real icon name from the selected icon library. Do not use emoji.
-
-## Styling Requirements
-
-Create `src/styles/tokens.css`:
-
-```css
-:root {
-  --rosewater: #f5e0dc;
-  --flamingo: #f2cdcd;
-  --pink: #f5c2e7;
-  --mauve: #cba6f7;
-  --red: #f38ba8;
-  --maroon: #eba0ac;
-  --peach: #fab387;
-  --yellow: #f9e2af;
-  --green: #a6e3a1;
-  --teal: #94e2d5;
-  --sky: #89dceb;
-  --sapphire: #74c7ec;
-  --blue: #89b4fa;
-  --lavender: #b4befe;
-  --text: #cdd6f4;
-  --subtext-1: #bac2de;
-  --subtext-0: #a6adc8;
-  --overlay-2: #9399b2;
-  --overlay-1: #7f849c;
-  --overlay-0: #6c7086;
-  --surface-2: #585b70;
-  --surface-1: #45475a;
-  --surface-0: #313244;
-  --base: #1e1e2e;
-  --mantle: #181825;
-  --crust: #11111b;
-
-  --font-heading: 'PixelHeading', system-ui, sans-serif;
-  --font-body: Inter, ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
-
-  --container-width: 1120px;
-  --section-padding: clamp(1.25rem, 4vw, 4rem);
-}
-```
-
-Create `src/styles/global.css`:
-
-```css
-@import './tokens.css';
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  color-scheme: dark;
-  scroll-behavior: smooth;
-}
-
-body {
-  margin: 0;
-  font-family: var(--font-body);
-  background: var(--crust);
-  color: var(--text);
-  overflow-x: hidden;
-}
-
-button,
-a {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-img,
-svg,
-canvas {
-  max-width: 100%;
-}
-
-.main-scroll {
-  scroll-snap-type: y mandatory;
-}
-
-@media (max-width: 768px) {
-  .main-scroll {
-    scroll-snap-type: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-```
-
-## Shared Section Component
-
-Create `src/components/layout/Section.astro`:
-
-```astro
----
-const { id, label, class: className = '' } = Astro.props;
----
-
-<section id={id} class={`section ${className}`} data-section={id} aria-label={label}>
-  <div class="section__inner">
-    <slot />
-  </div>
-</section>
-
-<style>
-  .section {
-    min-height: 100vh;
-    position: relative;
-    display: grid;
-    place-items: center;
-    overflow: hidden;
-    scroll-snap-align: start;
-    padding: var(--section-padding);
-  }
-
-  .section__inner {
-    width: min(100%, var(--container-width));
-    margin-inline: auto;
-    position: relative;
-    z-index: 2;
-  }
-</style>
-```
-
-## GSAP Scroll Setup
-
-Create `src/scripts/scroll.ts`:
-
-```ts
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
-
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-export function initScrollAnimations() {
-  if (prefersReducedMotion) return;
-
-  const sections = gsap.utils.toArray<HTMLElement>('[data-section]');
-
-  sections.forEach((section) => {
-    const revealItems = section.querySelectorAll('[data-reveal]');
-
-    gsap.fromTo(
-      revealItems,
-      { y: 32, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.6,
-        stagger: 0.08,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 70%',
-          end: 'bottom 30%',
-          toggleActions: 'play none none reverse'
-        }
-      }
-    );
-  });
-
-  ScrollTrigger.create({
-    trigger: document.body,
-    start: 'top top',
-    end: 'bottom bottom',
-    snap: {
-      snapTo: 1 / Math.max(sections.length - 1, 1),
-      duration: 0.35,
-      ease: 'power2.out'
-    }
-  });
-}
-```
-
-Import it in `src/pages/index.astro` using a client-side script:
-
-```astro
-<script>
-  import { initScrollAnimations } from '../scripts/scroll';
-  initScrollAnimations();
-</script>
-```
-
-## Three.js Scene Guidance
-
-Create a Three.js scene that attaches to a fixed canvas layer behind or beside content.
-
-Main responsibilities:
-
-- Load `/assets/models/rocket.glb`.
-- Render starfield background.
-- Update rocket position based on scroll progress.
-- Reduce particle count on mobile.
-- Disable animation if `prefers-reduced-motion` is enabled.
-
-Use `GLTFLoader` for the `.glb` model.
-
-Suggested behavior:
-
-```ts
-const scrollProgress = window.scrollY / (document.body.scrollHeight - window.innerHeight);
-rocket.position.y = gsap.utils.interpolate(2, -8, scrollProgress);
-rocket.position.x = Math.sin(scrollProgress * Math.PI * 4) * 1.25;
-rocket.rotation.z = Math.sin(scrollProgress * Math.PI * 3) * 0.2;
-```
-
-Do not make this code final until the actual scene size and camera are known.
-
-## Asset Sources
-
-Preferred asset sources:
-
-1. Kenney Space Kit
-   - Good for CC0 space-themed assets.
-   - Recommended for rocket/ship/planet assets.
-
-2. Quaternius
-   - Good for CC0 low-poly game assets.
-   - Recommended for low-poly spaceships or environment props.
-
-3. Poly Pizza
-   - Useful for free low-poly models.
-   - Must verify individual model license before using.
-
-4. Unsplash
-   - Useful for reference/background images.
-   - Prefer not to use photorealistic images as main visual style.
-
-Asset implementation rule:
-
-- Download chosen model manually.
-- Optimize it.
-- Rename it to `rocket.glb`.
-- Store it at `public/assets/models/rocket.glb`.
-- Add source/license notes in `public/assets/ASSET_LICENSES.md`.
-
-Create `public/assets/ASSET_LICENSES.md`:
-
-```md
-# Asset Licenses
-
-## rocket.glb
-
-- Source: TODO
-- Author: TODO
-- License: TODO
-- Download date: TODO
-- Notes: Verify license before production release.
-```
-
-## Modal Requirements
-
-Create reusable modal component.
-
-Behavior:
-
-- Opens when project card is clicked.
-- Closes when close button is clicked.
-- Closes on Escape.
-- Focus returns to clicked card after close.
-- Background scroll should be disabled while modal is open.
-- Use `role="dialog"` and `aria-modal="true"`.
-
-Avoid hover-only interactions.
-
-## Project Card Requirements
-
-Each card should show:
-
-- Title
-- Category
-- Status
-- Summary
-- Stack chips
-- View Details button
-
-Use a real `button` for opening modal.
-
-## HUD Navigation Requirements
-
-The HUD navigation should show:
-
-- Current section
-- Section list with icons
-- Scroll progress
-
-Recommended labels:
-
-```ts
-const navItems = [
-  { id: 'hero', label: 'Start', icon: 'rocket' },
-  { id: 'about', label: 'Profile', icon: 'user' },
-  { id: 'skills', label: 'Inventory', icon: 'code' },
-  { id: 'experience', label: 'Log', icon: 'briefcase' },
-  { id: 'projects', label: 'Archive', icon: 'folder' },
-  { id: 'experimental', label: 'Lab', icon: 'flask' },
-  { id: 'ongoing', label: 'Quests', icon: 'activity' },
-  { id: 'education', label: 'Training', icon: 'graduation-cap' },
-  { id: 'contact', label: 'Contact', icon: 'send' }
-];
-```
-
-## Mermaid: Component Dependency Diagram
-
-```mermaid
-flowchart TD
-  A[index.astro] --> B[BaseLayout]
-  A --> C[SpaceScene]
-  A --> D[HudNav]
-  A --> E[Sections]
-
-  E --> E1[HeroSection]
-  E --> E2[AboutSection]
-  E --> E3[SkillsSection]
-  E --> E4[ExperienceSection]
-  E --> E5[ProjectsSection]
-  E --> E6[ExperimentalSection]
-  E --> E7[OngoingSection]
-  E --> E8[EducationSection]
-  E --> E9[ContactSection]
-
-  E5 --> F[ProjectGrid]
-  F --> G[ProjectCard]
-  F --> H[ProjectModal]
-
-  E1 --> I[PixelButton]
-  E2 --> J[PixelCard]
-  E3 --> J
-  E4 --> J
-  E5 --> J
-```
-
-## Mermaid: Scroll Scene Flow
-
-```mermaid
-sequenceDiagram
-  participant User
-  participant Window
-  participant ScrollTrigger
-  participant SpaceScene
-  participant Rocket
-  participant SectionUI
-
-  User->>Window: Scrolls page
-  Window->>ScrollTrigger: Emits scroll progress
-  ScrollTrigger->>SectionUI: Reveals active section content
-  ScrollTrigger->>SectionUI: Snaps to nearest section
-  ScrollTrigger->>SpaceScene: Sends normalized progress
-  SpaceScene->>Rocket: Updates position and rotation
-  SpaceScene->>Window: Renders frame
-```
-
-## Build Order
-
-Follow this order:
-
-1. Create token and global styles.
-2. Create `BaseLayout.astro` and `Section.astro`.
-3. Create static data files.
-4. Build all sections without animation.
-5. Build project cards and modal.
-6. Add HUD navigation.
-7. Add GSAP reveal animation.
-8. Add GSAP snap behavior.
-9. Add Three.js scene with placeholder cube or simple geometry.
-10. Replace placeholder with `rocket.glb`.
-11. Add particle/starfield polish.
-12. Add responsive improvements.
-13. Add reduced motion support.
-14. Run performance and accessibility checks.
-
-## Quality Checklist
-
-Before finishing, verify:
-
-- No emoji appears in UI text.
-- All main sections are 100vh.
-- Scroll snapping works on desktop.
-- Mobile scrolling is not frustrating.
-- Project modal works with keyboard.
-- Rocket scene does not cover important content.
-- Assets are stored in `public/assets`.
-- Components are inside `src/components`.
-- Data is separated inside `src/data`.
-- Colors use CSS variables from the supplied palette.
-- Reduced motion mode works.
-- Lighthouse performance is acceptable.
-- No external asset is used without license notes.
-
-## Suggested First Prompt to Continue Implementation
-
-Use this prompt when asking Claude or another coding agent to start the build:
-
-```txt
-Build the foundation for my Astro portfolio redesign based on PRD.md, DESIGN.md, and CLAUDE.md.
-
-Start with:
-1. Astro folder structure
-2. global CSS tokens
-3. BaseLayout
-4. Section component
-5. index.astro with all 9 sections
-6. placeholder content from data files
-7. pixel button/card components
-
-Do not add Three.js yet. Keep the first implementation clean and responsive. Do not use emoji. Use icons only.
-```
-
-## Reference Usage
-
-Before editing visual implementation, inspect the `/references` folder.
-
-The references define the desired quality and mood. Do not copy them directly.
-
-Important interpretation:
-
-- The site should be professional and elegant first.
-- Retro pixel/game influence should be subtle.
-- The current implementation was too colorful, too ornamental, and too repetitive.
-- Do not add more decorative game UI.
-- Remove visual noise before adding new effects.
-
-
-## Section Scene Direction
-
-Use `SECTION_STYLES.md` as the source of truth for section-specific visual direction.
-
-Current problem to avoid: every section using the same dark space background, same card language, same ship behavior, and same layout rhythm.
-
-The site should keep one coherent identity, but each section needs a different scene:
-
-1. Intro — Launch Console
-2. About — Cockpit / Pilot Profile
-3. Expertise — Toolkit Bay
-4. Experience — Flight Path / Career Route
-5. Selected Work — Mission Archive / Gallery
-6. Experiments — Research Lab
-7. Currently Building — Construction Bay
-8. Education — Archive / Records Room
-9. Contact — Transmission / Docking Bay
-
-Rules:
-
-- Create variety through composition, panel structure, background motif, section density, and ship placement.
-- Do not create variety by adding random colors, ornaments, glows, shields, weapons, explosions, or arcade effects.
-- Keep the spacecraft secondary to content.
-- Do not redesign all sections in one pass.
-- Implement section identity gradually: About + Expertise first, then Experience + Currently Building, then Contact.
-
-## Current Fix Priority
-
-The visual cleanup, layout density, project modal polish, staged section transitions, and approved spacecraft sprite integration are already in progress. The next priority is section identity.
-
-Work in this order:
-
-1. Apply the section scene system from `SECTION_STYLES.md`.
-2. Redesign About + Expertise as distinct scenes, not repeated card grids.
-3. Redesign Experience + Currently Building with route/dock motifs.
-4. Polish Contact as a final transmission/docking scene.
-5. Revisit spacecraft anchor positions after section layouts are stable.
-6. Add optional micro-effects only after the core scenes feel distinct.
-7. Run responsive, accessibility, and performance checks.
-
-Do not attempt all tasks in one pass.
+Report:
+
+- changed files
+- what changed
+- what was intentionally not changed
+- build result
+- any existing warnings
