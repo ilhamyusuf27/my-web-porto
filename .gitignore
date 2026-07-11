@@ -27,3 +27,6 @@ yarn.lock
 
 # audit, design and progress markdown files
 PROGRESS.md
+
+# local design reference assets (kept on disk, not versioned)
+references/
