@@ -224,18 +224,18 @@ function buildWireframeState(id: string): WireframeState {
       nodes: makeNodes(([, y], index) => {
         const layer = Math.floor(index / 6);
         const slot = index % 6;
-        const depth = layer * 0.78;
-        const shelfOffset = layer === 1 ? 0.18 : layer === 2 ? -0.12 : 0;
+        const depth = layer * 0.92;
+        const shelfOffset = layer === 1 ? 0.22 : layer === 2 ? -0.18 : 0;
         return [
-          -1.95 + slot * 0.78 + shelfOffset,
-          0.28 + layer * 0.46 + y * 0.16 + (slot % 2) * 0.035,
-          -1.45 + depth + Math.sin(slot * 0.8) * 0.08,
+          -2.08 + slot * 0.82 + shelfOffset,
+          0.26 + layer * 0.5 + y * 0.12 + (slot % 2) * 0.025,
+          -1.72 + depth + Math.sin(slot * 0.8) * 0.06,
         ];
       }),
-      rotation: [0.08, -0.18, 0.015],
-      scale: 1.06,
-      lineOpacity: 0.31,
-      nodeOpacity: 0.3,
+      rotation: [0.09, -0.22, 0.012],
+      scale: 1.04,
+      lineOpacity: 0.27,
+      nodeOpacity: 0.24,
       signalRoute: [0, 1, 2, 8, 14, 15, 16, 17],
     };
   }
@@ -245,13 +245,13 @@ function buildWireframeState(id: string): WireframeState {
       nodes: makeNodes(([x, y, z], index) => {
         const side = x < 0 ? -1 : 1;
         const resolve = Math.abs(x) < 0.5 ? 0.58 : 1;
-        return [x * resolve + side * 0.12, y * 0.88 + 0.12, z * 0.58];
+        return [x * resolve + side * 0.18, y * 0.82 + 0.08, z * 0.52];
       }),
-      rotation: [0.02, 0, 0],
-      scale: 0.97,
-      lineOpacity: 0.34,
-      nodeOpacity: 0.42,
-      signalRoute: [0, 1, 2, 3, 4],
+      rotation: [0.018, -0.04, 0],
+      scale: 0.94,
+      lineOpacity: 0.28,
+      nodeOpacity: 0.34,
+      signalRoute: [9, 10, 13, 14, 16, 8, 3, 4],
     };
   }
 
@@ -392,40 +392,40 @@ const MODES: Record<string, SectionMode> = {
     },
   },
   education: {
-    camera: [0.36, 5.65, 6.05],
-    target: [0.08, 1.02, -0.05],
-    grid: { extent: 5.05, spacing: 0.72, rotation: -0.08, opacity: 0.14 },
+    camera: [0.42, 5.78, 6.2],
+    target: [0.08, 1.04, -0.16],
+    grid: { extent: 5.1, spacing: 0.78, rotation: -0.1, opacity: 0.12 },
     wireframe: buildWireframeState("education"),
-    signalOpacity: 0.22,
-    pulseOpacity: 0.16,
-    signalDuration: 8.6,
-    drift: [0.012, 0.02],
+    signalOpacity: 0.18,
+    pulseOpacity: 0.12,
+    signalDuration: 9.4,
+    drift: [0.01, 0.016],
     activeMotion: {
-      linePulse: 0.08,
-      nodePulse: 0.08,
-      sway: [0.006, 0.006, 0.001],
-      speed: 0.18,
-      signalScale: 0.98,
+      linePulse: 0.06,
+      nodePulse: 0.06,
+      sway: [0.004, 0.005, 0.001],
+      speed: 0.15,
+      signalScale: 0.94,
     },
   },
   contact: {
-    camera: [0, 5.35, 5.75],
-    target: [0, 0.9, 0.05],
-    grid: { extent: 4.5, spacing: 0.85, rotation: 0, opacity: 0.12 },
+    camera: [0.28, 5.2, 5.95],
+    target: [0.04, 0.86, 0.12],
+    grid: { extent: 4.6, spacing: 0.86, rotation: 0.04, opacity: 0.1 },
     wireframe: buildWireframeState("contact"),
-    signalOpacity: 0.32,
-    pulseOpacity: 0.3,
-    signalDuration: 4.6,
+    signalOpacity: 0.28,
+    pulseOpacity: 0.24,
+    signalDuration: 5.4,
     drift: [0.012, 0.014],
     activeMotion: {
-      linePulse: 0.14,
-      nodePulse: 0.18,
-      sway: [0.003, 0.008, 0],
-      speed: 0.34,
-      signalScale: 1.1,
+      linePulse: 0.1,
+      nodePulse: 0.13,
+      sway: [0.002, 0.006, 0],
+      speed: 0.24,
+      signalScale: 1.04,
     },
-    transitionSignalBoost: 1.1,
-    transitionPulseBoost: 1.18,
+    transitionSignalBoost: 1.06,
+    transitionPulseBoost: 1.08,
   },
 };
 
