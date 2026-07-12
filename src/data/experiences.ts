@@ -19,9 +19,9 @@ export const experiences: Experience[] = [
     status: "active",
     stack: ["WordPress", "WooCommerce", "PHP", "Elementor"],
     highlights: [
-      "Builds and maintains client WordPress and WooCommerce sites.",
-      "Handles theme customization, performance, and cross-browser reliability.",
-      "Bridges marketing needs with maintainable front-end delivery.",
+      "Build and maintain client WordPress and WooCommerce sites.",
+      "Handle theme customization, performance checks, and cross-browser fixes.",
+      "Turn marketing requirements into maintainable frontend implementation.",
     ],
   },
   {
@@ -34,8 +34,8 @@ export const experiences: Experience[] = [
     stack: ["React", "Vue", "Nuxt", "Next.js", "TypeScript", "Redux"],
     highlights: [
       "Built multi-tenant SaaS dashboards across Tomps SaaS, Project, and Building.",
-      "Worked on landing pages, customer portals, payments, and operational modules.",
-      "Shipped tested, responsive UI with Redux state and Tailwind styling.",
+      "Worked on landing pages, customer portals, payment flows, and operational modules.",
+      "Shipped responsive UI with Redux state, Tailwind styling, and interaction tests.",
     ],
   },
   {
@@ -47,7 +47,7 @@ export const experiences: Experience[] = [
     status: "done",
     stack: ["React", "Tailwind", "Bootstrap", "Jest"],
     highlights: [
-      "Developed React interfaces with tested, accessible components.",
+      "Developed React interfaces with reusable, tested components.",
       "Maintained styling systems with Tailwind and Bootstrap.",
       "Collaborated with backend teams on integration contracts.",
     ],
@@ -61,9 +61,9 @@ export const experiences: Experience[] = [
     status: "done",
     stack: ["Design", "Streaming", "Video Editing"],
     highlights: [
-      "Supported design, streaming, and video-editing needs.",
+      "Supported design, streaming, and video editing needs.",
       "Helped run online events and media production.",
-      "Learned production discipline outside pure code.",
+      "Built production discipline outside pure code work.",
     ],
   },
 ];

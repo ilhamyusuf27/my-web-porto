@@ -7,11 +7,11 @@ import { profile } from "../../data/profile";
 const focusAreas = [
   "Frontend interfaces",
   "Fullstack delivery",
-  "DevOps / SRE learning",
+  "Reliability learning",
 ];
 
 const statusRows = [
-  { label: "Status", value: "System ready" },
+  { label: "Status", value: "Available for selected work" },
   { label: "Location", value: profile.location },
   { label: "Focus", value: "Frontend, fullstack, reliability" },
   { label: "Availability", value: profile.availability },
@@ -42,8 +42,8 @@ const statusRows = [
       </div>
 
       <p class="hero__tagline">
-        I build polished web interfaces, connect product systems end to end, and keep
-        growing toward reliable deployment and observability practices.
+        I build polished web interfaces, connect frontend work with backend
+        needs, and keep learning reliable deployment practices.
       </p>
 
       <ul class="hero__focus" role="list" aria-label="Core capability areas">
@@ -65,15 +65,15 @@ const statusRows = [
       </div>
     </section>
 
-    <aside class="hero__runtime" aria-label="Runtime context">
+    <aside class="hero__runtime" aria-label="Work context">
       <div class="hero__runtime-head">
         <div>
-          <span>Runtime Context</span>
+          <span>Work Context</span>
           <strong>{profile.callsign}.dev</strong>
         </div>
         <span class="hero__runtime-badge">
           <span aria-hidden="true"></span>
-          ready
+          available
         </span>
       </div>
 
@@ -330,6 +330,9 @@ const statusRows = [
     color: var(--subtext-0);
     font-size: 0.68rem;
     text-decoration: none;
+  }
+
+  :global(.section.is-active-section) .hero__scroll {
     animation: heroFloat 2.4s ease-in-out infinite;
   }
 

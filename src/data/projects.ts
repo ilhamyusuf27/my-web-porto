@@ -43,12 +43,12 @@ export const projects: Project[] = [
     role: "Frontend Web Developer",
     type: "SaaS landing page and customer dashboard",
     summary:
-      "Public landing page and authenticated customer portal for package purchase, company onboarding, subdomain setup, payment flow, transaction history, invoices, and account management.",
+      "Public landing page and customer portal for package purchase, company onboarding, subdomain setup, payments, transaction history, invoices, and account management.",
     problem:
       "Tomps needed a marketing surface plus a reliable self-service portal where customers could buy a package, onboard a company, pay, and manage their subscription without manual support.",
     contribution: [
       "Built and maintained the Nuxt landing page with Pinia, Strapi CMS, i18n, and Vitest coverage.",
-      "Developed customer-portal flows in Next.js for package selection, onboarding, payment, and transaction states.",
+      "Developed customer portal flows in Next.js for package selection, onboarding, payment, and transaction states.",
       "Managed dashboard state with Redux Toolkit and built Tailwind-based responsive SaaS UI.",
       "Added React Testing Library tests for dashboard interactions to keep iterations safe.",
     ],
@@ -83,14 +83,14 @@ export const projects: Project[] = [
     role: "Frontend Web Developer",
     type: "Multi-tenant project-management SaaS",
     summary:
-      "Multi-tenant project-management dashboard integrated with Tomps SaaS, covering candidate projects, project setup, monitoring, maps, stakeholder data, and tenant-specific UI behavior.",
+      "Multi-tenant project management dashboard integrated with Tomps SaaS, covering candidate projects, project setup, monitoring, maps, stakeholder data, and tenant-specific UI behavior.",
     problem:
-      "Each customer tenant needed its own branding, feature flags, and modules while sharing one core project-management engine.",
+      "Each customer tenant needed its own branding, feature flags, and modules while sharing one core project management engine.",
     contribution: [
       "Integrated Tomps Project with Tomps SaaS so customers reached the correct tenant after package activation.",
       "Maintained multi-tenant behavior for styling, branding, feature flags, and workflow variants.",
       "Fixed bugs across Vue, TypeScript, and Vuex screens for setup, monitoring, maps, imports, and master data.",
-      "Kept project-creation flows usable with multi-step forms, validation states, and draft saving.",
+      "Kept project creation flows usable with multi-step forms, validation states, and draft saving.",
     ],
     outcomes: [
       ["Tenancy", "Per-tenant UI and feature flags"],
@@ -122,9 +122,9 @@ export const projects: Project[] = [
     role: "Frontend Web Developer",
     type: "Property-management platform",
     summary:
-      "Property-management dashboard modules for revenue monitoring, billing, complaints, maintenance, facility booking, unit data, and admin workflows.",
+      "Property management dashboard modules for revenue monitoring, billing, complaints, maintenance, facility booking, unit data, and admin workflows.",
     problem:
-      "Building operators needed one dashboard to monitor revenue, billing, complaints, maintenance, and facility bookings without context-switching between tools.",
+      "Building operators needed one dashboard to monitor revenue, billing, complaints, maintenance, and facility bookings without switching between tools.",
     contribution: [
       "Built and maintained React + TypeScript dashboard interfaces for operational building modules.",
       "Integrated Redux-managed data flows across lists, detail pages, filters, status states, and transactions.",
@@ -159,14 +159,14 @@ export const projects: Project[] = [
     role: "Frontend Web Developer",
     type: "Device protection and service reporting",
     summary:
-      "Multi-role device-protection dashboard for report monitoring, asset management, SLA tracking, user roles, and operational service workflows.",
+      "Multi-role device protection dashboard for report monitoring, asset management, SLA tracking, user roles, and service workflows.",
     problem:
       "Super admin, partner, reporter, and technician roles each needed tailored access to reports, assets, and SLA status on a shared platform.",
     contribution: [
       "Built React dashboard interfaces using Redux-managed state and Tailwind styling.",
       "Implemented multi-role navigation and screens for super admin, partner, reporter, and technician.",
       "Developed report monitoring with SLA timers, status tabs, filters, pagination, and Excel export.",
-      "Supported socket-driven operational updates for report status and notifications.",
+      "Supported socket-driven updates for report status and notifications.",
     ],
     outcomes: [
       ["Roles", "Four distinct access levels"],
@@ -194,7 +194,7 @@ export const projects: Project[] = [
     role: "Freelance Frontend Developer",
     type: "Tutoring student management platform",
     summary:
-      "Tutoring administration dashboard for maintaining students, learning sections, status controls, and student-management workflows.",
+      "Tutoring administration dashboard for maintaining students, learning sections, status controls, and student management workflows.",
     problem:
       "Tutors needed a clean admin surface to maintain student accounts and learning-section content across reading, listening, writing, and speaking.",
     contribution: [
@@ -246,21 +246,21 @@ export const projects: Project[] = [
     title: "Write-Mate Add-on",
     category: "experimental",
     status: "experimental",
-    period: "Prototype",
-    role: "Solo experiment",
-    type: "Browser extension experiment",
+    period: "Prototype test",
+    role: "Solo prototype",
+    type: "Browser extension prototype",
     summary:
-      "A browser add-on experiment for grammar, rewriting, and translation assistance that appears near text inputs.",
+      "A small browser add-on prototype that tested inline grammar, rewrite, and translation assistance near text inputs.",
     problem:
-      "Inline writing assistance usually lives in a separate tab; an add-on that sits next to the text input could reduce friction.",
+      "The test explored whether writing help next to the active input could reduce tab-switching.",
     contribution: [
-      "Explored browser extension UX for inline writing assistance.",
-      "Planned API-key based provider integration.",
-      "Designed popup and settings flow for user configuration.",
+      "Tested browser extension UX for inline writing assistance.",
+      "Sketched API key-based provider configuration.",
+      "Designed popup and settings screens for the prototype.",
     ],
     outcomes: [
-      ["Goal", "Inline rewrite and translate near inputs"],
-      ["Learned", "Extension lifecycle and provider abstraction"],
+      ["Tested", "Inline rewrite and translation near text inputs"],
+      ["Learned", "Extension lifecycle and provider configuration"],
     ],
     stack: ["JavaScript", "Browser Extension", "API Integration"],
     accent: "lavender",

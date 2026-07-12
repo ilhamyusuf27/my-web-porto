@@ -11,11 +11,11 @@ export type Education = {
 export const education: Education[] = [
   {
     id: "amikom",
-    title: "S1 Informatics",
+    title: "Bachelor of Informatics",
     org: "AMIKOM Yogyakarta",
     period: "2017 - 2021",
     type: "degree",
-    detail: "Bachelor of Informatics focused on web, multimedia, and animation.",
+    detail: "Undergraduate study focused on web development, multimedia, and animation.",
     note: "GPA 3.85",
   },
   {
@@ -24,7 +24,7 @@ export const education: Education[] = [
     org: "Pijar Camp",
     period: "2022",
     type: "bootcamp",
-    detail: "Intensive full-stack program covering JavaScript, Node, Express, React, and Next.js.",
+    detail: "Full-stack training covering JavaScript, Node.js, Express, React, and Next.js.",
     note: "Bootcamp graduate",
   },
 ];

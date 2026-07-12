@@ -16,8 +16,8 @@ const typeLabel: Record<string, string> = {
 };
 
 const registryRows = [
-  { label: "Programs", value: `${education.length}`, note: "formal + applied records" },
-  { label: "Credentials", value: `${certificates.length}`, note: "verified education outputs" },
+  { label: "Programs", value: `${education.length}`, note: "formal + applied training" },
+  { label: "Credentials", value: `${certificates.length}`, note: "degree and bootcamp record" },
   { label: "Formal degree", value: "Informatics", note: "AMIKOM Yogyakarta" },
   { label: "Bootcamp training", value: "Full-stack web", note: "Pijar Camp" },
   { label: "Core study focus", value: "Web systems", note: "UI, backend basics, multimedia" },
@@ -43,7 +43,7 @@ const domainRows = [
           <span class="archive__count">{String(education.length).padStart(2, "0")} entries</span>
         </div>
         <p class="archive__intro">
-          Formal study and applied training behind the frontend, full-stack, and
+          Formal study and applied training behind the frontend, fullstack, and
           reliability-minded delivery direction.
         </p>
       </header>

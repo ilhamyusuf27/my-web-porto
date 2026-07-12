@@ -513,6 +513,12 @@ export class AmbientSystemScene {
     transparent: true,
     depthWrite: false,
   });
+  private readonly signalTraceMaterial = new THREE.LineBasicMaterial({
+    color: 0xcba6f7,
+    transparent: true,
+    depthWrite: false,
+    opacity: 0,
+  });
   private readonly pulseMaterial = new THREE.MeshBasicMaterial({
     color: 0xcba6f7,
     transparent: true,
@@ -522,6 +528,7 @@ export class AmbientSystemScene {
   private readonly gridGeometry = new THREE.BufferGeometry();
   private readonly wireGeometry = new THREE.BufferGeometry();
   private readonly nodeGeometry = new THREE.BufferGeometry();
+  private readonly signalTraceGeometry = new THREE.BufferGeometry();
   private readonly grid = new THREE.LineSegments(
     this.gridGeometry,
     this.gridMaterial
@@ -535,6 +542,10 @@ export class AmbientSystemScene {
     new THREE.SphereGeometry(0.038, 10, 8),
     this.signalMaterial
   );
+  private readonly signalTrace = new THREE.Line(
+    this.signalTraceGeometry,
+    this.signalTraceMaterial
+  );
   private readonly pulse = new THREE.Mesh(
     new THREE.RingGeometry(0.055, 0.072, 24),
     this.pulseMaterial
@@ -542,7 +553,16 @@ export class AmbientSystemScene {
   private readonly removeActiveListener: () => void;
   private readonly removeTransitionListener: () => void;
   private readonly handleResize = () => this.resize();
-  private readonly handleVisibility = () => this.renderOnce();
+  private readonly handleVisibility = () => {
+    if (document.hidden) {
+      window.cancelAnimationFrame(this.animationFrame);
+      this.animationFrame = 0;
+      return;
+    }
+
+    this.clock.getDelta();
+    this.syncAnimationState();
+  };
   private readonly handleMotionPreference = () => this.syncAnimationState();
   private animationFrame = 0;
   private disposed = false;
@@ -593,10 +613,20 @@ export class AmbientSystemScene {
     this.wireMaterial.opacity = MODES.hero.wireframe.lineOpacity;
     this.nodeMaterial.opacity = MODES.hero.wireframe.nodeOpacity;
     this.signalMaterial.opacity = MODES.hero.signalOpacity;
+    this.signalTraceGeometry.setAttribute(
+      "position",
+      new THREE.BufferAttribute(new Float32Array(6), 3)
+    );
     this.camera.position.copy(this.cameraTo);
     this.camera.lookAt(this.targetTo);
 
-    this.wireframeRoot.add(this.wireframe, this.nodes, this.signal, this.pulse);
+    this.wireframeRoot.add(
+      this.wireframe,
+      this.nodes,
+      this.signalTrace,
+      this.signal,
+      this.pulse
+    );
     this.root.add(this.grid, this.wireframeRoot);
     this.scene.add(this.root);
 
@@ -636,11 +666,13 @@ export class AmbientSystemScene {
     this.gridGeometry.dispose();
     this.wireGeometry.dispose();
     this.nodeGeometry.dispose();
+    this.signalTraceGeometry.dispose();
     this.gridMaterial.dispose();
     this.wireMaterial.dispose();
     this.nodeMaterial.dispose();
     this.signal.geometry.dispose();
     this.signalMaterial.dispose();
+    this.signalTraceMaterial.dispose();
     this.pulse.geometry.dispose();
     this.pulseMaterial.dispose();
     this.renderer.dispose();
@@ -709,6 +741,7 @@ export class AmbientSystemScene {
     this.wireMaterial.opacity = mode.wireframe.lineOpacity;
     this.nodeMaterial.opacity = mode.wireframe.nodeOpacity;
     this.signalMaterial.opacity = mode.signalOpacity;
+    this.signalTraceMaterial.opacity = mode.signalOpacity * 0.34;
     this.applyWireframeTransform(mode.wireframe);
     this.camera.position.copy(v3(mode.camera));
     this.camera.lookAt(v3(mode.target));
@@ -758,6 +791,7 @@ export class AmbientSystemScene {
         this.transitionTo.signalOpacity,
         eased
       ) * THREE.MathUtils.lerp(this.transitionSignalBoost, 1, eased);
+    this.signalTraceMaterial.opacity = this.signalMaterial.opacity * 0.34;
 
     this.wireframeRoot.rotation.x = THREE.MathUtils.lerp(
       this.transitionFrom.wireframe.rotation[0],
@@ -829,7 +863,16 @@ export class AmbientSystemScene {
       this.transitionTo.wireframe.nodes[route[routeIndex + 1]] ??
       this.transitionTo.wireframe.nodes[0];
 
-    this.signal.position.lerpVectors(v3(from), v3(to), localProgress);
+    const head = v3(from).lerp(v3(to), localProgress);
+    const tailProgress = Math.max(0, localProgress - 0.22);
+    const tail = v3(from).lerp(v3(to), tailProgress);
+    const tracePosition = this.signalTraceGeometry.getAttribute(
+      "position"
+    ) as THREE.BufferAttribute;
+    tracePosition.array.set([tail.x, tail.y, tail.z, head.x, head.y, head.z]);
+    tracePosition.needsUpdate = true;
+
+    this.signal.position.copy(head);
     this.pulse.position.copy(this.signal.position);
     this.pulse.lookAt(this.camera.position);
 
@@ -891,6 +934,10 @@ export class AmbientSystemScene {
     );
     this.nodeMaterial.size = 0.035 * (1 + slowPulse * motion.nodePulse * 0.5);
     this.signal.scale.setScalar(motion.signalScale);
+    this.signalTraceMaterial.opacity = Math.min(
+      this.signalMaterial.opacity * (0.24 + slowPulse * 0.2),
+      0.18
+    );
 
     this.wireframeRoot.rotation.set(
       baseRotation[0] + offsetPulse * motion.sway[0],
@@ -923,6 +970,7 @@ export class AmbientSystemScene {
         this.transitionTo.signalOpacity,
         0.12
       );
+      this.signalTraceMaterial.opacity = 0;
       this.pulseMaterial.opacity = 0;
       this.renderOnce();
       return;

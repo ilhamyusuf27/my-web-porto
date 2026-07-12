@@ -12,7 +12,7 @@ const endpointRows = [
   { label: "Status", value: profile.availability },
   { label: "Location", value: "Indonesia · GMT+7" },
   { label: "Focus", value: "Frontend, fullstack, reliability" },
-  { label: "Availability", value: "Freelance / remote conversations" },
+  { label: "Availability", value: "Freelance and remote conversations" },
 ];
 ---
 
@@ -21,13 +21,13 @@ const endpointRows = [
     <section class="contact__main" aria-labelledby="contact-title">
       <span class="contact__state">
         <span aria-hidden="true"></span>
-        handshake ready
+        available to talk
       </span>
 
       <h2 id="contact-title" class="contact__title">Get in touch</h2>
       <p class="contact__copy">
         If you need a frontend developer who can also work across backend and
-        reliability concerns, I'm open to talk.
+        reliability concerns, I am open to talk.
       </p>
 
       <div class="contact__actions" aria-label="Primary contact actions">
@@ -87,16 +87,16 @@ const endpointRows = [
     <aside class="contact__endpoint" aria-labelledby="endpoint-title">
       <div class="contact__endpoint-head">
         <div>
-          <p class="contact__endpoint-kicker">Secure Handshake</p>
-          <h3 id="endpoint-title">Direct endpoint</h3>
+          <p class="contact__endpoint-kicker">Contact</p>
+          <h3 id="endpoint-title">Direct email</h3>
         </div>
-        <span class="contact__endpoint-status">open channel</span>
+        <span class="contact__endpoint-status">open</span>
       </div>
 
       {
         email && (
           <a class="contact__email" href={email.url}>
-            <span>Email endpoint</span>
+            <span>Primary email</span>
             <strong>{email.handle}</strong>
             <Icon name="mdi:arrow-right" size={16} aria-hidden="true" />
           </a>
@@ -116,7 +116,7 @@ const endpointRows = [
 
       <p class="contact__ready">
         <span aria-hidden="true"></span>
-        connection ready · {profile.callsign}.dev
+        ready for remote work · {profile.callsign}.dev
       </p>
     </aside>
   </div>

@@ -7,22 +7,22 @@ const experiments = projects.filter(
   (p) => p.category === "experimental" || p.status === "experimental"
 );
 
-// Side notes about active areas of experimentation (no fake links).
+// Notes from small tests and prototype work (no roadmap/status claims).
 const labNotes = [
   {
     icon: "mdi:cube",
-    title: "WebGL & Three.js play",
-    note: "Procedural geometry, particle systems, and scroll-linked scenes.",
+    title: "WebGL / Three.js tests",
+    note: "Small rendering trials, procedural geometry, and scroll-linked scene notes.",
   },
   {
     icon: "mdi:sparkles",
-    title: "GSAP motion systems",
-    note: "ScrollTrigger choreography and reusable reveal patterns.",
+    title: "GSAP timing tests",
+    note: "ScrollTrigger timing, staged reveals, and reusable motion patterns.",
   },
   {
     icon: "mdi:api",
-    title: "AI-assisted tooling",
-    note: "Provider-agnostic integrations and coding-agent workflows.",
+    title: "Assistant-tooling spike",
+    note: "Provider configuration, API handoff ideas, and workflow notes.",
   },
 ];
 ---
@@ -30,14 +30,17 @@ const labNotes = [
 <Section id="experimental" label="Experiments" index="05" accent="mauve" class="section--dense">
   <header class="lab__head" data-reveal>
     <h2 class="lab__title">Experiments</h2>
-    <p class="lab__sub">Prototypes, add-ons, and side experiments that explore ideas before production.</p>
+    <p class="lab__sub">Small prototypes and technical tests kept as a lab archive: what I tried, what changed, and what I learned.</p>
   </header>
 
   <div class="lab">
     <div class="lab__chambers">
       {
         experiments.map((exp) => {
-          const goal = exp.outcomes?.find((o) => o[0].toLowerCase().includes("goal"))?.[1];
+          const goal = exp.outcomes?.find((o) => {
+            const label = o[0].toLowerCase();
+            return label.includes("goal") || label.includes("test");
+          })?.[1];
           const learned = exp.outcomes?.find((o) => o[0].toLowerCase().includes("learn"))?.[1];
           return (
             <article
@@ -48,7 +51,7 @@ const labNotes = [
               <div class="lab__chamber-head">
                 <span class="lab__badge">
                   <Icon name="mdi:flask-empty-outline" size={16} />
-                  Prototype
+                  Lab test
                 </span>
                 <span class="lab__period">{exp.period}</span>
               </div>
@@ -58,7 +61,7 @@ const labNotes = [
               <dl class="lab__fields">
                 {goal && (
                   <div>
-                    <dt>Experiment goal</dt>
+                    <dt>Test goal</dt>
                     <dd>{goal}</dd>
                   </div>
                 )}
@@ -84,7 +87,7 @@ const labNotes = [
     <aside class="lab__notes" data-reveal>
       <h3 class="lab__notes-title">
         <Icon name="mdi:note" size={18} />
-        Lab notes
+        Test notes
       </h3>
       <ul role="list">
         {

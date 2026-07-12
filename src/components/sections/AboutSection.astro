@@ -7,8 +7,8 @@ const capabilityAreas = [
   {
     icon: "mdi:code-tags",
     label: "Interface Craft",
-    note: "Responsive UI systems in React, Vue, Astro, and TypeScript.",
-    tag: "Core",
+    note: "Responsive interfaces in React, Vue, Astro, and TypeScript.",
+    tag: "Daily use",
   },
   {
     icon: "mdi:view-dashboard",
@@ -20,7 +20,7 @@ const capabilityAreas = [
     icon: "mdi:server",
     label: "Backend Integration",
     note: "Node, NestJS, Prisma, and PostgreSQL for product APIs.",
-    tag: "Production use",
+    tag: "Project use",
   },
   {
     icon: "mdi:wrench-outline",
@@ -32,8 +32,8 @@ const capabilityAreas = [
 
 const modeStrip = [
   { k: "Base", v: "Indonesia / GMT+7" },
-  { k: "Focus", v: "Frontend + Fullstack" },
-  { k: "Direction", v: "DevOps / SRE" },
+  { k: "Focus", v: "Frontend + fullstack" },
+  { k: "Direction", v: "DevOps / SRE learning" },
 ];
 
 const workingModes = [
@@ -49,7 +49,7 @@ const workingModes = [
       <header class="about__panel-head">
         <div>
           <p class="about__eyebrow">Developer Profile</p>
-          <p class="about__panel-id">identity.kernel / verified-context</p>
+          <p class="about__panel-id">Frontend focus / fullstack range</p>
         </div>
         <span class="about__availability">
           <span class="about__availability-dot" aria-hidden="true"></span>
@@ -75,9 +75,9 @@ const workingModes = [
       </div>
 
       <p class="about__statement">
-        Frontend-focused engineer with fullstack range, shipping interfaces that
-        stay maintainable after handoff and growing toward reliability-minded
-        production systems.
+        Frontend-focused developer with fullstack range. I build interfaces
+        that stay maintainable after handoff, and I am growing toward
+        reliability-minded delivery.
       </p>
 
       <dl class="about__mode" aria-label="Working context">
@@ -116,7 +116,7 @@ const workingModes = [
       <header class="about__matrix-head">
         <div>
           <h3 id="about-capabilities-title">Capability Areas</h3>
-          <p>04 channels connected to the identity kernel</p>
+          <p>04 practical areas across product and client work</p>
         </div>
         <span aria-hidden="true">04</span>
       </header>
@@ -453,13 +453,6 @@ const workingModes = [
     height: 14px;
     display: inline-block;
     background: var(--mauve);
-    animation: about-blink 1.1s steps(2, start) infinite;
-  }
-
-  @keyframes about-blink {
-    to {
-      opacity: 0;
-    }
   }
 
   .about__matrix {

@@ -246,6 +246,8 @@ html:not(.js) [data-reveal] {
 .section.is-active-section .hero__prompt-state,
 .section.is-active-section .hero__runtime-badge > span,
 .section.is-active-section .about__availability-dot,
+.section.is-active-section .about__working-list span,
+.section.is-active-section .capability__labels i,
 .section.is-active-section .contact__state span,
 .section.is-active-section .contact__ready span {
   animation: console-status-pulse 4.8s ease-in-out infinite;
@@ -253,19 +255,23 @@ html:not(.js) [data-reveal] {
 
 .section.is-active-section .release-log__item-status--active,
 .section.is-active-section .release-log__status,
-.section.is-active-section .lab__badge {
+.section.is-active-section .lab__badge,
+.section.is-active-section .contact__endpoint-status {
   animation: console-label-breathe 6.2s ease-in-out infinite;
 }
 
 .section.is-active-section .hero__runtime,
 .section.is-active-section .contact__endpoint,
-.section.is-active-section .edu__registry {
+.section.is-active-section .edu__registry,
+.section.is-active-section .lab__notes {
   position: relative;
   overflow: clip;
 }
 
 .section.is-active-section .hero__runtime::after,
-.section.is-active-section .edu__registry::after {
+.section.is-active-section .contact__endpoint::after,
+.section.is-active-section .edu__registry::after,
+.section.is-active-section .lab__notes::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -283,6 +289,29 @@ html:not(.js) [data-reveal] {
   animation: console-panel-signal 9s ease-in-out infinite;
 }
 
+.section.is-active-section .about__terminal i {
+  animation: console-cursor-blink 1.35s steps(2, start) infinite;
+}
+
+.section.is-active-section .capability__connectors::after {
+  content: "";
+  position: absolute;
+  top: 49%;
+  left: 10%;
+  width: 28%;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(203, 166, 247, 0.42),
+    transparent
+  );
+  opacity: 0;
+  transform: translateX(-35%);
+  animation: capability-route-signal 8.4s ease-in-out infinite;
+}
+
 @keyframes console-status-pulse {
   0%,
   100% {
@@ -297,6 +326,12 @@ html:not(.js) [data-reveal] {
   }
 }
 
+@keyframes console-cursor-blink {
+  to {
+    opacity: 0;
+  }
+}
+
 @keyframes console-label-breathe {
   0%,
   100% {
@@ -304,6 +339,22 @@ html:not(.js) [data-reveal] {
   }
   50% {
     opacity: 1;
+  }
+}
+
+@keyframes capability-route-signal {
+  0%,
+  52%,
+  100% {
+    opacity: 0;
+    transform: translateX(-35%);
+  }
+  64% {
+    opacity: 0.9;
+  }
+  84% {
+    opacity: 0;
+    transform: translateX(205%);
   }
 }
 
@@ -341,6 +392,25 @@ html:not(.js) [data-reveal] {
   [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  .section.is-active-section .hero__prompt-state,
+  .section.is-active-section .hero__runtime-badge > span,
+  .section.is-active-section .about__availability-dot,
+  .section.is-active-section .about__working-list span,
+  .section.is-active-section .about__terminal i,
+  .section.is-active-section .capability__labels i,
+  .section.is-active-section .capability__connectors::after,
+  .section.is-active-section .release-log__item-status--active,
+  .section.is-active-section .release-log__status,
+  .section.is-active-section .lab__badge,
+  .section.is-active-section .lab__notes::after,
+  .section.is-active-section .contact__state span,
+  .section.is-active-section .contact__endpoint-status,
+  .section.is-active-section .contact__endpoint::after,
+  .section.is-active-section .contact__ready span,
+  .section.is-active-section .edu__registry::after {
+    animation: none !important;
   }
 }
 

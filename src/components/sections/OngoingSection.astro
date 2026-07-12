@@ -1,31 +1,31 @@
 ---
 import Section from "../layout/Section.astro";
-import { ongoingQuests as buildItems } from "../../data/profile";
+import { ongoingBuilds as buildItems } from "../../data/profile";
 
 const phaseLabel = (progress: number) => {
-  if (progress >= 70) return "Polish";
-  if (progress >= 55) return "Build";
-  return "Research";
+  if (progress >= 70) return "Polishing";
+  if (progress >= 55) return "Building";
+  return "Queued";
 };
 
 const focusLabel = (id: string) => {
-  if (id === "sre-path") return "Reliability";
-  if (id === "moneyflow") return "Product";
-  return "Portfolio";
+  if (id === "sre-path") return "Reliability practice";
+  if (id === "moneyflow") return "Product build";
+  return "Portfolio polish";
 };
 
 const laneLabel = (index: number) => `Lane ${String(index + 1).padStart(2, "0")}`;
 
 const displayFocus = (id: string, focus: string) =>
   id === "portfolio"
-    ? "Production systems portfolio built with Astro, GSAP, and Three.js."
+    ? "Active polish pass for this Astro, GSAP, and Three.js portfolio."
     : focus;
 ---
 
 <Section id="ongoing" label="Currently Building" index="06" accent="mauve" class="section--dense">
   <header class="queue__head" data-reveal>
     <h2 class="queue__title">Currently building</h2>
-    <p class="queue__sub">What is in progress right now and where it is heading next.</p>
+    <p class="queue__sub">Active work I am moving forward now, with status, focus, progress, and the next useful step.</p>
   </header>
 
   <div class="queue">

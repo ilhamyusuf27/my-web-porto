@@ -94,6 +94,7 @@ export function initScrollAnimations(): void {
 
   initProgress();
   initActiveSection(sections);
+  syncInitialHash(sections);
 }
 
 /** Lightweight reveal-once animations for native mobile scrolling. */
@@ -343,6 +344,30 @@ function initAnchorNavigation(
         scrollToSection(index, { immediate: false });
       });
     });
+}
+
+function syncInitialHash(sections: HTMLElement[]): void {
+  if (!window.location.hash) return;
+
+  const id = decodeURIComponent(window.location.hash.slice(1));
+  const section = sections.find((item) => item.id === id);
+  if (!section) return;
+
+  window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
+      document.documentElement.classList.add("reveal-done");
+      gsap.set("[data-reveal]", {
+        clearProps: "opacity,visibility,transform,willChange",
+      });
+
+      const previousScrollBehavior =
+        document.documentElement.style.scrollBehavior;
+      document.documentElement.style.scrollBehavior = "auto";
+      window.scrollTo(0, measuredTop(section));
+      document.documentElement.style.scrollBehavior = previousScrollBehavior;
+      syncActiveSection(section.id);
+    });
+  });
 }
 
 function scrollToSection(index: number, opts: { immediate: boolean }): void {
