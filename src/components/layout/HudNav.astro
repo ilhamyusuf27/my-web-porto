@@ -1,0 +1,243 @@
+---
+import Icon from "../ui/Icon.astro";
+import { profile } from "../../data/profile";
+
+const navItems = [
+  { id: "hero", label: "System", icon: "mdi:server" },
+  { id: "about", label: "Profile", icon: "mdi:account" },
+  { id: "skills", label: "Matrix", icon: "mdi:code-tags" },
+  { id: "experience", label: "Delivery", icon: "mdi:briefcase-outline" },
+  { id: "projects", label: "Work", icon: "mdi:folder" },
+  { id: "experimental", label: "Lab", icon: "mdi:flask-empty-outline" },
+  { id: "ongoing", label: "Build", icon: "mdi:target" },
+  { id: "education", label: "Records", icon: "mdi:school" },
+  { id: "contact", label: "Contact", icon: "mdi:send" },
+];
+---
+
+<nav class="hud" aria-label="Section navigation">
+  <a class="hud__brand" href="#hero" aria-label={`${profile.name} - back to start`}>
+    <span class="hud__brand-mark" aria-hidden="true">{profile.callsign.slice(0, 2).toUpperCase()}</span>
+    <span class="hud__brand-text">{profile.callsign}.dev</span>
+  </a>
+
+  <ul class="hud__list" role="list">
+    {
+      navItems.map((item) => (
+        <li>
+          <a
+            class="hud__item"
+            href={`#${item.id}`}
+            data-hud-item={item.id}
+            aria-label={item.label}
+            title={item.label}
+          >
+            <span class="hud__icon">
+              <Icon name={item.icon} size={18} />
+            </span>
+            <span class="hud__text">{item.label}</span>
+            <span class="hud__pip" aria-hidden="true" />
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .hud {
+    position: fixed;
+    inset: 0;
+    z-index: 9400;
+    pointer-events: none;
+  }
+
+  :global(html[data-modal-open]) .hud {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .hud__brand {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    pointer-events: auto;
+    background: rgba(30, 30, 46, 0.78);
+    border: 1px solid rgba(203, 166, 247, 0.42);
+    box-shadow: 2px 2px 0 rgba(17, 17, 27, 0.72);
+    color: var(--mauve);
+    font-family: var(--font-pixel);
+    font-size: 0.7rem;
+  }
+
+  .hud__brand-mark {
+    line-height: 1;
+  }
+
+  .hud__brand-text {
+    display: none;
+  }
+
+  .hud__list {
+    position: fixed;
+    left: 50%;
+    bottom: calc(1rem + env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    list-style: none;
+    margin: 0;
+    padding: 0.4rem;
+    display: flex;
+    flex-direction: row;
+    gap: 0.25rem;
+    align-items: center;
+    max-width: calc(100vw - 1.5rem);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    pointer-events: auto;
+    background: rgba(17, 17, 27, 0.82);
+    border: 1px solid var(--border-dim);
+    box-shadow: 0 10px 26px rgba(17, 17, 27, 0.36);
+    backdrop-filter: blur(8px);
+    border-radius: 6px;
+    scrollbar-width: none;
+  }
+
+  .hud__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hud__item {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    color: var(--overlay-1);
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition:
+      color 0.12s ease,
+      background 0.12s ease,
+      border-color 0.12s ease,
+      transform 0.12s ease;
+  }
+
+  .hud__item:hover,
+  .hud__item:focus-visible {
+    transform: translateY(-2px);
+    color: var(--text);
+    background: rgba(49, 50, 68, 0.52);
+    border-color: var(--border-dim);
+  }
+
+  .hud__icon {
+    display: grid;
+    place-items: center;
+  }
+
+  .hud__text {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 0.55rem);
+    transform: translateX(-50%) translateY(2px);
+    white-space: nowrap;
+    background: var(--surface-0);
+    border: 1px solid var(--border-dim);
+    box-shadow: 2px 2px 0 rgba(17, 17, 27, 0.72);
+    padding: 0.3rem 0.6rem;
+    font-family: var(--font-pixel);
+    font-size: 0.55rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text);
+    pointer-events: none;
+    opacity: 0;
+    transition:
+      opacity 0.12s ease,
+      transform 0.12s ease;
+  }
+
+  .hud__item:hover .hud__text,
+  .hud__item:focus-visible .hud__text {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .hud__pip {
+    position: absolute;
+    left: 50%;
+    bottom: 5px;
+    transform: translateX(-50%) scaleX(0);
+    width: 16px;
+    height: 2px;
+    background: var(--mauve);
+    box-shadow: none;
+    transition: transform 0.12s ease;
+  }
+
+  /* Active section state, set by hud script */
+  .hud__item[aria-current="true"] {
+    color: var(--text);
+    background: rgba(49, 50, 68, 0.52);
+    border-color: var(--mauve);
+  }
+
+  .hud__item[aria-current="true"] .hud__pip {
+    transform: translateX(-50%) scaleX(1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hud__item,
+    .hud__text,
+    .hud__pip {
+      transition: none;
+    }
+
+    .hud__item:hover,
+    .hud__item:focus-visible {
+      transform: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hud__brand {
+      top: 0.65rem;
+      left: 0.75rem;
+      width: 42px;
+      height: 36px;
+      font-size: 0.62rem;
+    }
+
+    .hud__list {
+      bottom: calc(0.65rem + env(safe-area-inset-bottom));
+      gap: 0.15rem;
+      padding: 0.32rem;
+      max-width: calc(100vw - 0.9rem);
+    }
+
+    .hud__item {
+      width: 38px;
+      height: 38px;
+    }
+
+    .hud__text {
+      display: none;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .hud__item {
+      width: 34px;
+      height: 36px;
+    }
+
+    .hud__icon :global(svg) {
+      width: 16px;
+      height: 16px;
+    }
+  }
+</style>

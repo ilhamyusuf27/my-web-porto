@@ -1,0 +1,142 @@
+---
+---
+
+<div class="section-chrome" data-section-chrome aria-hidden="true">
+  <span class="section-chrome__index" data-section-chrome-index>
+    <span data-section-chrome-index-current>00</span>
+    <span data-section-chrome-index-next></span>
+  </span>
+  <span class="section-chrome__label" data-section-chrome-label>System Online</span>
+  <span class="section-chrome__rail"></span>
+</div>
+
+<script>
+  import { initSectionChrome } from "../../scripts/sectionChrome";
+
+  initSectionChrome();
+</script>
+
+<style>
+  .section-chrome {
+    position: fixed;
+    top: calc(1rem + 24px);
+    left: calc(1rem + 48px + 1.5rem);
+    right: 1rem;
+    z-index: 9300;
+    display: grid;
+    grid-template-columns: auto max-content minmax(8rem, 1fr);
+    align-items: center;
+    column-gap: 1rem;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .section-chrome__index {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    min-width: 2.3rem;
+    height: 1.35rem;
+    overflow: hidden;
+    border: 1px solid var(--border-dim);
+    background: rgba(17, 17, 27, 0.72);
+    color: var(--mauve);
+    font-family: var(--font-pixel);
+    font-size: 0.55rem;
+    line-height: 1;
+  }
+
+  .section-chrome__index span {
+    grid-area: 1 / 1;
+    transition:
+      transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.24s ease;
+  }
+
+  .section-chrome__index span + span {
+    opacity: 0;
+    transform: translateY(105%);
+  }
+
+  .section-chrome__index.is-rolling-down span:first-child {
+    opacity: 0;
+    transform: translateY(-105%);
+  }
+
+  .section-chrome__index.is-rolling-down span + span {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section-chrome__index.is-rolling-up span:first-child {
+    opacity: 0;
+    transform: translateY(105%);
+  }
+
+  .section-chrome__index.is-rolling-up span + span {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section-chrome__label {
+    min-width: 0;
+    color: var(--subtext-0);
+    font-family: var(--font-pixel);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .section-chrome__rail {
+    position: relative;
+    height: 1px;
+    background: repeating-linear-gradient(
+      to right,
+      rgba(147, 153, 178, 0.28) 0,
+      rgba(147, 153, 178, 0.28) 6px,
+      transparent 6px,
+      transparent 12px
+    );
+  }
+
+  :global(html[data-modal-open]) .section-chrome {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  @media (max-width: 768px) {
+    .section-chrome {
+      top: calc(0.65rem + 18px);
+      left: calc(0.75rem + 42px + 0.75rem);
+      right: 0.75rem;
+      grid-template-columns: auto minmax(0, max-content) minmax(2rem, 1fr);
+      column-gap: 0.7rem;
+    }
+
+    .section-chrome__label {
+      min-width: 0;
+      max-width: 38vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 0.54rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .section-chrome {
+      column-gap: 0.55rem;
+    }
+
+    .section-chrome__rail {
+      min-width: 1.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .section-chrome__index span {
+      transition: none;
+    }
+  }
+</style>

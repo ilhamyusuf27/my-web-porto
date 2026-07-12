@@ -1,0 +1,95 @@
+---
+import Section from "../layout/Section.astro";
+import ProjectDirectory from "../portfolio/ProjectDirectory.astro";
+import ProjectModal from "../portfolio/ProjectModal.astro";
+---
+
+<Section id="projects" label="Selected Work" index="04" accent="mauve" class="section--projects">
+  <div class="case-index" data-reveal>
+    <header class="case-index__head">
+      <div>
+        <p class="case-index__eyebrow">case-study.index</p>
+        <h2 class="case-index__title">Selected work</h2>
+      </div>
+      <p class="case-index__sub">
+        A compact file directory of SaaS dashboards, multi-tenant platforms, and client delivery work.
+      </p>
+    </header>
+
+    <ProjectDirectory />
+  </div>
+
+  <ProjectModal />
+</Section>
+
+<style>
+  :global(.section--projects) {
+    height: 100vh;
+    min-height: 100vh;
+    padding-block: clamp(4.8rem, 8vh, 6rem) clamp(1.25rem, 3vh, 2rem);
+  }
+
+  :global(.section--projects .section__inner) {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .case-index {
+    height: 100%;
+    min-height: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: clamp(0.85rem, 1.8vh, 1.15rem);
+  }
+
+  .case-index__head {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(280px, 0.9fr);
+    align-items: end;
+    gap: 1.25rem;
+  }
+
+  .case-index__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mauve);
+    margin-bottom: 0.35rem;
+  }
+
+  .case-index__title {
+    font-size: clamp(1.55rem, 4.6vw, 2.55rem);
+  }
+
+  .case-index__sub {
+    color: var(--subtext-1);
+    font-family: var(--font-mono);
+    font-size: clamp(0.78rem, 1.5vw, 0.9rem);
+    line-height: 1.55;
+    max-width: 58ch;
+    justify-self: end;
+  }
+
+  @media (max-width: 980px) {
+    :global(.section--projects) {
+      height: auto;
+      min-height: 100vh;
+    }
+
+    .case-index__head {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    .case-index__sub {
+      justify-self: start;
+    }
+  }
+
+  @media (max-width: 760px) {
+    :global(.section--projects) {
+      padding-block: 6rem 2.5rem;
+    }
+  }
+</style>

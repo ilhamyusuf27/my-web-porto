@@ -1,0 +1,64 @@
+---
+interface Props {
+  id: string;
+  label: string;
+  index?: string;
+  accent?: string;
+  class?: string;
+}
+
+const { id, label, index, accent = "mauve", class: className = "" } = Astro.props;
+---
+
+<section
+  id={id}
+  class={`section ${className}`}
+  data-section={id}
+  data-section-label={label}
+  data-section-index={index}
+  data-accent={accent}
+  aria-label={label}
+  style="--section-accent: var(--mauve);"
+>
+  <div class="section__inner container">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section {
+    --dock-clearance: calc(5.25rem + env(safe-area-inset-bottom));
+    min-height: 100vh;
+    position: relative;
+    display: grid;
+    place-items: center;
+    /* clip (not hidden) keeps decorations tidy without establishing a scroll
+       container, so GSAP page snapping and tall-section scrolling still work. */
+    overflow: clip;
+    scroll-snap-align: start;
+    padding:
+      calc(var(--section-padding) + 2.5rem)
+      var(--section-padding)
+      max(calc(var(--section-padding) + 2.5rem), var(--dock-clearance));
+  }
+
+  .section.section--dense {
+    padding-block:
+      clamp(5.5rem, 8vh, 6.5rem)
+      max(clamp(2rem, 5vh, 3.25rem), var(--dock-clearance));
+  }
+
+  .section__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+  }
+
+  @media (max-width: 640px) {
+    .section,
+    .section.section--dense {
+      --dock-clearance: calc(5.75rem + env(safe-area-inset-bottom));
+      padding-block: 6rem max(2.5rem, var(--dock-clearance));
+    }
+  }
+</style>

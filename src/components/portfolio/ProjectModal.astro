@@ -1,0 +1,397 @@
+---
+import Modal from "../ui/Modal.astro";
+import Icon from "../ui/Icon.astro";
+import { projects } from "../../data/projects";
+
+const getImages = (project: (typeof projects)[number]) =>
+  project.images?.length
+    ? project.images
+    : project.image
+      ? [{ src: project.image, alt: `${project.title} preview` }]
+      : [];
+
+// Embedded payload so the controller can populate the modal without a fetch.
+const payload = projects.map((p) => ({
+  id: p.id,
+  title: p.title,
+  category: p.category,
+  type: p.type,
+  period: p.period,
+  role: p.role,
+  status: p.status,
+  summary: p.summary,
+  problem: p.problem ?? null,
+  contribution: p.contribution ?? [],
+  outcomes: p.outcomes ?? [],
+  stack: p.stack,
+  links: p.links ?? [],
+  accent: p.accent ?? "mauve",
+  image: p.image ?? null,
+  images: getImages(p),
+}));
+---
+
+<Modal id="project-modal" titleId="project-modal-title" class="project-case-modal">
+  <span slot="title" data-field="title">Project</span>
+
+  <div class="pm">
+    <section class="pm__gallery" aria-label="Project images">
+      <div class="pm__image-stage" data-gallery-stage>
+        <img data-gallery-image alt="" hidden />
+        <div class="pm__image-placeholder" data-gallery-placeholder>
+          <Icon name="mdi:file-document-outline" size={42} decorative />
+          <span>No project image available</span>
+        </div>
+      </div>
+      <div class="pm__gallery-meta">
+        <span data-gallery-count>No images</span>
+        <span data-gallery-caption>No preview asset</span>
+      </div>
+      <div class="pm__thumbs" data-gallery-thumbs hidden aria-label="Select project image"></div>
+    </section>
+
+    <div class="pm__content">
+      <div class="pm__meta" aria-hidden="false">
+        <span class="pm__meta-item" data-field="type">Type</span>
+        <span class="pm__meta-item pm__meta-item--accent" data-field="status-label">Status</span>
+        <span class="pm__meta-item" data-field="period">Period</span>
+      </div>
+
+      <p class="pm__role">
+        <Icon name="mdi:account" size={14} decorative />
+        <span data-field="role">Role</span>
+      </p>
+
+      <p class="pm__summary" data-field="summary">Summary</p>
+
+      <section class="pm__block" data-block="problem" hidden>
+        <h3 class="pm__heading"><Icon name="mdi:target" size={16} decorative /> Overview</h3>
+        <p data-field="problem"></p>
+      </section>
+
+      <section class="pm__block" data-block="contribution" hidden>
+        <h3 class="pm__heading"><Icon name="mdi:format-list-bulleted" size={16} decorative /> Contribution</h3>
+        <ul class="pm__list" data-field="contribution"></ul>
+      </section>
+
+      <section class="pm__block" data-block="outcomes" hidden>
+        <h3 class="pm__heading"><Icon name="mdi:chart-box-outline" size={16} decorative /> Outcomes</h3>
+        <dl class="pm__outcomes" data-field="outcomes"></dl>
+      </section>
+
+      <section class="pm__block">
+        <h3 class="pm__heading"><Icon name="mdi:code-tags" size={16} decorative /> Tech stack</h3>
+        <div class="pm__stack" data-field="stack"></div>
+      </section>
+
+      <section class="pm__block pm__links" data-block="links">
+        <h3 class="pm__heading"><Icon name="mdi:link-variant" size={16} decorative /> Links</h3>
+        <div class="pm__links-inner" data-field="links"></div>
+        <p class="pm__no-links" data-field="no-links" hidden>No public link available for this case file.</p>
+      </section>
+    </div>
+  </div>
+</Modal>
+
+<script type="application/json" id="project-data" set:html={JSON.stringify(payload)} is:inline />
+
+<style>
+  .pm {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.95fr) minmax(0, 1.05fr);
+    gap: 1.25rem;
+    min-height: 0;
+  }
+
+  :global(.project-case-modal .modal__panel) {
+    width: min(1080px, 100%);
+    max-height: min(88vh, 860px);
+    background: rgba(30, 30, 46, 0.96);
+  }
+
+  :global(.project-case-modal .modal__body) {
+    padding: clamp(1rem, 2vw, 1.35rem);
+  }
+
+  .pm__gallery,
+  .pm__content {
+    min-height: 0;
+  }
+
+  .pm__gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .pm__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .pm__image-stage {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background: rgba(17, 17, 27, 0.72);
+    border: 1px solid var(--border-dim);
+    overflow: hidden;
+  }
+
+  .pm__image-stage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.84) brightness(0.86);
+  }
+
+  .pm__image-placeholder {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 0.65rem;
+    color: var(--subtext-0);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    background:
+      linear-gradient(135deg, rgba(49, 50, 68, 0.48), rgba(17, 17, 27, 0.76));
+  }
+
+  .pm__image-placeholder[hidden] {
+    display: none;
+  }
+
+  .pm__gallery-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--subtext-0);
+  }
+
+  .pm__gallery-meta [data-gallery-caption] {
+    color: var(--subtext-1);
+    text-align: right;
+  }
+
+  .pm__thumbs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 0.5rem;
+  }
+
+  .pm__thumbs[hidden] {
+    display: none;
+  }
+
+  :global(.pm-thumb) {
+    aspect-ratio: 16 / 10;
+    border: 1px solid var(--border-dim);
+    background: var(--surface-0);
+    padding: 0;
+    overflow: hidden;
+    border-radius: 2px;
+  }
+
+  :global(.pm-thumb[aria-selected="true"]) {
+    border-color: rgba(203, 166, 247, 0.72);
+    box-shadow: 0 0 0 1px rgba(203, 166, 247, 0.28);
+  }
+
+  :global(.pm-thumb img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.8) brightness(0.82);
+  }
+
+  .pm__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .pm__meta-item {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--subtext-0);
+    background: var(--surface-0);
+    border: 1px solid var(--surface-2);
+    padding: 0.35rem 0.62rem;
+    border-radius: 2px;
+  }
+
+  .pm__meta-item--accent {
+    color: var(--text);
+    border-color: rgba(203, 166, 247, 0.5);
+  }
+
+  .pm__role {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--subtext-1);
+    margin-top: -0.3rem;
+  }
+
+  .pm__summary {
+    font-size: 1.02rem;
+    line-height: 1.65;
+    color: var(--text);
+  }
+
+  .pm__block[hidden] {
+    display: none;
+  }
+
+  .pm__heading {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mauve);
+    margin-bottom: 0.7rem;
+  }
+
+  .pm__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .pm__list li {
+    position: relative;
+    padding-left: 1.1rem;
+    line-height: 1.6;
+    color: var(--subtext-1);
+  }
+
+  .pm__list li::before {
+    content: "›";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--mauve);
+    font-family: var(--font-mono);
+    font-weight: 700;
+  }
+
+  .pm__outcomes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin: 0;
+  }
+
+  .pm__outcomes > div {
+    background: var(--surface-0);
+    border: 1px solid var(--surface-2);
+    border-left: 2px solid rgba(203, 166, 247, 0.42);
+    padding: 0.7rem 0.85rem;
+  }
+
+  .pm__outcomes dt {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--subtext-0);
+    margin-bottom: 0.3rem;
+  }
+
+  .pm__outcomes dd {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  .pm__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  /* Tech-stack chips are injected by the controller (src/scripts/modal.ts)
+     without a scoped attribute, so this style is intentionally global and
+     scoped to the modal by class name only. */
+  :global(.pm-chip) {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.01em;
+    color: var(--text);
+    background: rgba(49, 50, 68, 0.6);
+    border: 1px solid var(--border-dim);
+    padding: 0.34rem 0.62rem;
+    border-radius: 2px;
+    line-height: 1.2;
+  }
+
+  .pm__links[hidden] {
+    display: none;
+  }
+
+  .pm__links-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  :global(.pm-link) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text);
+    background: rgba(49, 50, 68, 0.55);
+    border: 1px solid var(--border-dim);
+    padding: 0.55rem 0.72rem;
+    border-radius: 2px;
+  }
+
+  :global(.pm-link--primary) {
+    color: var(--crust);
+    background: var(--mauve);
+    border-color: rgba(205, 214, 244, 0.6);
+  }
+
+  .pm__no-links {
+    font-family: var(--font-mono);
+    color: var(--subtext-0);
+    font-size: 0.8rem;
+    border: 1px dashed var(--border-dim);
+    padding: 0.7rem 0.8rem;
+  }
+
+  @media (max-width: 820px) {
+    .pm {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .pm {
+      gap: 1.15rem;
+    }
+
+    .pm__outcomes {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

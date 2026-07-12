@@ -1,0 +1,413 @@
+---
+import Section from "../layout/Section.astro";
+import PixelButton from "../ui/PixelButton.astro";
+import Icon from "../ui/Icon.astro";
+import { profile } from "../../data/profile";
+
+const focusAreas = [
+  "Frontend interfaces",
+  "Fullstack delivery",
+  "Reliability learning",
+];
+
+const statusRows = [
+  { label: "Status", value: "Available for selected work" },
+  { label: "Location", value: profile.location },
+  { label: "Focus", value: "Frontend, fullstack, reliability" },
+  { label: "Availability", value: profile.availability },
+  { label: "Current direction", value: "Docker, CI/CD, monitoring" },
+];
+---
+
+<Section id="hero" label="System Online" index="00" accent="mauve" class="section--dense">
+  <div class="hero" data-reveal>
+    <section class="hero__main" aria-labelledby="hero-title">
+      <p class="hero__prompt">
+        <span class="hero__prompt-state" aria-hidden="true"></span>
+        <span class="hero__prompt-label">system.online</span>
+        <span class="hero__prompt-command">profile --operator=ilham-yusuf</span>
+      </p>
+
+      <div class="hero__identity">
+        <h1 id="hero-title" class="hero__title">
+          <span>{profile.name.split(" ")[0]}</span>
+          <span>{profile.name.split(" ")[1]}</span>
+        </h1>
+
+        <p class="hero__role">
+          <span>{profile.role}</span>
+          <span class="hero__sep" aria-hidden="true">/</span>
+          <span>{profile.subrole}</span>
+        </p>
+      </div>
+
+      <p class="hero__tagline">
+        I build polished web interfaces, connect frontend work with backend
+        needs, and keep learning reliable deployment practices.
+      </p>
+
+      <ul class="hero__focus" role="list" aria-label="Core capability areas">
+        {focusAreas.map((item) => (
+          <li>
+            <Icon name="mdi:check-circle-outline" size={16} aria-hidden="true" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div class="hero__actions">
+        <PixelButton href="#projects" iconRight="mdi:arrow-right" variant="primary">
+          View selected work
+        </PixelButton>
+        <PixelButton href="#about" variant="ghost">
+          Operator profile
+        </PixelButton>
+      </div>
+    </section>
+
+    <aside class="hero__runtime" aria-label="Work context">
+      <div class="hero__runtime-head">
+        <div>
+          <span>Work Context</span>
+          <strong>{profile.callsign}.dev</strong>
+        </div>
+        <span class="hero__runtime-badge">
+          <span aria-hidden="true"></span>
+          available
+        </span>
+      </div>
+
+      <dl class="hero__stats">
+        {statusRows.map((row) => (
+          <div>
+            <dt>{row.label}</dt>
+            <dd>{row.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </aside>
+
+    <a class="hero__scroll" href="#about" aria-label="Scroll to operator profile">
+      <span>continue</span>
+      <Icon name="mdi:arrow-down" size={16} aria-hidden="true" />
+    </a>
+  </div>
+</Section>
+
+<style>
+  .hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 0.48fr);
+    grid-template-areas:
+      "main runtime"
+      "scroll scroll";
+    gap: clamp(1.15rem, 4vw, 3.2rem);
+    align-items: center;
+    width: 100%;
+    min-height: min(600px, calc(100vh - 10rem));
+    padding-block: clamp(0.25rem, 1.2vh, 0.75rem);
+  }
+
+  .hero__main,
+  .hero__runtime,
+  .hero__scroll {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero__main {
+    grid-area: main;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: clamp(0.78rem, 1.7vh, 1.08rem);
+    min-width: 0;
+    padding: 0;
+  }
+
+  .hero__prompt {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.52rem;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--subtext-1);
+  }
+
+  .hero__prompt-state {
+    width: 7px;
+    height: 7px;
+    background: var(--mauve);
+    box-shadow: 0 0 0 4px rgba(203, 166, 247, 0.08);
+  }
+
+  .hero__prompt-label {
+    color: var(--mauve);
+    font-weight: 700;
+  }
+
+  .hero__prompt-command {
+    color: var(--subtext-0);
+  }
+
+  .hero__identity {
+    display: grid;
+    gap: 0.62rem;
+  }
+
+  .hero__title {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: clamp(3rem, 8.2vw, 6.15rem);
+    line-height: 0.93;
+    letter-spacing: 0;
+    margin: 0;
+  }
+
+  .hero__title span {
+    display: block;
+  }
+
+  .hero__title span:last-child {
+    color: var(--mauve);
+  }
+
+  .hero__role {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.58rem;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: clamp(0.92rem, 1.5vw, 1.05rem);
+    color: var(--subtext-1);
+  }
+
+  .hero__sep {
+    color: var(--overlay-0);
+  }
+
+  .hero__tagline {
+    max-width: 61ch;
+    margin: 0;
+    color: var(--subtext-1);
+    font-size: clamp(1rem, 1.8vw, 1.2rem);
+    line-height: 1.5;
+  }
+
+  .hero__focus {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .hero__focus li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.38rem;
+    color: var(--subtext-1);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    border: 1px solid rgba(147, 153, 178, 0.28);
+    background: rgba(17, 17, 27, 0.36);
+    padding: 0.42rem 0.58rem;
+  }
+
+  .hero__focus :global(svg) {
+    color: var(--mauve);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  .hero__runtime {
+    grid-area: runtime;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    max-width: 360px;
+    justify-self: end;
+    border: 1px solid var(--border-dim);
+    background: rgba(24, 24, 37, 0.64);
+    box-shadow: 0 12px 28px rgba(17, 17, 27, 0.18);
+  }
+
+  .hero__runtime-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem 0.95rem 0.82rem;
+    border-bottom: 1px solid rgba(147, 153, 178, 0.18);
+  }
+
+  .hero__runtime-head span,
+  .hero__runtime-badge,
+  .hero__stats dt,
+  .hero__scroll {
+    font-family: var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .hero__runtime-head > div > span {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: var(--subtext-0);
+    font-size: 0.68rem;
+  }
+
+  .hero__runtime-head strong {
+    display: block;
+    color: var(--text);
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    line-height: 1.1;
+  }
+
+  .hero__runtime-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex: none;
+    color: var(--mauve);
+    font-size: 0.68rem;
+  }
+
+  .hero__runtime-badge span {
+    width: 7px;
+    height: 7px;
+    background: var(--mauve);
+  }
+
+  .hero__stats {
+    display: grid;
+    margin: 0;
+  }
+
+  .hero__stats > div {
+    display: grid;
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 0.65rem;
+    padding: 0.58rem 0.95rem;
+    border-bottom: 1px solid rgba(147, 153, 178, 0.16);
+  }
+
+  .hero__stats > div:last-child {
+    border-bottom: 0;
+  }
+
+  .hero__stats dt {
+    color: var(--subtext-0);
+    font-size: 0.66rem;
+  }
+
+  .hero__stats dd {
+    margin: 0;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.79rem;
+    line-height: 1.42;
+  }
+
+  .hero__scroll {
+    grid-area: scroll;
+    justify-self: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--subtext-0);
+    font-size: 0.68rem;
+    text-decoration: none;
+  }
+
+  :global(.section.is-active-section) .hero__scroll {
+    animation: heroFloat 2.4s ease-in-out infinite;
+  }
+
+  @keyframes heroFloat {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(4px);
+    }
+  }
+
+  @media (max-width: 960px) {
+    .hero {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "main"
+        "runtime"
+        "scroll";
+      min-height: auto;
+    }
+
+    .hero::before {
+      display: none;
+    }
+
+    .hero__runtime {
+      align-self: stretch;
+      justify-self: stretch;
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero__prompt {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .hero__stats > div {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
+  }
+
+  @media (max-height: 760px) and (min-width: 961px) {
+    .hero {
+      min-height: min(560px, calc(100vh - 9rem));
+      gap: 1rem;
+    }
+
+    .hero__main {
+      gap: 0.68rem;
+      padding-block: 1rem;
+    }
+
+    .hero__title {
+      font-size: clamp(2.7rem, 7.2vw, 5.1rem);
+    }
+
+    .hero__tagline {
+      font-size: 0.95rem;
+      line-height: 1.42;
+    }
+
+    .hero__stats > div {
+      padding-block: 0.55rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__scroll {
+      animation: none;
+    }
+  }
+</style>

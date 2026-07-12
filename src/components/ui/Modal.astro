@@ -1,0 +1,128 @@
+---
+import Icon from "./Icon.astro";
+
+interface Props {
+  id: string;
+  titleId?: string;
+  class?: string;
+}
+
+const { id, titleId = `${id}-title`, class: className = "" } = Astro.props;
+---
+
+<div
+  id={id}
+  class={`modal ${className}`}
+  data-modal
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby={titleId}
+  hidden
+>
+  <div class="modal__backdrop" data-modal-close></div>
+  <div class="modal__panel pixel-card pixel-card--custom" style="--card-accent: var(--mauve);">
+    <header class="modal__header">
+      <h2 id={titleId} class="modal__title">
+        <slot name="title">Dialog</slot>
+      </h2>
+      <button
+        type="button"
+        class="modal__close"
+        data-modal-close
+        aria-label="Close dialog"
+      >
+        <Icon name="mdi:close" size={18} />
+      </button>
+    </header>
+    <div class="modal__body">
+      <slot />
+    </div>
+  </div>
+</div>
+
+<style>
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    padding: clamp(1rem, 4vw, 3rem);
+  }
+
+  .modal[hidden] {
+    display: none;
+  }
+
+  .modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(17, 17, 27, 0.82);
+    backdrop-filter: blur(2px);
+  }
+
+  .modal__panel {
+    position: relative;
+    z-index: 1;
+    width: min(720px, 100%);
+    max-height: min(82vh, 820px);
+    display: flex;
+    flex-direction: column;
+    background: var(--base);
+    box-shadow: 6px 6px 0 rgba(17, 17, 27, 0.82), 0 0 32px rgba(203, 166, 247, 0.06);
+    animation: modal-in 0.18s ease-out;
+  }
+
+  @keyframes modal-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.98);
+    }
+  }
+
+  .modal__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.4rem 1.75rem;
+    border-bottom: 1px solid var(--border-dim);
+  }
+
+  .modal__title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  .modal__close {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    background: var(--surface-1);
+    color: var(--text);
+    border: 1px solid var(--border-dim);
+    border-radius: 2px;
+    transition: background 0.12s ease, transform 0.08s ease;
+  }
+
+  .modal__close:hover {
+    background: var(--surface-2);
+    transform: translate(-1px, -1px);
+  }
+
+  .modal__body {
+    padding: 1.75rem;
+    overflow-y: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .modal__panel {
+      animation: none;
+    }
+  }
+</style>

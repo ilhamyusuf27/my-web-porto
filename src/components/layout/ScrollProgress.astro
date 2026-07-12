@@ -1,0 +1,29 @@
+---
+/** Top-of-screen pixel scroll progress bar. Filled by hud scroll handler. */
+---
+
+<div class="scroll-progress" aria-hidden="true">
+  <span class="scroll-progress__fill" data-scroll-progress></span>
+</div>
+
+<style>
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    z-index: 9500;
+    background: var(--mantle);
+    border-bottom: 2px solid var(--crust);
+  }
+
+  .scroll-progress__fill {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: var(--mauve);
+    box-shadow: 0 0 8px rgba(203, 166, 247, 0.24);
+    transition: width 0.05s linear;
+  }
+</style>

@@ -1,0 +1,60 @@
+/* Layout + spacing helpers used across sections. */
+
+.container {
+  width: min(100%, var(--container-width));
+  margin-inline: auto;
+}
+
+.section-stack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.grid-auto {
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.stack-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.center {
+  display: grid;
+  place-items: center;
+}
+
+.text-sub {
+  color: var(--subtext-1);
+}
+
+.text-muted {
+  color: var(--subtext-0);
+}
+
+.accent {
+  color: var(--accent-primary);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.no-scrollbar {
+  scrollbar-width: thin;
+}
+
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .only-mobile {
+    display: none !important;
+  }
+}

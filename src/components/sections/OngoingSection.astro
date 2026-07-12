@@ -1,0 +1,439 @@
+---
+import Section from "../layout/Section.astro";
+import { ongoingBuilds as buildItems } from "../../data/profile";
+
+const phaseLabel = (progress: number) => {
+  if (progress >= 70) return "Polishing";
+  if (progress >= 55) return "Building";
+  return "Queued";
+};
+
+const focusLabel = (id: string) => {
+  if (id === "sre-path") return "Reliability practice";
+  if (id === "moneyflow") return "Product build";
+  return "Portfolio polish";
+};
+
+const laneLabel = (index: number) => `Lane ${String(index + 1).padStart(2, "0")}`;
+
+const displayFocus = (id: string, focus: string) =>
+  id === "portfolio"
+    ? "Active polish pass for this Astro, GSAP, and Three.js portfolio."
+    : focus;
+---
+
+<Section id="ongoing" label="Currently Building" index="06" accent="mauve" class="section--dense">
+  <header class="queue__head" data-reveal>
+    <h2 class="queue__title">Currently building</h2>
+    <p class="queue__sub">Active work I am moving forward now, with status, focus, progress, and the next useful step.</p>
+  </header>
+
+  <div class="queue">
+    {
+      buildItems.map((item, index) => (
+        <article
+          class="ticket"
+          data-reveal
+          style={`--queue-progress: ${item.progress}%; --queue-delay: ${index * 180}ms; --queue-scan-delay: ${index * 340}ms; --queue-signal-delay: ${index * 240}ms;`}
+        >
+          <div class="ticket__meta">
+            <span class="ticket__ticket">QUEUE-{String(index + 1).padStart(2, "0")}</span>
+            <span class="ticket__status">
+              <span aria-hidden="true"></span>
+              {phaseLabel(item.progress)}
+            </span>
+          </div>
+
+          <div class="ticket__top">
+            <div class="ticket__heading">
+              <h3 class="ticket__title">{item.title}</h3>
+              <p class="ticket__focus">{displayFocus(item.id, item.focus)}</p>
+            </div>
+          </div>
+
+          <dl class="ticket__details">
+            <div>
+              <dt>Status</dt>
+              <dd>{phaseLabel(item.progress)}</dd>
+            </div>
+            <div>
+              <dt>Focus</dt>
+              <dd>{focusLabel(item.id)}</dd>
+            </div>
+            <div>
+              <dt>Queue</dt>
+              <dd>{laneLabel(index)}</dd>
+            </div>
+          </dl>
+
+          <div class="ticket__progress">
+            <div class="ticket__progress-head">
+              <span>Progress</span>
+              <strong>{item.progress}%</strong>
+            </div>
+            <div class="ticket__bar" role="progressbar" aria-valuenow={item.progress} aria-valuemin="0" aria-valuemax="100" aria-label={`${item.title} progress`}>
+              <span class="ticket__bar-fill" />
+            </div>
+          </div>
+
+          <div class="ticket__next">
+            <span>Next step</span>
+            <p>{item.next}</p>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</Section>
+
+<style>
+  .queue__head {
+    margin-bottom: 1.15rem;
+    max-width: 680px;
+  }
+
+  .queue__title {
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .queue__sub {
+    color: var(--subtext-1);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+  }
+
+  .queue {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.85rem, 2vw, 1.15rem);
+    align-items: stretch;
+  }
+
+  .ticket {
+    --queue-progress: 0%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-width: 0;
+    background:
+      linear-gradient(180deg, rgba(49, 50, 68, 0.5), rgba(24, 24, 37, 0.76)),
+      var(--bg-card);
+    border: 1px solid var(--border-dim);
+    box-shadow: 0 14px 34px rgba(17, 17, 27, 0.24);
+    padding: 0.95rem;
+    overflow: clip;
+    transition:
+      transform 180ms ease,
+      border-color 180ms ease,
+      background-color 180ms ease;
+  }
+
+  .ticket::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-top: 1px solid rgba(203, 166, 247, 0.22);
+    opacity: 0.82;
+  }
+
+  .ticket::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      115deg,
+      transparent 0%,
+      transparent 42%,
+      rgba(203, 166, 247, 0.052) 50%,
+      transparent 58%,
+      transparent 100%
+    );
+    opacity: 0;
+    transform: translateX(-44%);
+  }
+
+  .ticket__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem;
+    color: var(--subtext-0);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .ticket__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--mauve);
+    white-space: nowrap;
+  }
+
+  .ticket__status span {
+    width: 7px;
+    height: 7px;
+    background: var(--mauve);
+    box-shadow: 0 0 0 4px rgba(203, 166, 247, 0.07);
+  }
+
+  .ticket__top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+  }
+
+  .ticket__heading {
+    flex: 1;
+  }
+
+  .ticket__title {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    line-height: 1.18;
+    color: var(--text);
+    margin: 0 0 0.35rem;
+  }
+
+  .ticket__focus {
+    font-size: 0.88rem;
+    color: var(--subtext-1);
+    line-height: 1.45;
+  }
+
+  .ticket__details {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    margin: 0;
+    border: 1px solid rgba(147, 153, 178, 0.18);
+    background: rgba(17, 17, 27, 0.22);
+  }
+
+  .ticket__details div {
+    min-width: 0;
+    padding: 0.5rem 0.55rem;
+    border-right: 1px solid rgba(147, 153, 178, 0.16);
+  }
+
+  .ticket__details div:last-child {
+    border-right: 0;
+  }
+
+  .ticket__details dt {
+    margin-bottom: 0.22rem;
+    color: var(--subtext-0);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .ticket__details dd {
+    margin: 0;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ticket__progress {
+    display: grid;
+    gap: 0.45rem;
+    margin-top: auto;
+  }
+
+  .ticket__progress-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-family: var(--font-mono);
+  }
+
+  .ticket__progress-head span {
+    color: var(--subtext-0);
+    font-size: 0.72rem;
+  }
+
+  .ticket__progress-head strong {
+    color: var(--mauve);
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  .ticket__bar {
+    position: relative;
+    height: 8px;
+    background:
+      linear-gradient(90deg, rgba(147, 153, 178, 0.12), rgba(147, 153, 178, 0.04)),
+      var(--mantle);
+    border: 1px solid rgba(147, 153, 178, 0.24);
+    overflow: hidden;
+    contain: paint;
+  }
+
+  .ticket__bar-fill {
+    position: relative;
+    display: block;
+    width: var(--queue-progress);
+    height: 100%;
+    background: linear-gradient(90deg, rgba(203, 166, 247, 0.42), rgba(203, 166, 247, 0.78));
+  }
+
+  .ticket__bar-fill::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 38px;
+    background: linear-gradient(90deg, transparent, rgba(205, 214, 244, 0.26), transparent);
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+
+  .ticket__next {
+    display: grid;
+    gap: 0.28rem;
+    padding-top: 0.72rem;
+    border-top: 1px dashed rgba(147, 153, 178, 0.22);
+    font-family: var(--font-mono);
+    color: var(--subtext-0);
+  }
+
+  .ticket__next span {
+    color: var(--mauve);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .ticket__next p {
+    margin: 0;
+    color: var(--text);
+    font-size: 0.8rem;
+    line-height: 1.42;
+  }
+
+  @media (hover: hover) {
+    .ticket:hover {
+      transform: translateY(-2px);
+      border-color: rgba(203, 166, 247, 0.32);
+      background-color: rgba(49, 50, 68, 0.48);
+    }
+  }
+
+  :global(.section.is-active-section) .ticket__status span {
+    animation: queue-status-pulse 4.8s ease-in-out infinite;
+    animation-delay: var(--queue-delay);
+  }
+
+  :global(.section.is-active-section) .ticket::after {
+    animation: queue-card-scan 8.5s ease-in-out infinite;
+    animation-delay: var(--queue-scan-delay);
+  }
+
+  :global(.section.is-active-section) .ticket__bar-fill::after {
+    animation: queue-progress-signal 4.8s ease-in-out infinite;
+    animation-delay: var(--queue-signal-delay);
+  }
+
+  @media (max-width: 980px) {
+    .queue {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-height: 760px) and (min-width: 981px) {
+    .queue__head {
+      margin-bottom: 0.85rem;
+    }
+
+    .queue__title {
+      font-size: clamp(1.55rem, 4vw, 2.25rem);
+    }
+
+    .ticket {
+      gap: 0.58rem;
+      padding: 0.82rem;
+    }
+
+    .ticket__focus,
+    .ticket__next p {
+      font-size: 0.78rem;
+      line-height: 1.38;
+    }
+
+    .ticket__details div {
+      padding-block: 0.42rem;
+    }
+  }
+
+  @keyframes queue-status-pulse {
+    0%,
+    100% {
+      opacity: 0.72;
+      transform: scale(1);
+      box-shadow: 0 0 0 4px rgba(203, 166, 247, 0.06);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.14);
+      box-shadow: 0 0 0 7px rgba(203, 166, 247, 0.03);
+    }
+  }
+
+  @keyframes queue-card-scan {
+    0%,
+    56%,
+    100% {
+      opacity: 0;
+      transform: translateX(-44%);
+    }
+    68% {
+      opacity: 1;
+    }
+    86% {
+      opacity: 0;
+      transform: translateX(44%);
+    }
+  }
+
+  @keyframes queue-progress-signal {
+    0%,
+    35%,
+    100% {
+      opacity: 0;
+      transform: translateX(-100%);
+    }
+    48% {
+      opacity: 1;
+    }
+    68% {
+      opacity: 0;
+      transform: translateX(calc(var(--queue-progress) + 20px));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ticket,
+    .ticket__status span,
+    .ticket::after,
+    .ticket__bar-fill::after {
+      animation: none !important;
+      transition: none !important;
+    }
+
+    .ticket:hover {
+      transform: none;
+    }
+  }
+</style>

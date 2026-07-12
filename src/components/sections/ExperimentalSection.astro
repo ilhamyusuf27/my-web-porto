@@ -1,0 +1,292 @@
+---
+import Section from "../layout/Section.astro";
+import Icon from "../ui/Icon.astro";
+import { projects } from "../../data/projects";
+
+const experiments = projects.filter(
+  (p) => p.category === "experimental" || p.status === "experimental"
+);
+
+// Notes from small tests and prototype work (no roadmap/status claims).
+const labNotes = [
+  {
+    icon: "mdi:cube",
+    title: "WebGL / Three.js tests",
+    note: "Small rendering trials, procedural geometry, and scroll-linked scene notes.",
+  },
+  {
+    icon: "mdi:sparkles",
+    title: "GSAP timing tests",
+    note: "ScrollTrigger timing, staged reveals, and reusable motion patterns.",
+  },
+  {
+    icon: "mdi:api",
+    title: "Assistant-tooling spike",
+    note: "Provider configuration, API handoff ideas, and workflow notes.",
+  },
+];
+---
+
+<Section id="experimental" label="Experiments" index="05" accent="mauve" class="section--dense">
+  <header class="lab__head" data-reveal>
+    <h2 class="lab__title">Experiments</h2>
+    <p class="lab__sub">Small prototypes and technical tests kept as a lab archive: what I tried, what changed, and what I learned.</p>
+  </header>
+
+  <div class="lab">
+    <div class="lab__chambers">
+      {
+        experiments.map((exp) => {
+          const goal = exp.outcomes?.find((o) => {
+            const label = o[0].toLowerCase();
+            return label.includes("goal") || label.includes("test");
+          })?.[1];
+          const learned = exp.outcomes?.find((o) => o[0].toLowerCase().includes("learn"))?.[1];
+          return (
+            <article
+              class="lab__chamber pixel-card pixel-card--custom"
+              style="--card-accent: var(--mauve);"
+              data-reveal
+            >
+              <div class="lab__chamber-head">
+                <span class="lab__badge">
+                  <Icon name="mdi:flask-empty-outline" size={16} />
+                  Lab test
+                </span>
+                <span class="lab__period">{exp.period}</span>
+              </div>
+              <h3 class="lab__name">{exp.title}</h3>
+              <p class="lab__summary">{exp.summary}</p>
+
+              <dl class="lab__fields">
+                {goal && (
+                  <div>
+                    <dt>Test goal</dt>
+                    <dd>{goal}</dd>
+                  </div>
+                )}
+                {learned && (
+                  <div>
+                    <dt>What I learned</dt>
+                    <dd>{learned}</dd>
+                  </div>
+                )}
+              </dl>
+
+              <div class="lab__stack">
+                {exp.stack.map((s) => (
+                  <span class="lab__chip">{s}</span>
+                ))}
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+
+    <aside class="lab__notes" data-reveal>
+      <h3 class="lab__notes-title">
+        <Icon name="mdi:note" size={18} />
+        Test notes
+      </h3>
+      <ul role="list">
+        {
+          labNotes.map((note) => (
+            <li>
+              <span class="lab__note-icon">
+                <Icon name={note.icon} size={18} />
+              </span>
+              <div>
+                <strong>{note.title}</strong>
+                <span>{note.note}</span>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </aside>
+  </div>
+</Section>
+
+<style>
+  .lab__head {
+    margin-bottom: 1.15rem;
+    max-width: 720px;
+  }
+
+  .lab__title {
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .lab__sub {
+    color: var(--subtext-1);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+  }
+
+  .lab {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.9fr);
+    gap: clamp(0.85rem, 2vw, 1.2rem);
+    align-items: start;
+  }
+
+  .lab__chambers {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .lab__chamber {
+    padding: 0.95rem 1rem;
+  }
+
+  .lab__chamber-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
+  }
+
+  .lab__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-pixel);
+    font-size: 0.48rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mauve);
+    background: var(--mantle);
+    border: 1px solid rgba(203, 166, 247, 0.42);
+    padding: 0.3rem 0.5rem;
+  }
+
+  .lab__period {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--subtext-0);
+  }
+
+  .lab__name {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    color: var(--text);
+    margin: 0 0 0.3rem;
+  }
+
+  .lab__summary {
+    color: var(--subtext-1);
+    line-height: 1.55;
+    margin-bottom: 0.65rem;
+  }
+
+  .lab__fields {
+    display: grid;
+    gap: 0.45rem;
+    margin: 0 0 0.65rem;
+  }
+
+  .lab__fields > div {
+    background: var(--mantle);
+    border-left: 2px solid rgba(203, 166, 247, 0.38);
+    padding: 0.5rem 0.75rem;
+  }
+
+  .lab__fields dt {
+    font-family: var(--font-pixel);
+    font-size: 0.48rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--subtext-0);
+    margin-bottom: 0.25rem;
+  }
+
+  .lab__fields dd {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--text);
+  }
+
+  .lab__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .lab__chip {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--subtext-1);
+    background: var(--surface-1);
+    border: 2px solid var(--surface-2);
+    padding: 0.25rem 0.5rem;
+  }
+
+  .lab__notes {
+    background: var(--bg-card);
+    border: 1px solid var(--border-dim);
+    border-top: 1px solid rgba(203, 166, 247, 0.34);
+    box-shadow: 4px 4px 0 rgba(17, 17, 27, 0.72);
+    padding: 0.95rem 1rem;
+  }
+
+  .lab__notes-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-pixel);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mauve);
+    margin-bottom: 0.7rem;
+  }
+
+  .lab__notes ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .lab__notes li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+  }
+
+  .lab__note-icon {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    color: var(--mauve);
+    background: var(--mantle);
+    border: 1px solid var(--border-dim);
+    flex: none;
+  }
+
+  .lab__notes strong {
+    display: block;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.98rem;
+  }
+
+  .lab__notes span {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--subtext-0);
+    line-height: 1.4;
+  }
+
+  @media (max-width: 860px) {
+    .lab {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,501 @@
+---
+import Section from "../layout/Section.astro";
+import Icon from "../ui/Icon.astro";
+import { education, certificates } from "../../data/education";
+
+const typeIcon: Record<string, string> = {
+  degree: "mdi:school-outline",
+  bootcamp: "mdi:code-braces",
+  certificate: "mdi:certificate-outline",
+};
+
+const typeLabel: Record<string, string> = {
+  degree: "Degree",
+  bootcamp: "Bootcamp",
+  certificate: "Certificate",
+};
+
+const registryRows = [
+  { label: "Programs", value: `${education.length}`, note: "formal + applied training" },
+  { label: "Credentials", value: `${certificates.length}`, note: "degree and bootcamp record" },
+  { label: "Formal degree", value: "Informatics", note: "AMIKOM Yogyakarta" },
+  { label: "Bootcamp training", value: "Full-stack web", note: "Pijar Camp" },
+  { label: "Core study focus", value: "Web systems", note: "UI, backend basics, multimedia" },
+  { label: "Current direction", value: "Reliability", note: "deployment, monitoring, SRE practice" },
+];
+
+const domainRows = [
+  "Frontend systems",
+  "Backend fundamentals",
+  "Client delivery",
+  "Interface motion",
+  "Reliability learning",
+];
+---
+
+<Section id="education" label="Education" index="07" accent="mauve" class="section--dense">
+  <div class="archive" data-reveal>
+    <section class="archive__main" aria-labelledby="education-title">
+      <header class="archive__head">
+        <span class="archive__eyebrow">Knowledge Archive</span>
+        <div class="archive__title-row">
+          <h2 id="education-title" class="archive__title">Learning records</h2>
+          <span class="archive__count">{String(education.length).padStart(2, "0")} entries</span>
+        </div>
+        <p class="archive__intro">
+          Formal study and applied training behind the frontend, fullstack, and
+          reliability-minded delivery direction.
+        </p>
+      </header>
+
+      <ol class="archive__records" role="list" aria-label="Education records">
+        {
+          education.map((item, index) => (
+            <li class="archive__record">
+              <article class="archive__entry">
+                <div class="archive__index" aria-hidden="true">
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                </div>
+
+                <div class="archive__entry-main">
+                  <div class="archive__entry-meta">
+                    <span class="archive__type">
+                      <Icon name={typeIcon[item.type] ?? "mdi:school-outline"} size={15} aria-hidden="true" />
+                      {typeLabel[item.type] ?? item.type}
+                    </span>
+                    <span>{item.period}</span>
+                  </div>
+
+                  <h3>{item.title}</h3>
+                  <p class="archive__org">
+                    <Icon name="mdi:domain" size={14} aria-hidden="true" />
+                    {item.org}
+                  </p>
+                  <p class="archive__detail">{item.detail}</p>
+                </div>
+
+                <div class="archive__entry-side">
+                  <span>Highlight</span>
+                  <strong>{item.note ?? "Verified record"}</strong>
+                </div>
+              </article>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <aside class="registry" aria-labelledby="registry-title" data-reveal>
+      <header class="registry__head">
+        <span>Credential Registry</span>
+        <h3 id="registry-title">Learning summary</h3>
+      </header>
+
+      <dl class="registry__rows">
+        {
+          registryRows.map((row) => (
+            <div class="registry__row">
+              <dt>{row.label}</dt>
+              <dd>
+                <strong>{row.value}</strong>
+                <span>{row.note}</span>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      <div class="registry__domains">
+        <h4>Knowledge domains</h4>
+        <ul role="list">
+          {domainRows.map((domain) => <li>{domain}</li>)}
+        </ul>
+      </div>
+    </aside>
+  </div>
+</Section>
+
+<style>
+  .archive {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
+    gap: clamp(1rem, 2.4vw, 1.45rem);
+    align-items: stretch;
+    position: relative;
+  }
+
+  .archive::before {
+    content: "";
+    position: absolute;
+    inset: 0 28% 0 8%;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, rgba(203, 166, 247, 0.065), transparent 28%),
+      repeating-linear-gradient(
+        180deg,
+        transparent 0,
+        transparent 52px,
+        rgba(147, 153, 178, 0.045) 53px
+      );
+    opacity: 0.6;
+    mask-image: linear-gradient(90deg, transparent, black 18%, black 76%, transparent);
+  }
+
+  .archive__main,
+  .registry {
+    position: relative;
+    z-index: 1;
+  }
+
+  .archive__main {
+    min-width: 0;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border-top: 1px solid rgba(203, 166, 247, 0.28);
+    border-bottom: 1px solid var(--border-dim);
+  }
+
+  .archive__head {
+    padding: 0 0 clamp(0.9rem, 1.7vw, 1.15rem);
+    border-bottom: 1px solid var(--border-dim);
+  }
+
+  .archive__eyebrow,
+  .archive__count,
+  .archive__entry-meta,
+  .archive__type,
+  .archive__entry-side span,
+  .registry__head span,
+  .registry__row dt,
+  .registry__domains h4 {
+    font-family: var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .archive__eyebrow,
+  .registry__head span {
+    display: block;
+    margin-bottom: 0.45rem;
+    color: var(--mauve);
+    font-size: 0.72rem;
+  }
+
+  .archive__title-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .archive__title {
+    font-size: clamp(1.85rem, 4.4vw, 2.75rem);
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  .archive__count {
+    flex: none;
+    color: var(--subtext-0);
+    font-size: 0.68rem;
+    padding-bottom: 0.25rem;
+  }
+
+  .archive__intro {
+    max-width: 720px;
+    color: var(--subtext-1);
+    font-size: 0.98rem;
+    line-height: 1.52;
+  }
+
+  .archive__records {
+    display: grid;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .archive__record {
+    border-bottom: 1px solid rgba(147, 153, 178, 0.2);
+  }
+
+  .archive__record:last-child {
+    border-bottom: 0;
+  }
+
+  .archive__entry {
+    display: grid;
+    grid-template-columns: 54px minmax(0, 1fr) minmax(138px, 0.34fr);
+    min-height: 100%;
+    background: rgba(24, 24, 37, 0.5);
+  }
+
+  .archive__index {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 1rem;
+    color: rgba(203, 166, 247, 0.78);
+    border-right: 1px dashed rgba(147, 153, 178, 0.26);
+    background: rgba(17, 17, 27, 0.28);
+  }
+
+  .archive__index span {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+  }
+
+  .archive__entry-main {
+    min-width: 0;
+    display: grid;
+    gap: 0.45rem;
+    padding: clamp(0.9rem, 1.8vw, 1.15rem);
+  }
+
+  .archive__entry-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.7rem;
+    color: var(--subtext-0);
+    font-size: 0.68rem;
+  }
+
+  .archive__type {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--mauve);
+  }
+
+  .archive__entry h3 {
+    margin: 0;
+    color: var(--text);
+    font-family: var(--font-heading);
+    font-size: clamp(1.08rem, 2vw, 1.35rem);
+    line-height: 1.18;
+  }
+
+  .archive__org {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.36rem;
+    color: var(--subtext-1);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+
+  .archive__detail {
+    color: var(--subtext-1);
+    font-size: 0.9rem;
+    line-height: 1.48;
+  }
+
+  .archive__entry-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.3rem;
+    padding: 0.9rem;
+    border-left: 1px solid rgba(147, 153, 178, 0.18);
+    background: rgba(17, 17, 27, 0.22);
+  }
+
+  .archive__entry-side span {
+    color: var(--subtext-0);
+    font-size: 0.62rem;
+  }
+
+  .archive__entry-side strong {
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    line-height: 1.3;
+    font-weight: 500;
+  }
+
+  .registry {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border: 1px solid var(--border-dim);
+    background: rgba(24, 24, 37, 0.7);
+    box-shadow: 0 14px 34px rgba(17, 17, 27, 0.22);
+  }
+
+  .registry__head {
+    padding: 0.95rem 1rem 0.85rem;
+    border-bottom: 1px solid rgba(147, 153, 178, 0.2);
+  }
+
+  .registry__head h3 {
+    margin: 0;
+    color: var(--text);
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    line-height: 1.15;
+  }
+
+  .registry__rows {
+    margin: 0;
+  }
+
+  .registry__row {
+    display: grid;
+    grid-template-columns: minmax(92px, 0.72fr) minmax(0, 1fr);
+    gap: 0.75rem;
+    padding: 0.64rem 1rem;
+    border-bottom: 1px solid rgba(147, 153, 178, 0.16);
+  }
+
+  .registry__row dt {
+    color: var(--subtext-0);
+    font-size: 0.66rem;
+    line-height: 1.35;
+  }
+
+  .registry__row dd {
+    margin: 0;
+    min-width: 0;
+  }
+
+  .registry__row strong,
+  .registry__row span {
+    display: block;
+  }
+
+  .registry__row strong {
+    color: var(--text);
+    font-family: var(--font-heading);
+    font-size: 0.92rem;
+    line-height: 1.15;
+  }
+
+  .registry__row span {
+    margin-top: 0.16rem;
+    color: var(--subtext-1);
+    font-size: 0.76rem;
+    line-height: 1.32;
+  }
+
+  .registry__domains {
+    margin-top: auto;
+    padding: 0.85rem 1rem 0.95rem;
+  }
+
+  .registry__domains h4 {
+    margin: 0 0 0.62rem;
+    color: var(--subtext-0);
+    font-size: 0.66rem;
+  }
+
+  .registry__domains ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.38rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .registry__domains li {
+    padding: 0.34rem 0.48rem;
+    border: 1px solid rgba(147, 153, 178, 0.22);
+    color: var(--subtext-1);
+    background: rgba(49, 50, 68, 0.32);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    line-height: 1;
+  }
+
+  @media (hover: hover) {
+    .archive__entry {
+      transition:
+        background-color 180ms ease,
+        transform 180ms ease;
+    }
+
+    .archive__entry:hover {
+      background: rgba(203, 166, 247, 0.035);
+      transform: translateX(2px);
+    }
+  }
+
+  @media (max-width: 980px) {
+    .archive {
+      grid-template-columns: 1fr;
+    }
+
+    .archive::before {
+      display: none;
+    }
+
+    .registry {
+      box-shadow: none;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .archive__title-row,
+    .archive__entry-meta {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .archive__entry {
+      grid-template-columns: 42px minmax(0, 1fr);
+    }
+
+    .archive__entry-side {
+      grid-column: 2;
+      border-left: 0;
+      border-top: 1px dashed rgba(147, 153, 178, 0.22);
+      padding-top: 0.7rem;
+    }
+
+    .registry__row {
+      grid-template-columns: 1fr;
+      gap: 0.28rem;
+    }
+  }
+
+  @media (max-height: 760px) and (min-width: 981px) {
+    .archive__head {
+      padding-bottom: 0.75rem;
+    }
+
+    .archive__title {
+      font-size: clamp(1.6rem, 3.6vw, 2.22rem);
+    }
+
+    .archive__intro,
+    .archive__detail {
+      font-size: 0.84rem;
+      line-height: 1.4;
+    }
+
+    .archive__entry-main {
+      gap: 0.34rem;
+      padding-block: 0.78rem;
+    }
+
+    .registry__row {
+      padding-block: 0.52rem;
+    }
+
+    .registry__domains {
+      padding-block: 0.7rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .archive__entry {
+      transition: none;
+    }
+
+    .archive__entry:hover {
+      transform: none;
+    }
+  }
+</style>
