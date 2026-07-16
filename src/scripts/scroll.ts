@@ -21,6 +21,10 @@ let isTransitioning = false;
 let scrollTween: gsap.core.Animation | null = null;
 let wheelGestureLocked = false;
 let wheelReleaseTimer = 0;
+let tallSectionExitIndex = -1;
+let tallSectionExitDirection = 0;
+let tallSectionExitReadyAt = 0;
+let tallSectionExitGestureReleased = false;
 
 type SectionTransitionStage = {
   root: HTMLElement;
@@ -39,36 +43,42 @@ type SectionTransitionConfig = {
   enterDelay?: number;
   exitDistance?: number;
   exitScale?: number;
+  clip?: "vertical" | "horizontal" | "none";
+  rotate?: number;
 };
 
 const SECTION_TRANSITIONS: Record<string, SectionTransitionConfig> = {
-  hero: { y: 12, duration: 0.42, ease: "power2.out", exitDistance: 0.42 },
-  about: { x: 14, y: 2, duration: 0.46, exitDistance: 0.5 },
-  skills: { y: 11, scale: 0.988, duration: 0.5, stagger: 0.014 },
-  experience: { y: 16, duration: 0.48, stagger: 0.01, exitDistance: 0.48 },
+  hero: { y: 48, duration: 0.72, ease: "power3.out", exitDistance: 0.5, clip: "vertical" },
+  about: { x: 38, y: 34, scale: 0.965, duration: 0.88, exitDistance: 0.44, clip: "none", rotate: -1.1 },
+  skills: { x: 84, y: 0, scale: 0.92, duration: 0.82, stagger: 0.04, clip: "horizontal", rotate: -0.8 },
+  experience: { x: 72, y: 0, duration: 0.78, stagger: 0.025, exitDistance: 0.5, clip: "horizontal" },
   projects: {
-    y: 5,
-    scale: 0.992,
-    duration: 0.4,
+    y: 54,
+    scale: 0.985,
+    duration: 0.72,
     stagger: 0,
     exitDistance: 0.35,
+    clip: "none",
+    rotate: 1.2,
   },
-  experimental: { x: 10, y: 8, duration: 0.5, stagger: 0.01 },
-  ongoing: { x: 15, y: 3, duration: 0.48, exitDistance: 0.52 },
-  education: { x: 4, y: 9, duration: 0.44, exitDistance: 0.42 },
-  contact: { y: 13, duration: 0.46, ease: "power2.out" },
+  experimental: { y: 76, scale: 0.9, duration: 0.84, stagger: 0.035, clip: "none", rotate: 1.8 },
+  ongoing: { x: 68, y: 0, duration: 0.72, exitDistance: 0.5, clip: "horizontal" },
+  education: { y: 20, scale: 0.95, duration: 0.72, exitDistance: 0.5, clip: "none" },
+  contact: { y: 64, duration: 0.78, ease: "power3.out", clip: "vertical" },
 };
 
 const DEFAULT_TRANSITION: Required<SectionTransitionConfig> = {
   x: 0,
-  y: 10,
+  y: 52,
   scale: 1,
-  duration: 0.46,
+  duration: 0.72,
   ease: "power3.out",
   stagger: 0.008,
-  enterDelay: 0.035,
+  enterDelay: 0.08,
   exitDistance: 0.45,
   exitScale: 0.997,
+  clip: "vertical",
+  rotate: 0,
 };
 
 /** Desktop-only GSAP snapping + reveals + progress + active-section tracking. */
@@ -82,7 +92,6 @@ export function initScrollAnimations(): void {
     if (!isTouch) {
       prepareControlledSectionMotion(sections);
       initControlledSectionNavigation(sections);
-      initScrollSettle(sections);
     } else {
       initNativeReveals(sections);
       initAnchorNavigation(sections, false);
@@ -179,7 +188,41 @@ function initControlledSectionNavigation(sections: HTMLElement[]): void {
       if (direction === 0) return;
 
       const currentIndex = getCurrentSectionIndex(sections);
-      if (canReadTallSection(sections[currentIndex], direction)) return;
+      const currentSection = sections[currentIndex];
+      if (
+        isTallSection(currentSection) &&
+        wouldCrossTallSectionEdge(currentSection, direction, event.deltaY)
+      ) {
+        event.preventDefault();
+        tallSectionExitIndex = currentIndex;
+        tallSectionExitDirection = direction;
+        tallSectionExitReadyAt = window.performance.now() + 650;
+        tallSectionExitGestureReleased = false;
+        lockWheelGesture();
+        settleTallSectionEdge(currentSection, direction);
+        return;
+      }
+
+      if (canReadTallSection(currentSection, direction)) {
+        clearTallSectionExit();
+        return;
+      }
+
+      if (
+        isTallSection(currentSection) &&
+        !isTallSectionExitArmed(currentIndex, direction)
+      ) {
+        event.preventDefault();
+        tallSectionExitIndex = currentIndex;
+        tallSectionExitDirection = direction;
+        tallSectionExitReadyAt = window.performance.now() + 650;
+        tallSectionExitGestureReleased = false;
+        lockWheelGesture();
+        settleTallSectionEdge(currentSection, direction);
+        return;
+      }
+
+      clearTallSectionExit();
 
       const nextIndex = clampIndex(currentIndex + direction, sections);
       if (nextIndex === currentIndex) {
@@ -231,32 +274,55 @@ function queueWheelGestureRelease(): void {
   window.clearTimeout(wheelReleaseTimer);
   wheelReleaseTimer = window.setTimeout(() => {
     wheelGestureLocked = false;
-  }, 180);
+    if (tallSectionExitIndex >= 0) tallSectionExitGestureReleased = true;
+  }, 360);
 }
 
-function initScrollSettle(sections: HTMLElement[]): void {
-  let settleTimer = 0;
+function isTallSection(section: HTMLElement | undefined): boolean {
+  return Boolean(section && section.offsetHeight > window.innerHeight + 8);
+}
 
-  const settle = () => {
-    window.clearTimeout(settleTimer);
-    settleTimer = window.setTimeout(() => {
-      if (
-        isTransitioning ||
-        shouldIgnoreNavigationEvent(document.activeElement)
-      )
-        return;
+function isTallSectionExitArmed(index: number, direction: number): boolean {
+  return tallSectionExitIndex === index &&
+    tallSectionExitDirection === direction &&
+    tallSectionExitGestureReleased &&
+    window.performance.now() >= tallSectionExitReadyAt;
+}
 
-      const nearestIndex = getNearestSectionIndex(sections);
-      if (isInsideTallReadableArea(sections[nearestIndex])) return;
+function wouldCrossTallSectionEdge(
+  section: HTMLElement | undefined,
+  direction: number,
+  deltaY: number
+): boolean {
+  if (!section) return false;
+  const top = measuredTop(section);
+  const remaining = direction > 0
+    ? top + section.offsetHeight - (window.scrollY + window.innerHeight)
+    : window.scrollY - top;
+  return remaining > 8 && Math.abs(deltaY) >= remaining;
+}
 
-      const targetTop = measuredTop(sections[nearestIndex]);
-      if (Math.abs(window.scrollY - targetTop) > 8) {
-        scrollToSection(nearestIndex, { immediate: false });
-      }
-    }, 140);
-  };
+function clearTallSectionExit(): void {
+  tallSectionExitIndex = -1;
+  tallSectionExitDirection = 0;
+  tallSectionExitReadyAt = 0;
+  tallSectionExitGestureReleased = false;
+}
 
-  window.addEventListener("scroll", settle, { passive: true });
+function settleTallSectionEdge(
+  section: HTMLElement | undefined,
+  direction: number
+): void {
+  if (!section) return;
+  const top = measuredTop(section);
+  const edge = direction > 0
+    ? top + section.offsetHeight - window.innerHeight
+    : top;
+  const root = document.documentElement;
+  const previousScrollBehavior = root.style.scrollBehavior;
+  root.style.scrollBehavior = "auto";
+  window.scrollTo({ top: edge, behavior: "auto" });
+  root.style.scrollBehavior = previousScrollBehavior;
 }
 
 /** Top progress bar fill. */
@@ -416,30 +482,45 @@ function createSectionTransition(
   id: string
 ): gsap.core.Timeline {
   const direction = targetIndex > currentIndex ? 1 : -1;
-  const stage = createSectionTransitionStage(
-    sectionEls[currentIndex],
-    sectionEls[targetIndex],
-    y
-  );
-  const outgoingConfig = getSectionTransitionConfig(sectionEls[currentIndex]);
+  const target = sectionEls[targetIndex];
   const incomingConfig = getSectionTransitionConfig(sectionEls[targetIndex]);
-  const duration = getTransitionDuration(
+  const duration = Math.min(.56, getTransitionDuration(
     incomingConfig.duration,
     Math.abs(targetIndex - currentIndex)
-  );
+  ));
+  const incoming = getSectionMotionTargets(target);
   const incomingStagger = getTransitionStagger(
-    stage.incoming.length,
+    incoming.length,
     duration,
     incomingConfig.stagger
   );
-  const enterDelay = Math.min(incomingConfig.enterDelay, duration * 0.18);
-  const cleanupTargets = [...stage.outgoing, ...stage.incoming];
+  const curtain = document.createElement("div");
+  curtain.setAttribute("aria-hidden", "true");
+  curtain.dataset.sectionCurtain = "true";
+  Object.assign(curtain.style, {
+    position: "fixed",
+    inset: "0",
+    zIndex: "9200",
+    pointerEvents: "none",
+    background: "#050505",
+    transformOrigin: direction > 0 ? "center bottom" : "center top",
+  });
+  document.body.append(curtain);
 
-  gsap.set(cleanupTargets, {
+  const stage: SectionTransitionStage = {
+    root: curtain,
+    outgoing: [],
+    incoming,
+    restore: () => curtain.remove(),
+  };
+  const cleanupTargets = [...incoming];
+
+  gsap.set(incoming, {
     willChange: "transform,opacity",
     transformOrigin: "50% 50%",
   });
-  gsap.set(stage.incoming, getIncomingState(incomingConfig, direction));
+  gsap.set(incoming, getIncomingState(incomingConfig, direction));
+  gsap.set(curtain, { scaleY: 0 });
 
   const timeline = gsap.timeline({
     onComplete: () => finishSectionTransition(id, cleanupTargets, stage),
@@ -448,30 +529,42 @@ function createSectionTransition(
 
   timeline
     .to(
-      stage.outgoing,
+      curtain,
       {
-        autoAlpha: 0,
-        ...getOutgoingState(outgoingConfig, direction),
-        duration: Math.min(0.18, duration * 0.38),
-        stagger: Math.min(0.008, outgoingConfig.stagger),
-        ease: "power2.out",
+        scaleY: 1,
+        duration: .24,
+        ease: "power3.inOut",
       },
       0
     )
     .call(() => cueSectionTransition(id), [], 0)
-    .call(() => jumpDocumentBehindStage(y), [], Math.min(0.08, duration * 0.18))
+    .call(() => jumpDocumentBehindStage(y), [], .22)
+    .call(() => {
+      curtain.style.transformOrigin = direction > 0 ? "center top" : "center bottom";
+    }, [], .24)
     .to(
-      stage.incoming,
+      curtain,
+      {
+        scaleY: 0,
+        duration: .34,
+        ease: "power3.inOut",
+      },
+      .24
+    )
+    .to(
+      incoming,
       {
         autoAlpha: 1,
         x: 0,
         y: 0,
         scale: 1,
+        rotation: 0,
+        clipPath: "inset(0% 0 0% 0)",
         duration,
         stagger: incomingStagger,
         ease: incomingConfig.ease,
       },
-      enterDelay
+      .27
     );
 
   return timeline;
@@ -577,10 +670,11 @@ function finishSectionTransition(
   }
   stage?.restore();
   isTransitioning = false;
+  lockWheelGesture();
   scrollTween = null;
   document.documentElement.removeAttribute("data-section-transitioning");
   syncActiveSection(id);
-  ScrollTrigger.refresh();
+  ScrollTrigger.update();
 }
 
 function getSectionMotionTargets(
@@ -625,11 +719,19 @@ function getIncomingState(
   config: Required<SectionTransitionConfig>,
   direction: number
 ): gsap.TweenVars {
+  const clipPath = config.clip === "horizontal"
+    ? direction > 0 ? "inset(0 100% 0 0)" : "inset(0 0 0 100%)"
+    : config.clip === "vertical"
+      ? direction > 0 ? "inset(100% 0 0 0)" : "inset(0 0 100% 0)"
+      : "inset(0% 0 0% 0)";
+
   return {
     autoAlpha: 0,
     x: config.x * direction,
     y: config.y * direction,
     scale: config.scale,
+    rotation: config.rotate * direction,
+    clipPath,
   };
 }
 
@@ -637,10 +739,18 @@ function getOutgoingState(
   config: Required<SectionTransitionConfig>,
   direction: number
 ): gsap.TweenVars {
+  const clipPath = config.clip === "horizontal"
+    ? direction > 0 ? "inset(0 0 0 100%)" : "inset(0 100% 0 0)"
+    : config.clip === "vertical"
+      ? direction > 0 ? "inset(0 0 100% 0)" : "inset(100% 0 0 0)"
+      : "inset(0% 0 0% 0)";
+
   return {
     x: config.x ? config.x * direction * -config.exitDistance : 0,
     y: config.y * direction * -config.exitDistance,
     scale: config.exitScale,
+    rotation: config.rotate * direction * -0.5,
+    clipPath,
   };
 }
 

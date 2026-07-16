@@ -1,6 +1,7 @@
 ---
 import "../../styles/global.css";
 import "../../styles/utilities.css";
+import "../../styles/v4-layout.css";
 import SectionChrome from "./SectionChrome.astro";
 
 interface Props {
@@ -35,12 +36,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString(
     <meta property="og:image" content={image} />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Fonts: display sans (Space Grotesk) for headings; small pixel HUD
-         (Press Start 2P); Inter body; JetBrains Mono for technical copy. -->
+    <!-- Geist carries the editorial system; JetBrains Mono is reserved for metadata. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
 

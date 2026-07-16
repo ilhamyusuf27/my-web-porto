@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "./tokens.css";
 
+/* Section component styles are bundled here by Astro during development. */
+
 * {
   box-sizing: border-box;
 }
@@ -8,7 +10,7 @@
 html {
   min-height: 100%;
   color-scheme: dark;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   background: var(--crust);
   scrollbar-gutter: stable;
 }

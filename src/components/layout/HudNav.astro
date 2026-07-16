@@ -1,243 +1,73 @@
 ---
-import Icon from "../ui/Icon.astro";
 import { profile } from "../../data/profile";
 
 const navItems = [
-  { id: "hero", label: "System", icon: "mdi:server" },
-  { id: "about", label: "Profile", icon: "mdi:account" },
-  { id: "skills", label: "Matrix", icon: "mdi:code-tags" },
-  { id: "experience", label: "Delivery", icon: "mdi:briefcase-outline" },
-  { id: "projects", label: "Work", icon: "mdi:folder" },
-  { id: "experimental", label: "Lab", icon: "mdi:flask-empty-outline" },
-  { id: "ongoing", label: "Build", icon: "mdi:target" },
-  { id: "education", label: "Records", icon: "mdi:school" },
-  { id: "contact", label: "Contact", icon: "mdi:send" },
+  { id: "about", label: "Profile" },
+  { id: "skills", label: "Capabilities" },
+  { id: "experience", label: "Experience" },
+  { id: "projects", label: "Work" },
+  { id: "contact", label: "Contact" },
 ];
 ---
 
-<nav class="hud" aria-label="Section navigation">
-  <a class="hud__brand" href="#hero" aria-label={`${profile.name} - back to start`}>
-    <span class="hud__brand-mark" aria-hidden="true">{profile.callsign.slice(0, 2).toUpperCase()}</span>
-    <span class="hud__brand-text">{profile.callsign}.dev</span>
+<nav class="nav" aria-label="Primary navigation">
+  <a class="nav__brand" href="#hero" aria-label={`${profile.name} — back to start`}>
+    <span>{profile.name}</span>
+    <small>Frontend developer</small>
   </a>
 
-  <ul class="hud__list" role="list">
-    {
-      navItems.map((item) => (
-        <li>
-          <a
-            class="hud__item"
-            href={`#${item.id}`}
-            data-hud-item={item.id}
-            aria-label={item.label}
-            title={item.label}
-          >
-            <span class="hud__icon">
-              <Icon name={item.icon} size={18} />
-            </span>
-            <span class="hud__text">{item.label}</span>
-            <span class="hud__pip" aria-hidden="true" />
-          </a>
-        </li>
-      ))
-    }
+  <ul class="nav__links" role="list">
+    {navItems.map((item) => (
+      <li>
+        <a href={`#${item.id}`} data-hud-item={item.id}>{item.label}</a>
+      </li>
+    ))}
   </ul>
+
+  <a class="nav__availability" href="#contact">
+    <span aria-hidden="true"></span>
+    Available
+  </a>
 </nav>
 
 <style>
-  .hud {
-    position: fixed;
-    inset: 0;
-    z-index: 9400;
-    pointer-events: none;
-  }
-
-  :global(html[data-modal-open]) .hud {
+  :global(html[data-modal-open]) .nav {
     opacity: 0;
     visibility: hidden;
-  }
-
-  .hud__brand {
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    display: grid;
-    place-items: center;
-    width: 48px;
-    height: 48px;
-    pointer-events: auto;
-    background: rgba(30, 30, 46, 0.78);
-    border: 1px solid rgba(203, 166, 247, 0.42);
-    box-shadow: 2px 2px 0 rgba(17, 17, 27, 0.72);
-    color: var(--mauve);
-    font-family: var(--font-pixel);
-    font-size: 0.7rem;
-  }
-
-  .hud__brand-mark {
-    line-height: 1;
-  }
-
-  .hud__brand-text {
-    display: none;
-  }
-
-  .hud__list {
-    position: fixed;
-    left: 50%;
-    bottom: calc(1rem + env(safe-area-inset-bottom));
-    transform: translateX(-50%);
-    list-style: none;
-    margin: 0;
-    padding: 0.4rem;
-    display: flex;
-    flex-direction: row;
-    gap: 0.25rem;
-    align-items: center;
-    max-width: calc(100vw - 1.5rem);
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    pointer-events: auto;
-    background: rgba(17, 17, 27, 0.82);
-    border: 1px solid var(--border-dim);
-    box-shadow: 0 10px 26px rgba(17, 17, 27, 0.36);
-    backdrop-filter: blur(8px);
-    border-radius: 6px;
-    scrollbar-width: none;
-  }
-
-  .hud__list::-webkit-scrollbar {
-    display: none;
-  }
-
-  .hud__item {
-    position: relative;
-    display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    color: var(--overlay-1);
-    border: 1px solid transparent;
-    border-radius: 4px;
-    transition:
-      color 0.12s ease,
-      background 0.12s ease,
-      border-color 0.12s ease,
-      transform 0.12s ease;
-  }
-
-  .hud__item:hover,
-  .hud__item:focus-visible {
-    transform: translateY(-2px);
-    color: var(--text);
-    background: rgba(49, 50, 68, 0.52);
-    border-color: var(--border-dim);
-  }
-
-  .hud__icon {
-    display: grid;
-    place-items: center;
-  }
-
-  .hud__text {
-    position: absolute;
-    left: 50%;
-    bottom: calc(100% + 0.55rem);
-    transform: translateX(-50%) translateY(2px);
-    white-space: nowrap;
-    background: var(--surface-0);
-    border: 1px solid var(--border-dim);
-    box-shadow: 2px 2px 0 rgba(17, 17, 27, 0.72);
-    padding: 0.3rem 0.6rem;
-    font-family: var(--font-pixel);
-    font-size: 0.55rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text);
     pointer-events: none;
-    opacity: 0;
-    transition:
-      opacity 0.12s ease,
-      transform 0.12s ease;
   }
 
-  .hud__item:hover .hud__text,
-  .hud__item:focus-visible .hud__text {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9400;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 2rem;
+    min-height: 76px;
+    padding: 0 clamp(1.25rem, 4vw, 4.5rem);
+    color: #f5f5f5;
+    background: rgba(5, 5, 5, 0.88);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(14px);
   }
 
-  .hud__pip {
-    position: absolute;
-    left: 50%;
-    bottom: 5px;
-    transform: translateX(-50%) scaleX(0);
-    width: 16px;
-    height: 2px;
-    background: var(--mauve);
-    box-shadow: none;
-    transition: transform 0.12s ease;
-  }
+  .nav__brand { display: flex; align-items: baseline; gap: .8rem; width: max-content; }
+  .nav__brand span { font-weight: 600; letter-spacing: -.03em; }
+  .nav__brand small { color: #777; font-family: var(--font-mono); font-size: .62rem; }
+  .nav__links { display: flex; align-items: center; gap: clamp(1rem, 2.4vw, 2.2rem); margin: 0; padding: 0; list-style: none; }
+  .nav__links a { position: relative; color: #777; font-size: .78rem; transition: color 400ms cubic-bezier(.32,.72,0,1); }
+  .nav__links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -.55rem; height: 1px; background: #f5f5f5; transform: scaleX(0); transform-origin: right; transition: transform 500ms cubic-bezier(.32,.72,0,1); }
+  .nav__links a:hover, .nav__links a:focus-visible, .nav__links a.is-active { color: #f5f5f5; }
+  .nav__links a:hover::after, .nav__links a:focus-visible::after, .nav__links a.is-active::after { transform: scaleX(1); transform-origin: left; }
+  .nav__availability { justify-self: end; display: inline-flex; align-items: center; gap: .55rem; font-family: var(--font-mono); font-size: .66rem; text-transform: uppercase; letter-spacing: .08em; }
+  .nav__availability span { width: 6px; height: 6px; border-radius: 50%; background: #cba6f7; box-shadow: 0 0 0 4px rgba(203,166,247,.1); }
 
-  /* Active section state, set by hud script */
-  .hud__item[aria-current="true"] {
-    color: var(--text);
-    background: rgba(49, 50, 68, 0.52);
-    border-color: var(--mauve);
-  }
-
-  .hud__item[aria-current="true"] .hud__pip {
-    transform: translateX(-50%) scaleX(1);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hud__item,
-    .hud__text,
-    .hud__pip {
-      transition: none;
-    }
-
-    .hud__item:hover,
-    .hud__item:focus-visible {
-      transform: none;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .hud__brand {
-      top: 0.65rem;
-      left: 0.75rem;
-      width: 42px;
-      height: 36px;
-      font-size: 0.62rem;
-    }
-
-    .hud__list {
-      bottom: calc(0.65rem + env(safe-area-inset-bottom));
-      gap: 0.15rem;
-      padding: 0.32rem;
-      max-width: calc(100vw - 0.9rem);
-    }
-
-    .hud__item {
-      width: 38px;
-      height: 38px;
-    }
-
-    .hud__text {
-      display: none;
-    }
-  }
-
-  @media (max-width: 420px) {
-    .hud__item {
-      width: 34px;
-      height: 36px;
-    }
-
-    .hud__icon :global(svg) {
-      width: 16px;
-      height: 16px;
-    }
+  @media (max-width: 820px) {
+    .nav { grid-template-columns: 1fr auto; min-height: 64px; }
+    .nav__links, .nav__brand small { display: none; }
   }
 </style>
