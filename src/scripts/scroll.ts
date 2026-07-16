@@ -87,13 +87,11 @@ export function initScrollAnimations(): void {
   sectionEls = sections;
 
   if (!prefersReducedMotion) {
-    // Controlled section navigation is desktop/tablet only; touch and
-    // reduced-motion users keep native scrolling.
-    if (!isTouch) {
-      prepareControlledSectionMotion(sections);
-      initControlledSectionNavigation(sections);
-    } else {
+    if (isTouch) {
       initNativeReveals(sections);
+      initAnchorNavigation(sections, true);
+    } else {
+      initFluidSectionSnap(sections);
       initAnchorNavigation(sections, false);
     }
   } else {
@@ -106,9 +104,154 @@ export function initScrollAnimations(): void {
   syncInitialHash(sections);
 }
 
+/**
+ * Reference-style desktop motion: native input remains untouched, section
+ * content softens during the handoff, and ScrollTrigger settles the document
+ * onto the next section after the gesture ends.
+ */
+function initFluidSectionSnap(sections: HTMLElement[]): void {
+  document.documentElement.classList.add("reveal-done");
+  gsap.set("[data-reveal]", {
+    clearProps: "opacity,visibility,transform,filter,willChange",
+  });
+
+  sections.forEach((section, index) => {
+    const inner = section.querySelector<HTMLElement>(".section__inner");
+    if (!inner) return;
+
+    if (index > 0) {
+      gsap.fromTo(
+        inner,
+        {
+          autoAlpha: 0.28,
+          y: 64,
+          scale: 0.988,
+          filter: "blur(7px)",
+        },
+        {
+          autoAlpha: 1,
+          y: 0,
+          scale: 1,
+          filter: "blur(0px)",
+          ease: "none",
+          immediateRender: false,
+          scrollTrigger: {
+            trigger: section,
+            start: "top 92%",
+            end: "top 38%",
+            scrub: 0.38,
+            invalidateOnRefresh: true,
+          },
+        }
+      );
+    }
+
+    if (index < sections.length - 1) {
+      gsap.to(inner, {
+        autoAlpha: 0.28,
+        y: -52,
+        scale: 0.99,
+        filter: "blur(7px)",
+        ease: "none",
+        immediateRender: false,
+        scrollTrigger: {
+          trigger: section,
+          start: "bottom 62%",
+          end: "bottom 8%",
+          scrub: 0.38,
+          invalidateOnRefresh: true,
+        },
+      });
+    }
+  });
+
+  ScrollTrigger.create({
+    start: 0,
+    end: "max",
+    snap: {
+      snapTo: (progress, self) => {
+        const max = ScrollTrigger.maxScroll(window);
+        if (max <= 0) return progress;
+
+        const y = progress * max;
+        const readableTallSection = sections.some((section) => {
+          if (!isTallSection(section)) return false;
+          const top = measuredTop(section);
+          const readableEnd = top + section.offsetHeight - window.innerHeight;
+          return y > top + 24 && y < readableEnd - 24;
+        });
+        if (readableTallSection) return progress;
+
+        const points = sections.map((section) => measuredTop(section) / max);
+        const direction = self?.direction ?? 1;
+        const epsilon = 1 / max;
+
+        if (direction > 0) {
+          return points.find((point) => point >= progress - epsilon)
+            ?? points[points.length - 1];
+        }
+
+        return [...points].reverse().find((point) => point <= progress + epsilon)
+          ?? points[0];
+      },
+      duration: { min: 0.38, max: 0.82 },
+      delay: 0.07,
+      ease: "power4.inOut",
+      inertia: false,
+      onStart: () => {
+        document.documentElement.setAttribute("data-section-transitioning", "true");
+      },
+      onComplete: () => {
+        const section = sections[getNearestSectionIndex(sections)];
+        const id = section?.getAttribute("data-section") ?? section?.id ?? "hero";
+        document.documentElement.removeAttribute("data-section-transitioning");
+        cueSectionTransition(id);
+        syncActiveSection(id);
+      },
+      onInterrupt: () => {
+        document.documentElement.removeAttribute("data-section-transitioning");
+      },
+    },
+  });
+}
+
 /** Lightweight reveal-once animations for native mobile scrolling. */
 function initNativeReveals(sections: HTMLElement[]): void {
   sections.forEach((section) => {
+    const id = section.getAttribute("data-section") ?? section.id;
+    const inner = section.querySelector<HTMLElement>(".section__inner");
+    const sectionMotion: Record<string, gsap.TweenVars> = {
+      hero: { y: 18, scale: .995 },
+      about: { x: -34, y: 10 },
+      skills: { x: 30, y: 16 },
+      experience: { y: 34, scale: .985 },
+      projects: { x: -24, y: 22, scale: .99 },
+      experimental: { x: 28, y: 26 },
+      education: { y: 30, scale: .975 },
+      contact: { x: -20, y: 34 },
+    };
+
+    if (inner) {
+      gsap.fromTo(
+        inner,
+        { autoAlpha: .56, ...(sectionMotion[id] ?? { y: 24 }) },
+        {
+          autoAlpha: 1,
+          x: 0,
+          y: 0,
+          scale: 1,
+          duration: .58,
+          ease: "power4.out",
+          clearProps: "opacity,visibility,transform,willChange",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 90%",
+            once: true,
+          },
+        }
+      );
+    }
+
     const items = section.querySelectorAll<HTMLElement>("[data-reveal]");
     if (!items.length) return;
 
@@ -118,12 +261,12 @@ function initNativeReveals(sections: HTMLElement[]): void {
       {
         y: 0,
         opacity: 1,
-        duration: 0.55,
-        stagger: 0.07,
-        ease: "power3.out",
+        duration: 0.46,
+        stagger: 0.045,
+        ease: "power4.out",
         scrollTrigger: {
           trigger: section,
-          start: "top 78%",
+          start: "top 76%",
           once: true,
         },
       }
@@ -482,90 +625,52 @@ function createSectionTransition(
   id: string
 ): gsap.core.Timeline {
   const direction = targetIndex > currentIndex ? 1 : -1;
+  const current = sectionEls[currentIndex];
   const target = sectionEls[targetIndex];
-  const incomingConfig = getSectionTransitionConfig(sectionEls[targetIndex]);
-  const duration = Math.min(.56, getTransitionDuration(
-    incomingConfig.duration,
-    Math.abs(targetIndex - currentIndex)
-  ));
-  const incoming = getSectionMotionTargets(target);
-  const incomingStagger = getTransitionStagger(
-    incoming.length,
-    duration,
-    incomingConfig.stagger
+  const outgoing = current?.querySelector<HTMLElement>(".section__inner");
+  const incoming = target?.querySelector<HTMLElement>(".section__inner");
+  const cleanupTargets = [outgoing, incoming].filter(
+    (item): item is HTMLElement => Boolean(item)
   );
-  const curtain = document.createElement("div");
-  curtain.setAttribute("aria-hidden", "true");
-  curtain.dataset.sectionCurtain = "true";
-  Object.assign(curtain.style, {
-    position: "fixed",
-    inset: "0",
-    zIndex: "9200",
-    pointerEvents: "none",
-    background: "#050505",
-    transformOrigin: direction > 0 ? "center bottom" : "center top",
-  });
-  document.body.append(curtain);
 
-  const stage: SectionTransitionStage = {
-    root: curtain,
-    outgoing: [],
-    incoming,
-    restore: () => curtain.remove(),
-  };
-  const cleanupTargets = [...incoming];
-
-  gsap.set(incoming, {
-    willChange: "transform,opacity",
-    transformOrigin: "50% 50%",
-  });
-  gsap.set(incoming, getIncomingState(incomingConfig, direction));
-  gsap.set(curtain, { scaleY: 0 });
+  gsap.set(cleanupTargets, { willChange: "transform,opacity,filter" });
+  if (incoming) {
+    gsap.set(incoming, {
+      autoAlpha: 0.28,
+      y: 64 * direction,
+      scale: 0.988,
+      filter: "blur(7px)",
+    });
+  }
 
   const timeline = gsap.timeline({
-    onComplete: () => finishSectionTransition(id, cleanupTargets, stage),
-    onInterrupt: () => finishSectionTransition(id, cleanupTargets, stage),
+    onComplete: () => finishSectionTransition(id, cleanupTargets),
+    onInterrupt: () => finishSectionTransition(id, cleanupTargets),
   });
 
   timeline
-    .to(
-      curtain,
-      {
-        scaleY: 1,
-        duration: .24,
-        ease: "power3.inOut",
-      },
-      0
-    )
     .call(() => cueSectionTransition(id), [], 0)
-    .call(() => jumpDocumentBehindStage(y), [], .22)
-    .call(() => {
-      curtain.style.transformOrigin = direction > 0 ? "center top" : "center bottom";
-    }, [], .24)
-    .to(
-      curtain,
-      {
-        scaleY: 0,
-        duration: .34,
-        ease: "power3.inOut",
-      },
-      .24
-    )
-    .to(
-      incoming,
-      {
-        autoAlpha: 1,
-        x: 0,
-        y: 0,
-        scale: 1,
-        rotation: 0,
-        clipPath: "inset(0% 0 0% 0)",
-        duration,
-        stagger: incomingStagger,
-        ease: incomingConfig.ease,
-      },
-      .27
-    );
+    .to(window, {
+      scrollTo: { y, autoKill: false },
+      duration: 0.78,
+      ease: "power4.inOut",
+    }, 0)
+    .to(outgoing, {
+      autoAlpha: 0.28,
+      y: -48 * direction,
+      scale: 0.99,
+      filter: "blur(7px)",
+      duration: 0.34,
+      ease: "power2.in",
+    }, 0)
+    .to(incoming, {
+      autoAlpha: 1,
+      y: 0,
+      scale: 1,
+      filter: "blur(0px)",
+      duration: 0.52,
+      ease: "power4.out",
+    }, 0.26);
 
   return timeline;
 }
@@ -665,7 +770,7 @@ function finishSectionTransition(
   if (cleanupTargets.length) {
     gsap.set(cleanupTargets, {
       clearProps:
-        "opacity,visibility,transform,transformOrigin,clipPath,willChange",
+        "opacity,visibility,transform,transformOrigin,clipPath,filter,willChange",
     });
   }
   stage?.restore();

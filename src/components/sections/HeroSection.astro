@@ -4,14 +4,15 @@ import { profile } from "../../data/profile";
 ---
 
 <Section id="hero" label="System Online" index="00" class="section--hero">
-  <div class="hero" data-reveal>
-    <p class="hero__intro">Ilham Yusuf — frontend developer</p>
+  <div class="hero" data-reveal data-hero-root>
+    <p class="hero__intro" data-hero-intro>Ilham Yusuf - frontend developer</p>
 
     <h1 id="hero-title" class="hero__title">
-      I build interfaces<br />for real systems.
+      <span class="hero__line-mask"><span data-hero-line>I build interfaces</span></span>
+      <span class="hero__line-mask"><span data-hero-line>for real systems.</span></span>
     </h1>
 
-    <div class="hero__footer">
+    <div class="hero__footer" data-hero-footer>
       <p>{profile.tagline}</p>
       <div class="hero__actions">
         <a class="hero__primary" href="#projects">View selected work <span>↗</span></a>
@@ -19,33 +20,79 @@ import { profile } from "../../data/profile";
       </div>
     </div>
 
-    <aside class="hero__status" aria-label="Current availability">
+    <aside class="hero__status" data-hero-status aria-label="Current availability">
       <span>Based in Indonesia</span>
       <span>{profile.availability}</span>
     </aside>
   </div>
 </Section>
 
+<script>
+  import gsap from "gsap";
+
+  const hero = document.querySelector<HTMLElement>("[data-hero-root]");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (hero && !reduceMotion) {
+    const intro = hero.querySelector<HTMLElement>("[data-hero-intro]");
+    const lines = hero.querySelectorAll<HTMLElement>("[data-hero-line]");
+    const footer = hero.querySelector<HTMLElement>("[data-hero-footer]");
+    const status = hero.querySelector<HTMLElement>("[data-hero-status]");
+    const animated = [intro, ...lines, footer, status].filter(Boolean);
+
+    gsap.set(animated, { willChange: "transform,opacity,filter" });
+
+    gsap.timeline({
+      defaults: { ease: "power4.out" },
+      onComplete: () => gsap.set(animated, { clearProps: "willChange" }),
+    })
+      .fromTo(intro, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: .48 })
+      .fromTo(
+        lines,
+        { autoAlpha: 0, yPercent: 112, filter: "blur(5px)" },
+        { autoAlpha: 1, yPercent: 0, filter: "blur(0px)", duration: .88, stagger: .1 },
+        "-=.24"
+      )
+      .fromTo(
+        footer,
+        { autoAlpha: 0, y: 30 },
+        { autoAlpha: 1, y: 0, duration: .66 },
+        "-=.48"
+      )
+      .fromTo(
+        status,
+        { autoAlpha: 0, x: 18 },
+        { autoAlpha: 1, x: 0, duration: .58 },
+        "-=.62"
+      );
+  }
+</script>
+
 <style>
   .hero { position: relative; display: grid; align-content: center; min-height: calc(100dvh - 9rem); padding-top: 3rem; }
-  .hero__intro { margin-bottom: clamp(2rem, 6vh, 4.5rem); font-family: var(--font-mono); font-size: .7rem; color: #8a8a8a; text-transform: uppercase; letter-spacing: .12em; }
+  .hero__intro { margin-bottom: clamp(2rem, 6vh, 4.5rem); font-family: var(--font-mono); font-size: .7rem; color: #bec6d3; text-transform: uppercase; letter-spacing: .12em; }
   .hero__title { max-width: 1100px; font-size: clamp(4rem, 10vw, 9rem); font-weight: 500; line-height: .86; letter-spacing: -.075em; text-wrap: balance; }
+  .hero__line-mask, .hero__line-mask > span { display: block; }
+  .hero__line-mask { overflow: hidden; padding-bottom: .08em; margin-bottom: -.08em; }
   .hero__title::first-line { color: #f2f2f2; }
   .hero__footer { display: grid; grid-template-columns: minmax(240px, 430px) auto; align-items: end; justify-content: space-between; gap: 3rem; margin-top: clamp(2.5rem, 7vh, 5rem); }
-  .hero__footer > p { color: #8a8a8a; font-size: clamp(1rem, 1.5vw, 1.15rem); line-height: 1.55; }
+  .hero__footer > p { color: #bec6d3; font-size: clamp(1rem, 1.5vw, 1.15rem); line-height: 1.55; }
   .hero__actions { display: flex; align-items: center; gap: 1.5rem; }
   .hero__primary { display: inline-flex; align-items: center; gap: 1.1rem; padding: .6rem .65rem .6rem 1.25rem; border-radius: 999px; color: #050505; background: #f2f2f2; font-size: .82rem; transition: transform 500ms cubic-bezier(.32,.72,0,1), background 500ms cubic-bezier(.32,.72,0,1); }
   .hero__primary span { display: grid; place-items: center; width: 2.1rem; height: 2.1rem; border-radius: 50%; background: #101010; color: #fff; transition: transform 500ms cubic-bezier(.32,.72,0,1); }
   .hero__primary:hover { transform: scale(.98); background: #fff; }
   .hero__primary:hover span { transform: translate(2px,-2px); }
-  .hero__link { color: #aaa; font-size: .8rem; border-bottom: 1px solid #555; padding-bottom: .25rem; transition: color 350ms cubic-bezier(.32,.72,0,1), border-color 350ms cubic-bezier(.32,.72,0,1); }
+  .hero__link { color: #d0d5de; font-size: .8rem; border-bottom: 1px solid var(--divider-line-strong); padding-bottom: .25rem; transition: color 350ms cubic-bezier(.32,.72,0,1), border-color 350ms cubic-bezier(.32,.72,0,1); }
   .hero__link:hover { color: #fff; border-color: #fff; }
-  .hero__status { position: absolute; top: 3rem; right: 0; display: grid; justify-items: end; gap: .35rem; color: #666; font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .08em; }
+  .hero__status { position: absolute; top: 3rem; right: 0; display: grid; justify-items: end; gap: .35rem; color: #929bad; font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .08em; }
   @media (max-width: 720px) {
     .hero { min-height: calc(100dvh - 7rem); }
     .hero__title { font-size: clamp(3.4rem, 17vw, 6rem); line-height: .9; }
     .hero__footer { grid-template-columns: 1fr; gap: 2rem; }
     .hero__actions { align-items: flex-start; flex-direction: column; gap: 1rem; }
     .hero__status { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero__line-mask { overflow: visible; }
   }
 </style>

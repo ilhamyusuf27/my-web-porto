@@ -48,6 +48,13 @@ export function initModal(): void {
   const dataEl = document.getElementById("project-data");
   if (!modal || !dataEl) return;
 
+  // The Work section is transformed during section transitions. A fixed
+  // descendant would use that section as its containing block instead of the
+  // viewport, so keep the dialog at the document root.
+  if (modal.parentElement !== document.body) {
+    document.body.append(modal);
+  }
+
   let projects: ProjectPayload[] = [];
   try {
     projects = JSON.parse(dataEl.textContent || "[]");

@@ -57,7 +57,7 @@ const { id, titleId = `${id}-title`, class: className = "" } = Astro.props;
   .modal__backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(17, 17, 27, 0.82);
+    background: rgba(10, 13, 23, 0.76);
     backdrop-filter: blur(2px);
   }
 
@@ -68,7 +68,7 @@ const { id, titleId = `${id}-title`, class: className = "" } = Astro.props;
     max-height: min(82vh, 820px);
     display: flex;
     flex-direction: column;
-    background: var(--base);
+    background: var(--surface-panel-strong);
     box-shadow: 6px 6px 0 rgba(17, 17, 27, 0.82), 0 0 32px rgba(203, 166, 247, 0.06);
     animation: modal-in 0.18s ease-out;
   }

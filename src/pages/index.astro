@@ -10,6 +10,7 @@ import ProjectsSection from "../components/sections/ProjectsSection.astro";
 import ExperimentalSection from "../components/sections/ExperimentalSection.astro";
 import EducationSection from "../components/sections/EducationSection.astro";
 import ContactSection from "../components/sections/ContactSection.astro";
+import ConsoleBackgroundScene from "../components/scene/ConsoleBackgroundScene.astro";
 import { profile } from "../data/profile";
 ---
 
@@ -17,6 +18,7 @@ import { profile } from "../data/profile";
   title={`${profile.name} - ${profile.role} | Production Systems Portfolio`}
   description="Ilham Yusuf is a frontend developer with fullstack range, building maintainable web interfaces, client systems, and reliability-minded product experiences."
 >
+  <ConsoleBackgroundScene slot="ambient" />
   <ScrollProgress slot="nav" />
   <HudNav slot="nav" />
   <HeroSection />
