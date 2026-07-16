@@ -8,6 +8,7 @@ dist/
 node_modules/
 
 # logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -16,12 +17,20 @@ pnpm-debug.log*
 # environment variables
 .env
 .env.production
+.env.*
+!.env.example
+
+# local caches and test output
+.cache/
+coverage/
+*.tsbuildinfo
 
 # macOS-specific files
 .DS_Store
 
 # jetbrains setting folder
 .idea/
+.vscode/
 
 yarn.lock
 
@@ -30,3 +39,7 @@ PROGRESS.md
 
 # local design reference assets (kept on disk, not versioned)
 references/
+
+# superseded local scene and unused generated concept art
+src/components/scene/AmbientSystemScene.ts
+public/assets/images/capabilities-system-fabric.png

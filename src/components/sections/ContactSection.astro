@@ -1,515 +1,132 @@
 ---
 import Section from "../layout/Section.astro";
-import PixelButton from "../ui/PixelButton.astro";
 import Icon from "../ui/Icon.astro";
 import { socials, resumeUrl } from "../../data/socials";
 import { profile } from "../../data/profile";
 
-const email = socials.find((s) => s.id === "email");
-const channelLinks = socials.filter((s) => s.id !== "email");
-
-const endpointRows = [
-  { label: "Status", value: profile.availability },
-  { label: "Location", value: "Indonesia · GMT+7" },
-  { label: "Focus", value: "Frontend, fullstack, reliability" },
-  { label: "Availability", value: "Freelance and remote conversations" },
-];
+const email = socials.find((social) => social.id === "email");
+const channelLinks = socials.filter((social) => social.id !== "email");
 ---
 
-<Section id="contact" label="Contact" index="08" accent="mauve" class="section--dense">
-  <div class="contact" data-reveal>
-    <section class="contact__main" aria-labelledby="contact-title">
-      <span class="contact__state">
+<Section id="contact" label="Contact" index="07" accent="mauve" class="section--contact-final">
+  <div class="handshake" data-handshake>
+    <header class="handshake__header">
+      <div class="handshake__availability">
         <span aria-hidden="true"></span>
-        available to talk
-      </span>
-
-      <h2 id="contact-title" class="contact__title">Get in touch</h2>
-      <p class="contact__copy">
-        If you need a frontend developer who can also work across backend and
-        reliability concerns, I am open to talk.
-      </p>
-
-      <div class="contact__actions" aria-label="Primary contact actions">
-        {email && (
-          <PixelButton
-            href={email.url}
-            icon="mdi:send"
-            variant="primary"
-            class="contact__email-btn"
-          >
-            Send message
-          </PixelButton>
-        )}
-        <PixelButton
-          href={resumeUrl}
-          iconRight="mdi:download"
-          variant="ghost"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Download CV
-        </PixelButton>
+        {profile.availability}
       </div>
+      <p>Frontend engineering, full-stack delivery, and reliability-minded product work.</p>
+    </header>
 
-      <div class="contact__channels" aria-label="Secondary contact channels">
-        <p class="contact__channels-title">Secondary channels</p>
+    <main class="handshake__main">
+      <h2 id="contact-title">Let’s build<br />something <span>reliable.</span></h2>
+
+      {email && (
+        <a class="handshake__email" href={email.url} data-contact-email>
+          <span>Start a conversation</span>
+          <strong>{email.handle}</strong>
+          <span class="handshake__arrow" aria-hidden="true">
+            <Icon name="mdi:arrow-top-right" size={30} />
+          </span>
+        </a>
+      )}
+    </main>
+
+    <footer class="handshake__footer">
+      <nav aria-label="Contact channels">
         <ul role="list">
-          {
-            channelLinks.map((social) => (
-              <li>
-                <a
-                  class="contact__channel"
-                  href={social.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={`${social.label}: ${social.handle}`}
-                >
-                  <Icon name={social.icon} size={18} aria-hidden="true" />
-                  <span>
-                    <strong>{social.label}</strong>
-                    <small>{social.handle}</small>
-                  </span>
-                  <Icon
-                    name="mdi:open-in-new"
-                    size={14}
-                    class="contact__channel-ext"
-                    aria-hidden="true"
-                  />
-                </a>
-              </li>
-            ))
-          }
+          {channelLinks.map((social) => (
+            <li>
+              <a href={social.url} target="_blank" rel="noreferrer">
+                <Icon name={social.icon} size={18} aria-hidden="true" />
+                <span>{social.label}</span>
+                <small>{social.handle}</small>
+              </a>
+            </li>
+          ))}
+          <li>
+            <a href={resumeUrl} target="_blank" rel="noreferrer">
+              <Icon name="mdi:file-download-outline" size={18} aria-hidden="true" />
+              <span>Resume</span>
+              <small>Download PDF</small>
+            </a>
+          </li>
         </ul>
+      </nav>
+
+      <div class="handshake__meta">
+        <span>Indonesia, GMT+7</span>
+        <span>Open to remote collaboration</span>
       </div>
-    </section>
-
-    <aside class="contact__endpoint" aria-labelledby="endpoint-title">
-      <div class="contact__endpoint-head">
-        <div>
-          <p class="contact__endpoint-kicker">Contact</p>
-          <h3 id="endpoint-title">Direct email</h3>
-        </div>
-        <span class="contact__endpoint-status">open</span>
-      </div>
-
-      {
-        email && (
-          <a class="contact__email" href={email.url}>
-            <span>Primary email</span>
-            <strong>{email.handle}</strong>
-            <Icon name="mdi:arrow-right" size={16} aria-hidden="true" />
-          </a>
-        )
-      }
-
-      <dl class="contact__protocol">
-        {
-          endpointRows.map((row) => (
-            <div>
-              <dt>{row.label}</dt>
-              <dd>{row.value}</dd>
-            </div>
-          ))
-        }
-      </dl>
-
-      <p class="contact__ready">
-        <span aria-hidden="true"></span>
-        ready for remote work · {profile.callsign}.dev
-      </p>
-    </aside>
+    </footer>
   </div>
 </Section>
 
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const root = document.querySelector<HTMLElement>("[data-handshake]");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (root && !reduceMotion) {
+    const titleLines = root.querySelectorAll<HTMLElement>(".handshake__main h2, .handshake__header > *");
+    const email = root.querySelector<HTMLElement>("[data-contact-email]");
+    const footerItems = root.querySelectorAll<HTMLElement>(".handshake__footer li, .handshake__meta span");
+
+    const timeline = gsap.timeline({
+      scrollTrigger: { trigger: root, start: "top 72%", once: true },
+    });
+
+    timeline
+      .fromTo(titleLines, { autoAlpha: 0, y: 72 }, { autoAlpha: 1, y: 0, duration: .9, stagger: .08, ease: "power3.out" })
+      .fromTo(email, { autoAlpha: 0, scaleX: .72, transformOrigin: "left center" }, { autoAlpha: 1, scaleX: 1, duration: .72, ease: "power3.out" }, "-=.45")
+      .fromTo(footerItems, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: .55, stagger: .05, ease: "power2.out" }, "-=.3");
+  }
+</script>
+
 <style>
-  .contact {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1.08fr) minmax(340px, 0.78fr);
-    align-items: center;
-    gap: clamp(1.2rem, 3.4vw, 2.4rem);
+  :global(.section--contact-final) { min-height: 100dvh; padding-block: clamp(8rem, 14vh, 11rem) max(5rem, var(--dock-clearance)) !important; }
+  .handshake { min-height: min(760px, calc(100dvh - 12rem)); display: grid; grid-template-rows: auto 1fr auto; gap: clamp(4rem, 9vh, 7rem); }
+  .handshake__header { display: flex; justify-content: space-between; gap: 2rem; align-items: start; }
+  .handshake__availability { display: inline-flex; align-items: center; gap: .65rem; color: #b795d9; font-family: var(--font-mono); font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; }
+  .handshake__availability > span { width: 7px; height: 7px; background: #cba6f7; animation: signal 2.4s ease-in-out infinite; }
+  .handshake__header > p { max-width: 39ch; color: #a3acbe; line-height: 1.6; }
+  .handshake__main { display: grid; align-content: center; gap: clamp(3rem, 7vh, 5rem); }
+  .handshake h2 { max-width: 12ch; font-size: clamp(4rem, 9.2vw, 9.5rem); line-height: .84; letter-spacing: -.075em; }
+  .handshake h2 span { color: #a7b0c1; font-weight: 400; }
+  .handshake__email { position: relative; display: grid; grid-template-columns: minmax(170px, .35fr) minmax(0, 1fr) auto; gap: 2rem; align-items: center; padding: 1.5rem 0; border-top: 1px solid var(--divider-line-strong); border-bottom: 1px solid var(--divider-line); transition: padding .35s cubic-bezier(.16,1,.3,1), border-color .35s ease; }
+  .handshake__email > span:first-child { color: #a3acbe; font-family: var(--font-mono); font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; }
+  .handshake__email strong { min-width: 0; overflow: hidden; color: #e7e7e7; font-size: clamp(1.35rem, 3.1vw, 3rem); font-weight: 500; letter-spacing: -.04em; text-overflow: ellipsis; white-space: nowrap; }
+  .handshake__arrow { display: grid; place-items: center; width: 3.5rem; height: 3.5rem; color: #cba6f7; border: 1px solid #463c50; transition: transform .35s cubic-bezier(.16,1,.3,1), background .35s ease, color .35s ease; }
+  .handshake__email:hover, .handshake__email:focus-visible { padding-inline: 1.25rem; border-color: #8d70aa; outline: none; }
+  .handshake__email:hover .handshake__arrow, .handshake__email:focus-visible .handshake__arrow { color: #111; background: #cba6f7; transform: rotate(8deg); }
+  .handshake__email:active .handshake__arrow { transform: scale(.96); }
+  .handshake__footer { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3rem; align-items: end; padding-top: 2rem; border-top: 1px solid var(--divider-line); }
+  .handshake__footer ul { display: flex; flex-wrap: wrap; gap: 1rem 2.5rem; margin: 0; padding: 0; list-style: none; }
+  .handshake__footer a { display: grid; grid-template-columns: auto auto; gap: .18rem .6rem; align-items: center; color: #d0d5de; transition: color .25s ease, transform .25s cubic-bezier(.16,1,.3,1); }
+  .handshake__footer a:hover, .handshake__footer a:focus-visible { color: #e9e9e9; transform: translateY(-2px); outline: none; }
+  .handshake__footer a :global(svg) { grid-row: 1 / span 2; color: #a786c6; }
+  .handshake__footer a span { font-size: .85rem; font-weight: 600; }
+  .handshake__footer a small { color: #929bad; font-family: var(--font-mono); font-size: .62rem; }
+  .handshake__meta { display: grid; gap: .55rem; justify-items: end; color: #929bad; font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .06em; }
+  @keyframes signal { 0%,100% { opacity: .45; transform: scale(.8); } 50% { opacity: 1; transform: scale(1); } }
+  @media (max-width: 760px) {
+    :global(.section--contact-final) { padding-block: 7rem max(6rem, var(--dock-clearance)) !important; }
+    .handshake { min-height: auto; }
+    .handshake__header { display: grid; }
+    .handshake h2 { font-size: clamp(3.8rem, 18vw, 6rem); }
+    .handshake__email { grid-template-columns: 1fr auto; gap: 1rem; }
+    .handshake__email > span:first-child { grid-column: 1 / -1; }
+    .handshake__email strong { font-size: clamp(1rem, 5vw, 1.5rem); }
+    .handshake__footer { grid-template-columns: 1fr; }
+    .handshake__footer ul { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .handshake__meta { justify-items: start; }
   }
-
-  .contact::before {
-    content: "";
-    position: absolute;
-    top: 53%;
-    left: 48%;
-    right: 35%;
-    height: 1px;
-    pointer-events: none;
-    background: linear-gradient(
-      to right,
-      transparent,
-      rgba(203, 166, 247, 0.34),
-      rgba(147, 153, 178, 0.18),
-      transparent
-    );
-  }
-
-  .contact__main,
-  .contact__endpoint {
-    position: relative;
-    min-width: 0;
-  }
-
-  .contact__main {
-    display: grid;
-    align-content: center;
-    gap: clamp(0.82rem, 2vh, 1.1rem);
-    padding-block: clamp(0.4rem, 1.6vh, 1rem);
-  }
-
-  .contact__state,
-  .contact__copy,
-  .contact__channels-title,
-  .contact__channel small,
-  .contact__endpoint-kicker,
-  .contact__endpoint-status,
-  .contact__protocol,
-  .contact__email span,
-  .contact__ready {
-    font-family: var(--font-mono);
-  }
-
-  .contact__state {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    width: fit-content;
-    color: var(--mauve);
-    font-size: 0.68rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .contact__state span,
-  .contact__ready span {
-    width: 7px;
-    height: 7px;
-    background: var(--mauve);
-    box-shadow: 0 0 0 4px rgba(203, 166, 247, 0.08);
-  }
-
-  .contact__title {
-    margin: 0;
-    max-width: 10ch;
-    font-size: clamp(2.15rem, 6vw, 4rem);
-    line-height: 0.98;
-    letter-spacing: 0;
-    color: var(--text);
-  }
-
-  .contact__copy {
-    max-width: 54ch;
-    margin: 0;
-    color: var(--subtext-1);
-    font-size: clamp(0.95rem, 1.35vw, 1.05rem);
-    line-height: 1.58;
-  }
-
-  .contact__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.8rem;
-  }
-
-  .contact__channels {
-    display: grid;
-    gap: 0.62rem;
-    margin-top: clamp(0.3rem, 1.2vh, 0.65rem);
-    padding-top: clamp(0.78rem, 1.6vh, 1rem);
-    border-top: 1px solid rgba(147, 153, 178, 0.16);
-  }
-
-  .contact__channels-title {
-    margin: 0;
-    color: var(--subtext-0);
-    font-size: 0.66rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .contact__channels ul {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.5rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .contact__channel {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 0.65rem;
-    min-height: 3.9rem;
-    padding: 0.68rem 0.78rem;
-    border: 1px solid rgba(147, 153, 178, 0.18);
-    border-left-color: rgba(203, 166, 247, 0.28);
-    background: rgba(24, 24, 37, 0.42);
-    transition:
-      transform 0.14s ease,
-      border-color 0.14s ease,
-      background 0.14s ease;
-  }
-
-  .contact__channel:hover,
-  .contact__channel:focus-visible {
-    transform: translateY(-2px);
-    border-color: rgba(203, 166, 247, 0.36);
-    background: rgba(49, 50, 68, 0.42);
-  }
-
-  .contact__channel :global(svg:first-child) {
-    color: var(--mauve);
-  }
-
-  .contact__channel span {
-    display: grid;
-    gap: 0.16rem;
-    min-width: 0;
-  }
-
-  .contact__channel strong {
-    color: var(--text);
-    font-family: var(--font-heading);
-    font-size: 0.96rem;
-    font-weight: 650;
-  }
-
-  .contact__channel small {
-    overflow: hidden;
-    color: var(--subtext-0);
-    font-size: 0.72rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .contact__channel-ext {
-    color: var(--overlay-0);
-  }
-
-  .contact__endpoint {
-    display: grid;
-    grid-template-rows: auto auto 1fr auto;
-    gap: clamp(0.82rem, 1.8vh, 1rem);
-    padding: clamp(1rem, 2vw, 1.35rem);
-    border: 1px solid var(--border-dim);
-    border-top-color: rgba(203, 166, 247, 0.38);
-    background:
-      linear-gradient(225deg, rgba(203, 166, 247, 0.045), transparent 38%),
-      rgba(24, 24, 37, 0.76);
-    box-shadow: var(--pixel-shadow);
-    overflow: hidden;
-  }
-
-  .contact__endpoint::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image:
-      linear-gradient(rgba(147, 153, 178, 0.045) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(147, 153, 178, 0.035) 1px, transparent 1px);
-    background-size: 34px 34px;
-    mask-image: linear-gradient(to bottom, black, transparent 82%);
-  }
-
-  .contact__endpoint-head,
-  .contact__email,
-  .contact__protocol,
-  .contact__ready {
-    position: relative;
-    z-index: 1;
-  }
-
-  .contact__endpoint-head {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem;
-    padding-bottom: 0.85rem;
-    border-bottom: 1px solid rgba(147, 153, 178, 0.2);
-  }
-
-  .contact__endpoint-kicker {
-    margin: 0 0 0.28rem;
-    color: var(--mauve);
-    font-size: 0.66rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .contact__endpoint h3 {
-    margin: 0;
-    color: var(--text);
-    font-size: clamp(1.1rem, 2.2vw, 1.35rem);
-    line-height: 1.1;
-  }
-
-  .contact__endpoint-status {
-    flex: none;
-    width: fit-content;
-    padding: 0.34rem 0.5rem;
-    border: 1px solid rgba(147, 153, 178, 0.24);
-    color: var(--mauve);
-    font-size: 0.68rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .contact__email {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 0.35rem 0.7rem;
-    align-items: center;
-    padding: clamp(0.92rem, 2vw, 1.1rem);
-    border: 1px solid rgba(203, 166, 247, 0.3);
-    border-left-width: 3px;
-    background:
-      linear-gradient(90deg, rgba(203, 166, 247, 0.08), transparent 54%),
-      rgba(17, 17, 27, 0.42);
-    transition:
-      border-color 0.14s ease,
-      background 0.14s ease,
-      transform 0.14s ease;
-  }
-
-  .contact__email:hover,
-  .contact__email:focus-visible {
-    transform: translateY(-2px);
-    border-color: rgba(203, 166, 247, 0.55);
-    background: rgba(49, 50, 68, 0.36);
-  }
-
-  .contact__email span {
-    grid-column: 1 / -1;
-    color: var(--subtext-0);
-    font-size: 0.62rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .contact__email strong {
-    min-width: 0;
-    color: var(--text);
-    font-family: var(--font-mono);
-    font-size: clamp(1rem, 2vw, 1.18rem);
-    overflow-wrap: anywhere;
-  }
-
-  .contact__email :global(svg) {
-    color: var(--mauve);
-  }
-
-  .contact__protocol {
-    display: grid;
-    align-content: start;
-    margin: 0;
-    border-block: 1px solid rgba(147, 153, 178, 0.16);
-  }
-
-  .contact__protocol div {
-    display: grid;
-    grid-template-columns: minmax(6.5rem, 0.35fr) minmax(0, 1fr);
-    gap: 0.85rem;
-    padding: 0.68rem 0;
-    border-bottom: 1px solid rgba(147, 153, 178, 0.14);
-  }
-
-  .contact__protocol div:last-child {
-    border-bottom: 0;
-  }
-
-  .contact__protocol dt {
-    color: var(--overlay-1);
-    font-size: 0.61rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .contact__protocol dd {
-    margin: 0;
-    color: var(--text);
-    font-size: 0.78rem;
-    line-height: 1.35;
-  }
-
-  .contact__ready {
-    display: flex;
-    align-items: center;
-    gap: 0.45rem;
-    margin: 0;
-    color: var(--subtext-0);
-    font-size: 0.66rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-
-  @media (max-width: 980px) {
-    .contact {
-      grid-template-columns: 1fr;
-      align-items: start;
-    }
-
-    .contact::before {
-      display: none;
-    }
-
-    .contact__main {
-      align-content: start;
-    }
-  }
-
-  @media (max-width: 620px) {
-    .contact__channels ul {
-      grid-template-columns: 1fr;
-    }
-
-    .contact__protocol div {
-      grid-template-columns: 1fr;
-      gap: 0.2rem;
-    }
-  }
-
-  @media (max-height: 780px) and (min-width: 981px) {
-    .contact__title {
-      font-size: clamp(1.95rem, 5vw, 3.35rem);
-    }
-
-    .contact__endpoint {
-      padding: 0.92rem;
-    }
-
-    .contact__copy {
-      font-size: 0.92rem;
-      line-height: 1.48;
-    }
-
-    .contact__channel {
-      min-height: 3.72rem;
-      padding: 0.58rem 0.68rem;
-    }
-
-    .contact__protocol div {
-      padding-block: 0.54rem;
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .contact__channel,
-    .contact__email {
-      transition: none;
-    }
-
-    .contact__channel:hover,
-    .contact__channel:focus-visible,
-    .contact__email:hover,
-    .contact__email:focus-visible {
-      transform: none;
-    }
+    .handshake__availability > span { animation: none; opacity: 1; }
+    .handshake__email, .handshake__arrow, .handshake__footer a { transition: none; }
   }
 </style>

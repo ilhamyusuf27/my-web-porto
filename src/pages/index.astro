@@ -2,16 +2,15 @@
 import BaseLayout from "../components/layout/BaseLayout.astro";
 import ScrollProgress from "../components/layout/ScrollProgress.astro";
 import HudNav from "../components/layout/HudNav.astro";
-import ConsoleBackgroundScene from "../components/scene/ConsoleBackgroundScene.astro";
 import HeroSection from "../components/sections/HeroSection.astro";
 import AboutSection from "../components/sections/AboutSection.astro";
 import SkillsSection from "../components/sections/SkillsSection.astro";
 import ExperienceSection from "../components/sections/ExperienceSection.astro";
 import ProjectsSection from "../components/sections/ProjectsSection.astro";
 import ExperimentalSection from "../components/sections/ExperimentalSection.astro";
-import OngoingSection from "../components/sections/OngoingSection.astro";
 import EducationSection from "../components/sections/EducationSection.astro";
 import ContactSection from "../components/sections/ContactSection.astro";
+import ConsoleBackgroundScene from "../components/scene/ConsoleBackgroundScene.astro";
 import { profile } from "../data/profile";
 ---
 
@@ -19,17 +18,15 @@ import { profile } from "../data/profile";
   title={`${profile.name} - ${profile.role} | Production Systems Portfolio`}
   description="Ilham Yusuf is a frontend developer with fullstack range, building maintainable web interfaces, client systems, and reliability-minded product experiences."
 >
+  <ConsoleBackgroundScene slot="ambient" />
   <ScrollProgress slot="nav" />
   <HudNav slot="nav" />
-  <ConsoleBackgroundScene slot="ambient" />
-
   <HeroSection />
   <AboutSection />
   <SkillsSection />
   <ExperienceSection />
   <ProjectsSection />
   <ExperimentalSection />
-  <OngoingSection />
   <EducationSection />
   <ContactSection />
 </BaseLayout>

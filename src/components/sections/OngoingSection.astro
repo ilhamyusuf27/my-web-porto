@@ -135,7 +135,7 @@ const displayFocus = (id: string, focus: string) =>
     position: absolute;
     inset: 0;
     pointer-events: none;
-    border-top: 1px solid rgba(203, 166, 247, 0.22);
+    border-top: 1px solid var(--divider-line);
     opacity: 0.82;
   }
 
@@ -212,14 +212,14 @@ const displayFocus = (id: string, focus: string) =>
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0;
     margin: 0;
-    border: 1px solid rgba(147, 153, 178, 0.18);
-    background: rgba(17, 17, 27, 0.22);
+    border: 1px solid var(--divider-line-soft);
+    background: var(--surface-interactive-soft);
   }
 
   .ticket__details div {
     min-width: 0;
     padding: 0.5rem 0.55rem;
-    border-right: 1px solid rgba(147, 153, 178, 0.16);
+    border-right: 1px solid var(--divider-line-soft);
   }
 
   .ticket__details div:last-child {
@@ -277,7 +277,7 @@ const displayFocus = (id: string, focus: string) =>
     background:
       linear-gradient(90deg, rgba(147, 153, 178, 0.12), rgba(147, 153, 178, 0.04)),
       var(--mantle);
-    border: 1px solid rgba(147, 153, 178, 0.24);
+    border: 1px solid var(--divider-line);
     overflow: hidden;
     contain: paint;
   }
@@ -304,7 +304,7 @@ const displayFocus = (id: string, focus: string) =>
     display: grid;
     gap: 0.28rem;
     padding-top: 0.72rem;
-    border-top: 1px dashed rgba(147, 153, 178, 0.22);
+    border-top: 1px dashed var(--divider-line);
     font-family: var(--font-mono);
     color: var(--subtext-0);
   }

@@ -48,6 +48,13 @@ export function initModal(): void {
   const dataEl = document.getElementById("project-data");
   if (!modal || !dataEl) return;
 
+  // The Work section is transformed during section transitions. A fixed
+  // descendant would use that section as its containing block instead of the
+  // viewport, so keep the dialog at the document root.
+  if (modal.parentElement !== document.body) {
+    document.body.append(modal);
+  }
+
   let projects: ProjectPayload[] = [];
   try {
     projects = JSON.parse(dataEl.textContent || "[]");
@@ -274,11 +281,48 @@ function updateGallery(modal: HTMLElement, p: ProjectPayload): void {
 function showModal(modal: HTMLElement): void {
   modal.hidden = false;
   document.documentElement.setAttribute("data-modal-open", "true");
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const backdrop = modal.querySelector<HTMLElement>(".modal__backdrop");
+  const panel = modal.querySelector<HTMLElement>(".modal__panel");
+  backdrop?.animate(
+    [{ opacity: 0 }, { opacity: 1 }],
+    { duration: 360, easing: "cubic-bezier(.16,1,.3,1)" }
+  );
+  panel?.animate(
+    [
+      { opacity: 0, transform: "translateY(38px) scale(.975)" },
+      { opacity: 1, transform: "translateY(0) scale(1)" },
+    ],
+    { duration: 560, easing: "cubic-bezier(.16,1,.3,1)" }
+  );
 }
 
 function hideModal(modal: HTMLElement): void {
-  modal.hidden = true;
   document.documentElement.removeAttribute("data-modal-open");
+  const panel = modal.querySelector<HTMLElement>(".modal__panel");
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !panel) {
+    modal.hidden = true;
+    return;
+  }
+
+  const backdrop = modal.querySelector<HTMLElement>(".modal__backdrop");
+  backdrop?.animate(
+    [{ opacity: 1 }, { opacity: 0 }],
+    { duration: 220, easing: "ease-out", fill: "forwards" }
+  );
+  const closing = panel.animate(
+    [
+      { opacity: 1, transform: "translateY(0) scale(1)" },
+      { opacity: 0, transform: "translateY(24px) scale(.985)" },
+    ],
+    { duration: 260, easing: "cubic-bezier(.4,0,1,1)", fill: "forwards" }
+  );
+  closing.finished.finally(() => {
+    modal.hidden = true;
+    panel.getAnimations().forEach((animation) => animation.cancel());
+    backdrop?.getAnimations().forEach((animation) => animation.cancel());
+  });
 }
 
 function trapFocus(e: KeyboardEvent, modal: HTMLElement): void {

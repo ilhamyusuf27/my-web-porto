@@ -1,292 +1,309 @@
 ---
 import Section from "../layout/Section.astro";
-import Icon from "../ui/Icon.astro";
 import { projects } from "../../data/projects";
+import { ongoingBuilds } from "../../data/profile";
 
 const experiments = projects.filter(
-  (p) => p.category === "experimental" || p.status === "experimental"
+  (project) => project.category === "experimental" || project.status === "experimental"
 );
 
-// Notes from small tests and prototype work (no roadmap/status claims).
-const labNotes = [
-  {
-    icon: "mdi:cube",
-    title: "WebGL / Three.js tests",
-    note: "Small rendering trials, procedural geometry, and scroll-linked scene notes.",
-  },
-  {
-    icon: "mdi:sparkles",
-    title: "GSAP timing tests",
-    note: "ScrollTrigger timing, staged reveals, and reusable motion patterns.",
-  },
-  {
-    icon: "mdi:api",
-    title: "Assistant-tooling spike",
-    note: "Provider configuration, API handoff ideas, and workflow notes.",
-  },
+const researchNotes = [
+  ["Rendering", "Shader rendering and scroll-linked WebGL trials."],
+  ["Motion", "GSAP timing studies and reusable transition patterns."],
+  ["Tooling", "Provider configuration and assistant workflow spikes."],
 ];
+
+const experimentFunctions = ["Grammar", "Rewrite", "Translation"];
+const featuredExperiment = experiments[0];
+
+const phase = (progress: number) => {
+  if (progress >= 70) return "Refining";
+  if (progress >= 55) return "Building";
+  return "Exploring";
+};
 ---
 
-<Section id="experimental" label="Experiments" index="05" accent="mauve" class="section--dense">
-  <header class="lab__head" data-reveal>
-    <h2 class="lab__title">Experiments</h2>
-    <p class="lab__sub">Small prototypes and technical tests kept as a lab archive: what I tried, what changed, and what I learned.</p>
-  </header>
+<Section id="experimental" label="R&D and Build Queue" index="05" class="section--research">
+  <div class="research" data-reveal data-research>
+    <header class="research__head">
+      <h2>
+        <span data-research-heading>Testing ideas.</span>
+        <span data-research-heading>Building the useful ones.</span>
+      </h2>
+      <p>
+        Small technical tests that earn their place by improving a real
+        interface or delivery workflow.
+      </p>
+    </header>
 
-  <div class="lab">
-    <div class="lab__chambers">
-      {
-        experiments.map((exp) => {
-          const goal = exp.outcomes?.find((o) => {
-            const label = o[0].toLowerCase();
-            return label.includes("goal") || label.includes("test");
-          })?.[1];
-          const learned = exp.outcomes?.find((o) => o[0].toLowerCase().includes("learn"))?.[1];
-          return (
-            <article
-              class="lab__chamber pixel-card pixel-card--custom"
-              style="--card-accent: var(--mauve);"
-              data-reveal
-            >
-              <div class="lab__chamber-head">
-                <span class="lab__badge">
-                  <Icon name="mdi:flask-empty-outline" size={16} />
-                  Lab test
-                </span>
-                <span class="lab__period">{exp.period}</span>
-              </div>
-              <h3 class="lab__name">{exp.title}</h3>
-              <p class="lab__summary">{exp.summary}</p>
+    {featuredExperiment && (
+      <section
+        class="research__experiments"
+        aria-labelledby={`experiment-${featuredExperiment.id}`}
+      >
+        <article class="research-feature" data-research-card>
+          <header class="research-feature__top" data-research-block>
+            <div>
+              <span>Featured prototype</span>
+              <strong>{featuredExperiment.type}</strong>
+            </div>
+            <span>{featuredExperiment.period}</span>
+          </header>
 
-              <dl class="lab__fields">
-                {goal && (
-                  <div>
-                    <dt>Test goal</dt>
-                    <dd>{goal}</dd>
-                  </div>
-                )}
-                {learned && (
-                  <div>
-                    <dt>What I learned</dt>
-                    <dd>{learned}</dd>
-                  </div>
-                )}
-              </dl>
+          <div class="research-feature__body">
+            <div class="research-feature__identity" data-research-block>
+              <h3 id={`experiment-${featuredExperiment.id}`}>
+                {featuredExperiment.title}
+              </h3>
+              <p>{featuredExperiment.summary}</p>
+            </div>
 
-              <div class="lab__stack">
-                {exp.stack.map((s) => (
-                  <span class="lab__chip">{s}</span>
-                ))}
-              </div>
-            </article>
-          );
-        })
-      }
-    </div>
+            <div class="research-feature__question" data-research-block>
+              <span>What it tested</span>
+              <p>{featuredExperiment.problem}</p>
+              <ul role="list" aria-label="Writing assistance functions">
+                {experimentFunctions.map((item) => <li>{item}</li>)}
+              </ul>
+            </div>
+          </div>
 
-    <aside class="lab__notes" data-reveal>
-      <h3 class="lab__notes-title">
-        <Icon name="mdi:note" size={18} />
-        Test notes
-      </h3>
-      <ul role="list">
-        {
-          labNotes.map((note) => (
-            <li>
-              <span class="lab__note-icon">
-                <Icon name={note.icon} size={18} />
-              </span>
-              <div>
-                <strong>{note.title}</strong>
-                <span>{note.note}</span>
-              </div>
-            </li>
-          ))
-        }
-      </ul>
-    </aside>
+          <footer class="research-feature__footer" data-research-block>
+            <ul role="list" aria-label={`${featuredExperiment.title} tools`}>
+              {featuredExperiment.stack.map((tool) => <li>{tool}</li>)}
+            </ul>
+            <span>{featuredExperiment.role}</span>
+          </footer>
+        </article>
+
+        <aside class="research-notes" aria-label="Active research threads">
+          <div class="research-notes__intro" data-research-note>
+            <h3>Active research threads</h3>
+            <p>Focused studies that support current interface work.</p>
+          </div>
+
+          <div class="research-notes__list">
+            {researchNotes.map(([title, note]) => (
+              <article data-research-note>
+                <h4>{title}</h4>
+                <p>{note}</p>
+              </article>
+            ))}
+          </div>
+
+          <p class="research-notes__principle" data-research-note>
+            Start small. Isolate the uncertain part. Keep the result only when
+            it improves the product experience.
+          </p>
+        </aside>
+      </section>
+    )}
+
+    <section class="builds" aria-labelledby="builds-title">
+      <header class="builds__head">
+        <h3 id="builds-title">In progress now</h3>
+        <span>{ongoingBuilds.length} active tracks</span>
+      </header>
+
+      <div class="builds__lanes">
+        {ongoingBuilds.map((item) => (
+          <article class="build-lane" data-build-lane>
+            <div class="build-lane__status">
+              <span aria-hidden="true"></span>
+              {phase(item.progress)}
+            </div>
+            <h4>{item.title}</h4>
+            <p>{item.focus}</p>
+            <footer>
+              <span>Next</span>
+              <strong>{item.next}</strong>
+            </footer>
+          </article>
+        ))}
+      </div>
+    </section>
   </div>
 </Section>
 
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const root = document.querySelector<HTMLElement>("[data-research]");
+
+  if (root && !reduceMotion) {
+    const headingLines = gsap.utils.toArray<HTMLElement>("[data-research-heading]", root);
+    const notes = gsap.utils.toArray<HTMLElement>("[data-research-note]", root);
+    const card = root.querySelector<HTMLElement>("[data-research-card]");
+    const cardBlocks = gsap.utils.toArray<HTMLElement>("[data-research-block]", root);
+    const lanes = gsap.utils.toArray<HTMLElement>("[data-build-lane]", root);
+
+    gsap.fromTo(
+      headingLines,
+      { autoAlpha: 0, yPercent: 110 },
+      {
+        autoAlpha: 1,
+        yPercent: 0,
+        duration: .9,
+        stagger: .1,
+        ease: "power4.out",
+        scrollTrigger: { trigger: root, start: "top 78%", once: true },
+      }
+    );
+
+    if (card) {
+      const featureTimeline = gsap.timeline({
+        scrollTrigger: { trigger: card, start: "top 84%", once: true },
+      });
+
+      featureTimeline
+        .fromTo(
+          card,
+          { autoAlpha: 0, y: 64, clipPath: "inset(0 0 18% 0)" },
+          {
+            autoAlpha: 1,
+            y: 0,
+            clipPath: "inset(0 0 0% 0)",
+            duration: 1,
+            ease: "power4.out",
+          }
+        )
+        .fromTo(
+          cardBlocks,
+          { autoAlpha: 0, y: 24 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: .68,
+            stagger: .08,
+            ease: "power3.out",
+          },
+          "-=.58"
+        )
+        .fromTo(
+          notes,
+          { autoAlpha: 0, x: 28 },
+          {
+            autoAlpha: 1,
+            x: 0,
+            duration: .62,
+            stagger: .08,
+            ease: "power3.out",
+          },
+          "-=.5"
+        );
+    }
+
+    lanes.forEach((lane, index) => {
+      gsap.fromTo(
+        lane,
+        { autoAlpha: 0, y: 34 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.72,
+          delay: index * 0.04,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: lane,
+            start: "top 96%",
+            once: true,
+          },
+        }
+      );
+    });
+  }
+</script>
+
 <style>
-  .lab__head {
-    margin-bottom: 1.15rem;
-    max-width: 720px;
+  :global(.section--research) {
+    min-height: 160dvh;
+    padding-bottom: clamp(6rem, 12vh, 9rem) !important;
   }
+  .research { position: relative; display: grid; gap: clamp(7rem, 15vh, 12rem); }
+  .research__head { display: grid; justify-items: start; gap: clamp(2rem, 4vh, 3.5rem); }
+  .research__head h2 { max-width: none; overflow: hidden; font-size: clamp(4rem, 7.3vw, 8.2rem); line-height: .86; letter-spacing: -.075em; }
+  .research__head h2 span { display: block; width: fit-content; white-space: nowrap; }
+  .research__head > p { max-width: 52ch; color: #c1c8d5; font-size: clamp(1rem, 1.25vw, 1.15rem); line-height: 1.65; }
 
-  .lab__title {
-    font-size: clamp(1.75rem, 5vw, 2.75rem);
-    margin-bottom: 0.5rem;
-  }
+  .research__experiments { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(280px, .55fr); gap: clamp(2.5rem, 5vw, 5rem); align-items: stretch; }
+  .research-feature { position: relative; isolation: isolate; min-height: 610px; display: grid; grid-template-rows: auto 1fr auto; overflow: hidden; border: 1px solid var(--surface-border-strong); background: rgba(34, 44, 72, .26); backdrop-filter: blur(22px) saturate(118%); -webkit-backdrop-filter: blur(22px) saturate(118%); box-shadow: inset 0 1px 0 rgba(255,255,255,.045), 0 28px 80px rgba(8, 10, 20, .18); }
+  .research-feature::before { content: ""; position: absolute; z-index: -1; inset: 0; background: radial-gradient(circle at 92% 5%, rgba(203,166,247,.14), transparent 38%), linear-gradient(135deg, rgba(255,255,255,.035), transparent 38%); pointer-events: none; }
+  .research-feature::after { content: ""; position: absolute; top: 0; left: 0; width: clamp(120px, 24%, 260px); height: 3px; background: #cba6f7; opacity: .85; pointer-events: none; }
+  .research-feature__top { min-height: 96px; display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding: 1.5rem clamp(1.5rem, 3.5vw, 3rem); border-bottom: 1px solid var(--divider-line); }
+  .research-feature__top div { display: grid; gap: .45rem; }
+  .research-feature__top span, .research-feature__top strong { font-family: var(--font-mono) !important; font-size: .61rem; letter-spacing: .08em; text-transform: uppercase; }
+  .research-feature__top span { color: #9ea8b9; }
+  .research-feature__top strong { color: #d3d8e2; font-weight: 400; }
+  .research-feature__body { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(260px, .7fr); }
+  .research-feature__identity { align-self: stretch; display: grid; align-content: center; gap: 2rem; padding: clamp(3rem, 6vw, 6rem) clamp(1.5rem, 4vw, 4rem); }
+  .research-feature__identity h3 { max-width: 10ch; font-size: clamp(4rem, 7.2vw, 7.8rem); line-height: .82; letter-spacing: -.075em; text-wrap: balance; }
+  .research-feature__identity > p { max-width: 52ch; color: #c1c8d5; line-height: 1.65; }
+  .research-feature__question { align-self: stretch; display: grid; align-content: end; gap: 1.4rem; padding: clamp(2rem, 3.5vw, 3.25rem); border-left: 1px solid var(--divider-line); background: rgba(203,166,247,.045); }
+  .research-feature__question > span { color: #aeb7c7; font-family: var(--font-mono) !important; font-size: .61rem; letter-spacing: .08em; text-transform: uppercase; }
+  .research-feature__question > p { color: #d5dae3; font-size: clamp(1.15rem, 1.75vw, 1.55rem); line-height: 1.45; letter-spacing: -.025em; }
+  .research-feature__question ul, .research-feature__footer ul { display: flex; flex-wrap: wrap; gap: .7rem 1.1rem; margin: 0; padding: 0; list-style: none; }
+  .research-feature__question li { color: #cba6f7; font-size: .72rem; }
+  .research-feature__question li:not(:last-child)::after { content: "/"; margin-left: 1.1rem; color: #778196; }
+  .research-feature__footer { min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding: 1.25rem clamp(1.5rem, 3.5vw, 3rem); border-top: 1px solid var(--divider-line); }
+  .research-feature__footer li, .research-feature__footer > span { color: #aeb7c7; font-family: var(--font-mono) !important; font-size: .61rem; letter-spacing: .04em; }
+  .research-feature__footer li:not(:last-child)::after { content: "/"; margin-left: 1.1rem; color: #778196; }
 
-  .lab__sub {
-    color: var(--subtext-1);
-    font-family: var(--font-mono);
-    font-size: 0.95rem;
-  }
+  .research-notes { display: grid; grid-template-rows: auto 1fr auto; gap: clamp(2.5rem, 5vh, 4.5rem); padding-block: .25rem; }
+  .research-notes__intro { display: grid; gap: .8rem; padding-top: 1.25rem; border-top: 1px solid var(--divider-line-strong); }
+  .research-notes__intro h3 { max-width: 10ch; font-size: clamp(1.8rem, 2.8vw, 2.7rem); line-height: 1; letter-spacing: -.05em; }
+  .research-notes__intro p { max-width: 32ch; color: #aeb7c7; font-size: .82rem; line-height: 1.55; }
+  .research-notes__list { align-self: center; display: grid; }
+  .research-notes__list article { display: grid; grid-template-columns: .7fr 1.3fr; gap: 1.25rem; padding-block: 1.25rem; border-bottom: 1px solid var(--divider-line); }
+  .research-notes__list h4 { color: #d7dce5; font-size: .82rem; font-weight: 500; }
+  .research-notes__list p { color: #9fa9ba; font-size: .76rem; line-height: 1.55; }
+  .research-notes__principle { max-width: 23ch; color: #d8dce5; font-size: clamp(1.25rem, 2vw, 1.75rem); line-height: 1.35; letter-spacing: -.035em; }
 
-  .lab {
-    display: grid;
-    grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.9fr);
-    gap: clamp(0.85rem, 2vw, 1.2rem);
-    align-items: start;
-  }
-
-  .lab__chambers {
-    display: grid;
-    gap: 0.85rem;
-  }
-
-  .lab__chamber {
-    padding: 0.95rem 1rem;
-  }
-
-  .lab__chamber-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.6rem;
-  }
-
-  .lab__badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-family: var(--font-pixel);
-    font-size: 0.48rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--mauve);
-    background: var(--mantle);
-    border: 1px solid rgba(203, 166, 247, 0.42);
-    padding: 0.3rem 0.5rem;
-  }
-
-  .lab__period {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--subtext-0);
-  }
-
-  .lab__name {
-    font-family: var(--font-heading);
-    font-size: 1.4rem;
-    color: var(--text);
-    margin: 0 0 0.3rem;
-  }
-
-  .lab__summary {
-    color: var(--subtext-1);
-    line-height: 1.55;
-    margin-bottom: 0.65rem;
-  }
-
-  .lab__fields {
-    display: grid;
-    gap: 0.45rem;
-    margin: 0 0 0.65rem;
-  }
-
-  .lab__fields > div {
-    background: var(--mantle);
-    border-left: 2px solid rgba(203, 166, 247, 0.38);
-    padding: 0.5rem 0.75rem;
-  }
-
-  .lab__fields dt {
-    font-family: var(--font-pixel);
-    font-size: 0.48rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--subtext-0);
-    margin-bottom: 0.25rem;
-  }
-
-  .lab__fields dd {
-    margin: 0;
-    font-size: 0.88rem;
-    color: var(--text);
-  }
-
-  .lab__stack {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-  }
-
-  .lab__chip {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--subtext-1);
-    background: var(--surface-1);
-    border: 2px solid var(--surface-2);
-    padding: 0.25rem 0.5rem;
-  }
-
-  .lab__notes {
-    background: var(--bg-card);
-    border: 1px solid var(--border-dim);
-    border-top: 1px solid rgba(203, 166, 247, 0.34);
-    box-shadow: 4px 4px 0 rgba(17, 17, 27, 0.72);
-    padding: 0.95rem 1rem;
-  }
-
-  .lab__notes-title {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: var(--font-pixel);
-    font-size: 0.6rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--mauve);
-    margin-bottom: 0.7rem;
-  }
-
-  .lab__notes ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.65rem;
-  }
-
-  .lab__notes li {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.65rem;
-  }
-
-  .lab__note-icon {
-    display: grid;
-    place-items: center;
-    width: 34px;
-    height: 34px;
-    color: var(--mauve);
-    background: var(--mantle);
-    border: 1px solid var(--border-dim);
-    flex: none;
-  }
-
-  .lab__notes strong {
-    display: block;
-    font-family: var(--font-heading);
-    font-weight: 600;
-    color: var(--text);
-    font-size: 0.98rem;
-  }
-
-  .lab__notes span {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    color: var(--subtext-0);
-    line-height: 1.4;
-  }
+  .builds { display: grid; gap: 2.5rem; }
+  .builds__head { display: flex; align-items: end; justify-content: space-between; gap: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--divider-line); }
+  .builds__head h3 { font-size: clamp(2.8rem,6vw,6rem); line-height: .92; letter-spacing: -.06em; }
+  .builds__head span { color: #929bad; font-family: var(--font-mono) !important; font-size: .63rem; text-transform: uppercase; letter-spacing: .08em; }
+  .builds__lanes { display: grid; }
+  .build-lane { display: grid; grid-template-columns: minmax(110px,.25fr) minmax(220px,.65fr) minmax(0,1fr) minmax(280px,.8fr); gap: clamp(1.5rem,4vw,4rem); align-items: start; padding: clamp(2rem,4vw,3.5rem) 0; border-bottom: 1px solid var(--divider-line); }
+  .build-lane__status { display: inline-flex; align-items: center; gap: .55rem; color: #a3acbe; font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .08em; }
+  .build-lane__status span { width: 6px; height: 6px; border-radius: 50%; background: #cba6f7; box-shadow: 0 0 0 4px rgba(203,166,247,.08); }
+  .build-lane h4 { font-size: clamp(1.55rem,2.6vw,2.5rem); letter-spacing: -.045em; }
+  .build-lane > p { max-width: 46ch; color: #a3acbe; line-height: 1.6; }
+  .build-lane footer { display: grid; gap: .65rem; }
+  .build-lane footer span { color: #929bad; font-family: var(--font-mono) !important; font-size: .6rem; text-transform: uppercase; letter-spacing: .08em; }
+  .build-lane footer strong { color: #d0d5de; font-size: .82rem; font-weight: 400; line-height: 1.55; }
 
   @media (max-width: 860px) {
-    .lab {
-      grid-template-columns: 1fr;
+    :global(.section--research) {
+      min-height: 100dvh;
+      padding-bottom: clamp(5rem, 12vh, 7rem) !important;
     }
+    .research__experiments { grid-template-columns: 1fr; }
+    .research__head h2 span { white-space: normal; }
+    .research-feature { min-height: 580px; }
+    .research-feature__body { grid-template-columns: 1fr; }
+    .research-feature__question { border-top: 1px solid var(--divider-line); border-left: 0; }
+    .research-notes { grid-template-columns: minmax(180px, .7fr) minmax(0, 1.3fr); grid-template-rows: auto auto; }
+    .research-notes__principle { grid-column: 1 / -1; max-width: 34ch; }
+    .build-lane { grid-template-columns: 1fr; gap: 1rem; }
+    .build-lane footer { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--divider-line-soft); }
+  }
+  @media (max-width: 560px) {
+    .research { gap: 6rem; }
+    .research__head h2 { font-size: clamp(3.35rem, 15vw, 5.5rem); }
+    .research-feature__top, .research-feature__footer { align-items: flex-start; flex-direction: column; }
+    .research-feature__identity h3 { font-size: clamp(3.25rem, 16vw, 5.25rem); }
+    .research-feature__question li:not(:last-child)::after, .research-feature__footer li:not(:last-child)::after { margin-left: .7rem; }
+    .research-notes { grid-template-columns: 1fr; }
+    .research-notes__principle { grid-column: auto; }
+    .research-notes__list article { grid-template-columns: 1fr; gap: .6rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .research-feature, .research-notes [data-research-note], .build-lane { transform: none; }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .research-feature { background: rgba(30, 39, 64, .96); backdrop-filter: none; -webkit-backdrop-filter: none; }
   }
 </style>

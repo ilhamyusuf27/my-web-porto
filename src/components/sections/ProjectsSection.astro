@@ -5,14 +5,12 @@ import ProjectModal from "../portfolio/ProjectModal.astro";
 ---
 
 <Section id="projects" label="Selected Work" index="04" accent="mauve" class="section--projects">
-  <div class="case-index" data-reveal>
+  <div class="case-index" data-reveal data-case-index>
     <header class="case-index__head">
-      <div>
-        <p class="case-index__eyebrow">case-study.index</p>
-        <h2 class="case-index__title">Selected work</h2>
-      </div>
+      <h2 class="case-index__title">Systems I’ve<br />helped ship.</h2>
       <p class="case-index__sub">
-        A compact file directory of SaaS dashboards, multi-tenant platforms, and client delivery work.
+        Selected product work across SaaS portals, multi-tenant platforms,
+        operational dashboards, and client delivery.
       </p>
     </header>
 
@@ -22,74 +20,97 @@ import ProjectModal from "../portfolio/ProjectModal.astro";
   <ProjectModal />
 </Section>
 
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const root = document.querySelector<HTMLElement>("[data-case-index]");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (root && !reduceMotion) {
+    const header = root.querySelectorAll<HTMLElement>(".case-index__head > *");
+    const tiles = gsap.utils.toArray<HTMLElement>("[data-work-tile]", root);
+
+    gsap.fromTo(header, { autoAlpha: 0, y: 46 }, {
+      autoAlpha: 1, y: 0, duration: .78, stagger: .08, ease: "power3.out",
+      scrollTrigger: { trigger: root, start: "top 76%", once: true },
+    });
+
+    tiles.forEach((tile, index) => {
+      gsap.fromTo(tile, {
+        autoAlpha: 0,
+        y: 52,
+        scale: index === 0 ? .96 : .985,
+      }, {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        duration: .82,
+        delay: index % 2 * .06,
+        ease: "power3.out",
+        scrollTrigger: { trigger: tile, start: "top 92%", once: true },
+      });
+    });
+  }
+</script>
+
 <style>
   :global(.section--projects) {
-    height: 100vh;
-    min-height: 100vh;
-    padding-block: clamp(4.8rem, 8vh, 6rem) clamp(1.25rem, 3vh, 2rem);
+    min-height: 180dvh;
+    padding-block: clamp(8rem, 13vh, 11rem) clamp(10rem, 18vh, 16rem);
   }
 
   :global(.section--projects .section__inner) {
-    height: 100%;
     min-height: 0;
   }
 
   .case-index {
-    height: 100%;
-    min-height: 0;
     display: grid;
-    grid-template-rows: auto minmax(0, 1fr);
-    gap: clamp(0.85rem, 1.8vh, 1.15rem);
+    gap: clamp(4rem, 9vh, 7rem);
   }
 
   .case-index__head {
     display: grid;
-    grid-template-columns: minmax(0, 0.8fr) minmax(280px, 0.9fr);
-    align-items: end;
-    gap: 1.25rem;
-  }
-
-  .case-index__eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--mauve);
-    margin-bottom: 0.35rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    width: 100%;
   }
 
   .case-index__title {
-    font-size: clamp(1.55rem, 4.6vw, 2.55rem);
+    max-width: 10ch;
+    font-size: clamp(4rem, 9vw, 9rem);
+    line-height: .82;
+    letter-spacing: -.075em;
   }
 
   .case-index__sub {
     color: var(--subtext-1);
-    font-family: var(--font-mono);
-    font-size: clamp(0.78rem, 1.5vw, 0.9rem);
-    line-height: 1.55;
-    max-width: 58ch;
-    justify-self: end;
+    justify-self: start;
+    width: min(56ch, calc(100% - clamp(0rem, 12vw, 12rem)));
+    max-width: 56ch;
+    margin-left: clamp(0rem, 12vw, 12rem);
+    font-size: clamp(.95rem, 1.35vw, 1.15rem);
+    line-height: 1.65;
+    overflow-wrap: normal;
+    word-break: normal;
   }
 
   @media (max-width: 980px) {
     :global(.section--projects) {
-      height: auto;
-      min-height: 100vh;
-    }
-
-    .case-index__head {
-      grid-template-columns: 1fr;
-      align-items: start;
+      min-height: 100dvh;
     }
 
     .case-index__sub {
-      justify-self: start;
+      margin-left: 0;
+      width: min(56ch, 100%);
     }
   }
 
   @media (max-width: 760px) {
     :global(.section--projects) {
-      padding-block: 6rem 2.5rem;
+      padding-block: 7rem 10rem;
     }
   }
 </style>

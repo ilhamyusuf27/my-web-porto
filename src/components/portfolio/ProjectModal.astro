@@ -10,388 +10,167 @@ const getImages = (project: (typeof projects)[number]) =>
       ? [{ src: project.image, alt: `${project.title} preview` }]
       : [];
 
-// Embedded payload so the controller can populate the modal without a fetch.
-const payload = projects.map((p) => ({
-  id: p.id,
-  title: p.title,
-  category: p.category,
-  type: p.type,
-  period: p.period,
-  role: p.role,
-  status: p.status,
-  summary: p.summary,
-  problem: p.problem ?? null,
-  contribution: p.contribution ?? [],
-  outcomes: p.outcomes ?? [],
-  stack: p.stack,
-  links: p.links ?? [],
-  accent: p.accent ?? "mauve",
-  image: p.image ?? null,
-  images: getImages(p),
+const payload = projects.map((project) => ({
+  id: project.id,
+  title: project.title,
+  category: project.category,
+  type: project.type,
+  period: project.period,
+  role: project.role,
+  status: project.status,
+  summary: project.summary,
+  problem: project.problem ?? null,
+  contribution: project.contribution ?? [],
+  outcomes: project.outcomes ?? [],
+  stack: project.stack,
+  links: project.links ?? [],
+  accent: project.accent ?? "mauve",
+  image: project.image ?? null,
+  images: getImages(project),
 }));
 ---
 
 <Modal id="project-modal" titleId="project-modal-title" class="project-case-modal">
   <span slot="title" data-field="title">Project</span>
 
-  <div class="pm">
-    <section class="pm__gallery" aria-label="Project images">
-      <div class="pm__image-stage" data-gallery-stage>
+  <article class="case-modal">
+    <section class="case-modal__visual" aria-label="Project images">
+      <div class="case-modal__image" data-gallery-stage>
         <img data-gallery-image alt="" hidden />
-        <div class="pm__image-placeholder" data-gallery-placeholder>
-          <Icon name="mdi:file-document-outline" size={42} decorative />
+        <div class="case-modal__placeholder" data-gallery-placeholder>
+          <Icon name="mdi:image-outline" size={38} decorative />
           <span>No project image available</span>
         </div>
       </div>
-      <div class="pm__gallery-meta">
+
+      <div class="case-modal__gallery-footer">
         <span data-gallery-count>No images</span>
         <span data-gallery-caption>No preview asset</span>
       </div>
-      <div class="pm__thumbs" data-gallery-thumbs hidden aria-label="Select project image"></div>
+      <div class="case-modal__thumbs" data-gallery-thumbs hidden aria-label="Select project image"></div>
     </section>
 
-    <div class="pm__content">
-      <div class="pm__meta" aria-hidden="false">
-        <span class="pm__meta-item" data-field="type">Type</span>
-        <span class="pm__meta-item pm__meta-item--accent" data-field="status-label">Status</span>
-        <span class="pm__meta-item" data-field="period">Period</span>
-      </div>
+    <div class="case-modal__story">
+      <header class="case-modal__intro">
+        <div class="case-modal__meta">
+          <span data-field="type">Type</span>
+          <span data-field="status-label">Status</span>
+          <span data-field="period">Period</span>
+        </div>
+        <p class="case-modal__role">
+          <span>Role</span>
+          <strong data-field="role">Role</strong>
+        </p>
+        <p class="case-modal__summary" data-field="summary">Summary</p>
+      </header>
 
-      <p class="pm__role">
-        <Icon name="mdi:account" size={14} decorative />
-        <span data-field="role">Role</span>
-      </p>
-
-      <p class="pm__summary" data-field="summary">Summary</p>
-
-      <section class="pm__block" data-block="problem" hidden>
-        <h3 class="pm__heading"><Icon name="mdi:target" size={16} decorative /> Overview</h3>
+      <section class="case-modal__block" data-block="problem" hidden>
+        <h3>Context</h3>
         <p data-field="problem"></p>
       </section>
 
-      <section class="pm__block" data-block="contribution" hidden>
-        <h3 class="pm__heading"><Icon name="mdi:format-list-bulleted" size={16} decorative /> Contribution</h3>
-        <ul class="pm__list" data-field="contribution"></ul>
+      <section class="case-modal__block" data-block="contribution" hidden>
+        <h3>Contribution</h3>
+        <ul class="case-modal__list" data-field="contribution"></ul>
       </section>
 
-      <section class="pm__block" data-block="outcomes" hidden>
-        <h3 class="pm__heading"><Icon name="mdi:chart-box-outline" size={16} decorative /> Outcomes</h3>
-        <dl class="pm__outcomes" data-field="outcomes"></dl>
+      <section class="case-modal__block" data-block="outcomes" hidden>
+        <h3>System outcomes</h3>
+        <dl class="case-modal__outcomes" data-field="outcomes"></dl>
       </section>
 
-      <section class="pm__block">
-        <h3 class="pm__heading"><Icon name="mdi:code-tags" size={16} decorative /> Tech stack</h3>
-        <div class="pm__stack" data-field="stack"></div>
+      <section class="case-modal__block case-modal__stack-block">
+        <h3>Technology</h3>
+        <div class="case-modal__stack" data-field="stack"></div>
       </section>
 
-      <section class="pm__block pm__links" data-block="links">
-        <h3 class="pm__heading"><Icon name="mdi:link-variant" size={16} decorative /> Links</h3>
-        <div class="pm__links-inner" data-field="links"></div>
-        <p class="pm__no-links" data-field="no-links" hidden>No public link available for this case file.</p>
+      <section class="case-modal__block case-modal__links" data-block="links">
+        <h3>Project access</h3>
+        <div class="case-modal__links-inner" data-field="links"></div>
+        <p class="case-modal__no-links" data-field="no-links" hidden>
+          This project does not have a public link.
+        </p>
       </section>
     </div>
-  </div>
+  </article>
 </Modal>
 
 <script type="application/json" id="project-data" set:html={JSON.stringify(payload)} is:inline />
 
 <style>
-  .pm {
-    display: grid;
-    grid-template-columns: minmax(260px, 0.95fr) minmax(0, 1.05fr);
-    gap: 1.25rem;
-    min-height: 0;
+  :global(.project-case-modal) {
+    z-index: 10000;
+    padding: clamp(.75rem, 2vw, 1.5rem);
   }
-
+  :global(.project-case-modal .modal__backdrop) { background: rgba(6,8,14,.82); backdrop-filter: blur(12px); }
   :global(.project-case-modal .modal__panel) {
-    width: min(1080px, 100%);
-    max-height: min(88vh, 860px);
-    background: rgba(30, 30, 46, 0.96);
-  }
-
-  :global(.project-case-modal .modal__body) {
-    padding: clamp(1rem, 2vw, 1.35rem);
-  }
-
-  .pm__gallery,
-  .pm__content {
-    min-height: 0;
-  }
-
-  .pm__gallery {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .pm__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .pm__image-stage {
-    position: relative;
-    aspect-ratio: 16 / 10;
-    background: rgba(17, 17, 27, 0.72);
-    border: 1px solid var(--border-dim);
+    width: min(1420px, 100%);
+    max-height: calc(100dvh - clamp(1.5rem, 4vw, 3rem));
+    border: 1px solid var(--divider-line);
+    background: var(--surface-panel-strong);
+    box-shadow: 0 40px 120px rgba(0,0,0,.65);
     overflow: hidden;
+    animation: none;
   }
-
-  .pm__image-stage img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: saturate(0.84) brightness(0.86);
+  :global(.project-case-modal .modal__header) { min-height: 5.4rem; align-items: center; padding: 1.2rem clamp(1.25rem, 3vw, 3rem); border-bottom: 1px solid var(--surface-border); background: var(--surface-panel-strong); }
+  :global(.project-case-modal .modal__title) { max-width: 24ch; font-size: clamp(1.45rem, 2.6vw, 2.8rem); line-height: .95; letter-spacing: -.05em; }
+  :global(.project-case-modal .modal__close) { width: 3rem; height: 3rem; border: 1px solid var(--divider-line); border-radius: 0; background: transparent; transition: transform .3s cubic-bezier(.16,1,.3,1), color .25s ease, background .25s ease; }
+  :global(.project-case-modal .modal__close:hover), :global(.project-case-modal .modal__close:focus-visible) { color: #111; background: #cba6f7; transform: rotate(8deg); outline: none; }
+  :global(.project-case-modal .modal__body) { padding: 0; overflow-y: auto; }
+  .case-modal { display: grid; grid-template-columns: minmax(0, 1.18fr) minmax(380px, .82fr); min-height: 0; }
+  .case-modal__visual { position: sticky; top: 0; align-self: start; min-width: 0; padding: clamp(1rem, 2vw, 1.5rem); border-right: 1px solid var(--surface-border); background: var(--surface-panel-soft); }
+  .case-modal__image { position: relative; min-height: min(63dvh, 700px); overflow: hidden; background: var(--surface-panel-soft); }
+  .case-modal__image img { width: 100%; height: 100%; position: absolute; inset: 0; object-fit: cover; filter: saturate(.78) brightness(.8); animation: case-image-in .65s cubic-bezier(.16,1,.3,1); }
+  .case-modal__placeholder { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: .75rem; color: #a3acbe; font-family: var(--font-mono); font-size: .72rem; }
+  .case-modal__placeholder[hidden], .case-modal__thumbs[hidden] { display: none; }
+  .case-modal__gallery-footer { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem 0 0; color: #9aa4b7; font-family: var(--font-mono); font-size: .63rem; }
+  .case-modal__gallery-footer span:last-child { color: #c4cad5; text-align: right; }
+  .case-modal__thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: .5rem; margin-top: 1rem; }
+  :global(.pm-thumb) { position: relative; aspect-ratio: 16/10; padding: 0; overflow: hidden; border: 1px solid var(--surface-border); border-radius: 0; background: var(--surface-panel-soft); opacity: .45; transition: opacity .25s ease, border-color .25s ease, transform .25s cubic-bezier(.16,1,.3,1); }
+  :global(.pm-thumb:hover), :global(.pm-thumb:focus-visible) { opacity: .8; transform: translateY(-2px); outline: none; }
+  :global(.pm-thumb[aria-selected="true"]) { opacity: 1; border-color: #a786c6; box-shadow: none; }
+  :global(.pm-thumb img) { width: 100%; height: 100%; object-fit: cover; filter: saturate(.7) brightness(.78); }
+  .case-modal__story { min-width: 0; padding: clamp(2rem, 4vw, 4rem); }
+  .case-modal__intro { display: grid; gap: 2rem; padding-bottom: clamp(3rem, 6vh, 5rem); }
+  .case-modal__meta { display: flex; flex-wrap: wrap; gap: .75rem 1.5rem; color: #a2abbd; font-family: var(--font-mono); font-size: .61rem; letter-spacing: .07em; text-transform: uppercase; }
+  .case-modal__meta span:nth-child(2) { color: #c19be5; }
+  .case-modal__role { display: grid; gap: .4rem; }
+  .case-modal__role > span, .case-modal__block h3 { color: #98a2b5; font-family: var(--font-mono); font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; }
+  .case-modal__role strong { color: #bdbdbd; font-size: .88rem; font-weight: 500; }
+  .case-modal__summary { color: #e0e0e0; font-size: clamp(1.45rem, 2.5vw, 2.65rem); line-height: 1.18; letter-spacing: -.045em; }
+  .case-modal__block { display: grid; grid-template-columns: minmax(100px, .3fr) minmax(0, 1fr); gap: clamp(1.5rem, 3vw, 3rem); padding: clamp(2rem, 4vh, 3rem) 0; border-top: 1px solid var(--divider-line); }
+  .case-modal__block[hidden] { display: none; }
+  .case-modal__block > p { color: #c0c7d3; line-height: 1.7; }
+  .case-modal__list { display: grid; gap: 1rem; margin: 0; padding: 0; list-style: none; }
+  .case-modal__list li { position: relative; padding-left: 1.25rem; color: #c0c7d3; line-height: 1.6; }
+  .case-modal__list li::before { content: "/"; position: absolute; left: 0; color: #a786c6; font-family: var(--font-mono); }
+  .case-modal__outcomes { display: grid; gap: 1.5rem; margin: 0; }
+  .case-modal__outcomes > :global(div) { display: grid; grid-template-columns: minmax(90px, .35fr) 1fr; gap: 1rem; }
+  .case-modal__outcomes :global(dt) { color: #aab3c3; font-family: var(--font-mono); font-size: .65rem; text-transform: uppercase; }
+  .case-modal__outcomes :global(dd) { margin: 0; color: #b8b8b8; line-height: 1.5; }
+  .case-modal__stack { display: flex; flex-wrap: wrap; gap: .55rem; }
+  :global(.pm-chip) { display: inline-flex; padding: .42rem .66rem; border: 1px solid var(--divider-line); border-radius: 0; background: transparent; color: #d0d5de; font-family: var(--font-mono); font-size: .67rem; }
+  .case-modal__links-inner { display: flex; flex-wrap: wrap; gap: .65rem; }
+  :global(.pm-link) { display: inline-flex; align-items: center; min-height: 2.8rem; padding: .65rem .9rem; border: 1px solid var(--divider-line); border-radius: 0; background: transparent; color: #ddd; font-family: var(--font-mono); font-size: .72rem; transition: transform .25s cubic-bezier(.16,1,.3,1), border-color .25s ease; }
+  :global(.pm-link:hover), :global(.pm-link:focus-visible) { transform: translateY(-2px); border-color: #a786c6; outline: none; }
+  :global(.pm-link--primary) { color: #111; background: #cba6f7; border-color: #cba6f7; }
+  .case-modal__no-links { color: #a3acbe; font-family: var(--font-mono); font-size: .72rem; }
+  @keyframes case-image-in { from { opacity: 0; transform: scale(1.035); } }
+  @media (max-width: 900px) {
+    :global(.project-case-modal .modal__panel) { max-height: calc(100dvh - 1.5rem); }
+    .case-modal { grid-template-columns: 1fr; }
+    .case-modal__visual { position: relative; border-right: 0; border-bottom: 1px solid var(--divider-line); }
+    .case-modal__image { min-height: 46dvh; }
   }
-
-  .pm__image-placeholder {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    align-content: center;
-    gap: 0.65rem;
-    color: var(--subtext-0);
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    background:
-      linear-gradient(135deg, rgba(49, 50, 68, 0.48), rgba(17, 17, 27, 0.76));
-  }
-
-  .pm__image-placeholder[hidden] {
-    display: none;
-  }
-
-  .pm__gallery-meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--subtext-0);
-  }
-
-  .pm__gallery-meta [data-gallery-caption] {
-    color: var(--subtext-1);
-    text-align: right;
-  }
-
-  .pm__thumbs {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-    gap: 0.5rem;
-  }
-
-  .pm__thumbs[hidden] {
-    display: none;
-  }
-
-  :global(.pm-thumb) {
-    aspect-ratio: 16 / 10;
-    border: 1px solid var(--border-dim);
-    background: var(--surface-0);
-    padding: 0;
-    overflow: hidden;
-    border-radius: 2px;
-  }
-
-  :global(.pm-thumb[aria-selected="true"]) {
-    border-color: rgba(203, 166, 247, 0.72);
-    box-shadow: 0 0 0 1px rgba(203, 166, 247, 0.28);
-  }
-
-  :global(.pm-thumb img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: saturate(0.8) brightness(0.82);
-  }
-
-  .pm__content {
-    display: flex;
-    flex-direction: column;
-    gap: 1.1rem;
-  }
-
-  .pm__meta-item {
-    font-family: var(--font-mono);
-    font-size: 0.74rem;
-    color: var(--subtext-0);
-    background: var(--surface-0);
-    border: 1px solid var(--surface-2);
-    padding: 0.35rem 0.62rem;
-    border-radius: 2px;
-  }
-
-  .pm__meta-item--accent {
-    color: var(--text);
-    border-color: rgba(203, 166, 247, 0.5);
-  }
-
-  .pm__role {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    color: var(--subtext-1);
-    margin-top: -0.3rem;
-  }
-
-  .pm__summary {
-    font-size: 1.02rem;
-    line-height: 1.65;
-    color: var(--text);
-  }
-
-  .pm__block[hidden] {
-    display: none;
-  }
-
-  .pm__heading {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: var(--font-heading);
-    font-weight: 600;
-    font-size: 0.8rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--mauve);
-    margin-bottom: 0.7rem;
-  }
-
-  .pm__list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-  }
-
-  .pm__list li {
-    position: relative;
-    padding-left: 1.1rem;
-    line-height: 1.6;
-    color: var(--subtext-1);
-  }
-
-  .pm__list li::before {
-    content: "›";
-    position: absolute;
-    left: 0;
-    top: 0;
-    color: var(--mauve);
-    font-family: var(--font-mono);
-    font-weight: 700;
-  }
-
-  .pm__outcomes {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 0.75rem;
-    margin: 0;
-  }
-
-  .pm__outcomes > div {
-    background: var(--surface-0);
-    border: 1px solid var(--surface-2);
-    border-left: 2px solid rgba(203, 166, 247, 0.42);
-    padding: 0.7rem 0.85rem;
-  }
-
-  .pm__outcomes dt {
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--subtext-0);
-    margin-bottom: 0.3rem;
-  }
-
-  .pm__outcomes dd {
-    margin: 0;
-    font-size: 0.92rem;
-    line-height: 1.5;
-    color: var(--text);
-  }
-
-  .pm__stack {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.45rem;
-  }
-
-  /* Tech-stack chips are injected by the controller (src/scripts/modal.ts)
-     without a scoped attribute, so this style is intentionally global and
-     scoped to the modal by class name only. */
-  :global(.pm-chip) {
-    display: inline-flex;
-    align-items: center;
-    font-family: var(--font-mono);
-    font-size: 0.76rem;
-    letter-spacing: 0.01em;
-    color: var(--text);
-    background: rgba(49, 50, 68, 0.6);
-    border: 1px solid var(--border-dim);
-    padding: 0.34rem 0.62rem;
-    border-radius: 2px;
-    line-height: 1.2;
-  }
-
-  .pm__links[hidden] {
-    display: none;
-  }
-
-  .pm__links-inner {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-  }
-
-  :global(.pm-link) {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    color: var(--text);
-    background: rgba(49, 50, 68, 0.55);
-    border: 1px solid var(--border-dim);
-    padding: 0.55rem 0.72rem;
-    border-radius: 2px;
-  }
-
-  :global(.pm-link--primary) {
-    color: var(--crust);
-    background: var(--mauve);
-    border-color: rgba(205, 214, 244, 0.6);
-  }
-
-  .pm__no-links {
-    font-family: var(--font-mono);
-    color: var(--subtext-0);
-    font-size: 0.8rem;
-    border: 1px dashed var(--border-dim);
-    padding: 0.7rem 0.8rem;
-  }
-
-  @media (max-width: 820px) {
-    .pm {
-      grid-template-columns: 1fr;
-    }
-  }
-
   @media (max-width: 600px) {
-    .pm {
-      gap: 1.15rem;
-    }
-
-    .pm__outcomes {
-      grid-template-columns: 1fr;
-    }
+    :global(.project-case-modal) { padding: .5rem; }
+    :global(.project-case-modal .modal__header) { min-height: 4.5rem; }
+    .case-modal__image { min-height: 34dvh; }
+    .case-modal__story { padding: 1.5rem; }
+    .case-modal__block { grid-template-columns: 1fr; gap: 1rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .case-modal__image img { animation: none; }
+    :global(.pm-thumb), :global(.pm-link), :global(.project-case-modal .modal__close) { transition: none; }
   }
 </style>
