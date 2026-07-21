@@ -186,14 +186,22 @@ export class AtmosphericSystemScene {
   private targetPointer = new THREE.Vector2(.5, .5);
   private pointerStrength = 0;
   private targetPointerStrength = 0;
+  private readonly frameInterval = 1000 / 24;
   private reduced = matchMedia("(prefers-reduced-motion: reduce)");
   private finePointer = matchMedia("(hover: hover) and (pointer: fine)");
   private removeActive: () => void;
   private removeTransition: () => void;
 
   constructor({ canvas }: SceneOptions) {
-    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: "low-power" });
-    this.renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.25));
+    this.renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: false,
+      alpha: false,
+      depth: false,
+      stencil: false,
+      powerPreference: "high-performance",
+    });
+    this.renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1));
     this.material = new THREE.ShaderMaterial({
       vertexShader, fragmentShader, depthWrite: false, depthTest: false,
       uniforms: {
@@ -264,7 +272,7 @@ export class AtmosphericSystemScene {
   private animate = (time = performance.now()) => {
     if (document.hidden || this.reduced.matches) return;
     this.frame = requestAnimationFrame(this.animate);
-    if (this.lastFrame && time - this.lastFrame < 33) return;
+    if (this.lastFrame && time - this.lastFrame < this.frameInterval) return;
     this.lastFrame = time;
     const uniforms = this.material.uniforms;
     uniforms.uTime.value = time / 1000;

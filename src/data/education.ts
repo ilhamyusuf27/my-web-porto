@@ -15,7 +15,7 @@ export const education: Education[] = [
     org: "AMIKOM Yogyakarta",
     period: "2017 - 2021",
     type: "degree",
-    detail: "Undergraduate study focused on web development, multimedia, and animation.",
+    detail: "Built a broad technical foundation across web development, multimedia systems, and animation.",
     note: "GPA 3.85",
   },
   {
@@ -24,7 +24,7 @@ export const education: Education[] = [
     org: "Pijar Camp",
     period: "2022",
     type: "bootcamp",
-    detail: "Full-stack training covering JavaScript, Node.js, Express, React, and Next.js.",
+    detail: "Applied full-stack training across JavaScript, Node.js, Express, React, and Next.js.",
     note: "Bootcamp graduate",
   },
 ];

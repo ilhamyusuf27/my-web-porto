@@ -19,9 +19,9 @@ export const experiences: Experience[] = [
     status: "active",
     stack: ["WordPress", "WooCommerce", "PHP", "Elementor"],
     highlights: [
-      "Build and maintain client WordPress and WooCommerce sites.",
-      "Handle theme customization, performance checks, and cross-browser fixes.",
-      "Turn marketing requirements into maintainable frontend implementation.",
+      "Build and maintain WordPress and WooCommerce sites for day-to-day content and commerce operations.",
+      "Translate marketing requirements into maintainable themes, templates, and frontend behavior.",
+      "Resolve performance regressions, cross-browser issues, and client-specific customizations.",
     ],
   },
   {
@@ -33,9 +33,9 @@ export const experiences: Experience[] = [
     status: "done",
     stack: ["React", "Vue", "Nuxt", "Next.js", "TypeScript", "Redux"],
     highlights: [
-      "Built multi-tenant SaaS dashboards across Tomps SaaS, Project, and Building.",
-      "Worked on landing pages, customer portals, payment flows, and operational modules.",
-      "Shipped responsive UI with Redux state, Tailwind styling, and interaction tests.",
+      "Delivered multi-tenant SaaS interfaces across Tomps SaaS, Project, and Building products.",
+      "Built acquisition pages, customer onboarding, payment flows, and operational dashboard modules.",
+      "Shipped responsive UI with shared state, Tailwind styling, and interaction tests.",
     ],
   },
   {
@@ -47,9 +47,9 @@ export const experiences: Experience[] = [
     status: "done",
     stack: ["React", "Tailwind", "Bootstrap", "Jest"],
     highlights: [
-      "Developed React interfaces with reusable, tested components.",
-      "Maintained styling systems with Tailwind and Bootstrap.",
-      "Collaborated with backend teams on integration contracts.",
+      "Developed React interfaces from reusable, tested components.",
+      "Maintained consistent styling across Tailwind and Bootstrap codebases.",
+      "Worked with backend engineers to align API contracts and interface states.",
     ],
   },
   {
@@ -61,9 +61,9 @@ export const experiences: Experience[] = [
     status: "done",
     stack: ["Design", "Streaming", "Video Editing"],
     highlights: [
-      "Supported design, streaming, and video editing needs.",
-      "Helped run online events and media production.",
-      "Built production discipline outside pure code work.",
+      "Supported visual design, live streaming, and video production for faculty programs.",
+      "Helped operate online events from preparation through live delivery.",
+      "Developed practical production discipline before moving fully into frontend work.",
     ],
   },
 ];

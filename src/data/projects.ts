@@ -43,9 +43,9 @@ export const projects: Project[] = [
     role: "Frontend Web Developer",
     type: "SaaS landing page and customer dashboard",
     summary:
-      "Public landing page and customer portal for package purchase, company onboarding, subdomain setup, payments, transaction history, invoices, and account management.",
+      "A connected acquisition and self-service experience for package purchase, company onboarding, payments, invoices, and account management.",
     problem:
-      "Tomps needed a marketing surface plus a reliable self-service portal where customers could buy a package, onboard a company, pay, and manage their subscription without manual support.",
+      "Tomps needed customers to move from package discovery to an active company account without relying on manual support.",
     contribution: [
       "Built and maintained the Nuxt landing page with Pinia, Strapi CMS, i18n, and Vitest coverage.",
       "Developed customer portal flows in Next.js for package selection, onboarding, payment, and transaction states.",
@@ -83,7 +83,7 @@ export const projects: Project[] = [
     role: "Frontend Web Developer",
     type: "Multi-tenant project-management SaaS",
     summary:
-      "Multi-tenant project management dashboard integrated with Tomps SaaS, covering candidate projects, project setup, monitoring, maps, stakeholder data, and tenant-specific UI behavior.",
+      "A multi-tenant project platform for setup, monitoring, map-based visibility, stakeholder data, and tenant-specific workflows.",
     problem:
       "Each customer tenant needed its own branding, feature flags, and modules while sharing one core project management engine.",
     contribution: [
@@ -122,7 +122,7 @@ export const projects: Project[] = [
     role: "Frontend Web Developer",
     type: "Property-management platform",
     summary:
-      "Property management dashboard modules for revenue monitoring, billing, complaints, maintenance, facility booking, unit data, and admin workflows.",
+      "Operational property modules that bring revenue, billing, complaints, maintenance, facilities, and unit data into one dashboard.",
     problem:
       "Building operators needed one dashboard to monitor revenue, billing, complaints, maintenance, and facility bookings without switching between tools.",
     contribution: [
@@ -159,7 +159,7 @@ export const projects: Project[] = [
     role: "Frontend Web Developer",
     type: "Device protection and service reporting",
     summary:
-      "Multi-role device protection dashboard for report monitoring, asset management, SLA tracking, user roles, and service workflows.",
+      "A role-aware service dashboard for device reports, asset records, SLA tracking, and operational follow-up.",
     problem:
       "Super admin, partner, reporter, and technician roles each needed tailored access to reports, assets, and SLA status on a shared platform.",
     contribution: [
@@ -194,7 +194,7 @@ export const projects: Project[] = [
     role: "Freelance Frontend Developer",
     type: "Tutoring student management platform",
     summary:
-      "Tutoring administration dashboard for maintaining students, learning sections, status controls, and student management workflows.",
+      "A tutoring operations dashboard for managing students, learning sections, account status, and day-to-day admin workflows.",
     problem:
       "Tutors needed a clean admin surface to maintain student accounts and learning-section content across reading, listening, writing, and speaking.",
     contribution: [
@@ -225,7 +225,7 @@ export const projects: Project[] = [
     role: "Solo builder (frontend + backend)",
     type: "Personal finance web app",
     summary:
-      "A personal finance web app for tracking accounts, income, expenses, and categories with a clear dashboard and a maintainable transaction flow.",
+      "A personal finance product for tracking accounts, income, expenses, and categories through a clear, maintainable transaction model.",
     problem:
       "Personal cash flow needs a clear dashboard and a transaction flow that stays maintainable as rules and categories grow.",
     contribution: [
@@ -250,7 +250,7 @@ export const projects: Project[] = [
     role: "Solo prototype",
     type: "Browser extension prototype",
     summary:
-      "A small browser add-on prototype that tested inline grammar, rewrite, and translation assistance near text inputs.",
+      "A browser extension prototype for grammar, rewriting, and translation assistance beside the active text field.",
     problem:
       "The test explored whether writing help next to the active input could reduce tab-switching.",
     contribution: [
