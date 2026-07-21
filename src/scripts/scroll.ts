@@ -112,7 +112,7 @@ export function initScrollAnimations(): void {
 function initFluidSectionSnap(sections: HTMLElement[]): void {
   document.documentElement.classList.add("reveal-done");
   gsap.set("[data-reveal]", {
-    clearProps: "opacity,visibility,transform,filter,willChange",
+    clearProps: "opacity,visibility,transform,willChange",
   });
 
   sections.forEach((section, index) => {
@@ -126,13 +126,11 @@ function initFluidSectionSnap(sections: HTMLElement[]): void {
           autoAlpha: 0.28,
           y: 64,
           scale: 0.988,
-          filter: "blur(7px)",
         },
         {
           autoAlpha: 1,
           y: 0,
           scale: 1,
-          filter: "blur(0px)",
           ease: "none",
           immediateRender: false,
           scrollTrigger: {
@@ -151,7 +149,6 @@ function initFluidSectionSnap(sections: HTMLElement[]): void {
         autoAlpha: 0.28,
         y: -52,
         scale: 0.99,
-        filter: "blur(7px)",
         ease: "none",
         immediateRender: false,
         scrollTrigger: {
@@ -472,16 +469,24 @@ function settleTallSectionEdge(
 function initProgress(): void {
   const bar = document.querySelector<HTMLElement>("[data-scroll-progress]");
   if (!bar) return;
+  let queued = false;
 
   const update = () => {
     const max = document.documentElement.scrollHeight - window.innerHeight;
     const progress = max > 0 ? window.scrollY / max : 0;
-    bar.style.width = `${Math.min(100, Math.max(0, progress * 100))}%`;
+    bar.style.transform = `scaleX(${Math.min(1, Math.max(0, progress))})`;
+    queued = false;
+  };
+
+  const queueUpdate = () => {
+    if (queued) return;
+    queued = true;
+    window.requestAnimationFrame(update);
   };
 
   update();
-  window.addEventListener("scroll", update, { passive: true });
-  window.addEventListener("resize", update, { passive: true });
+  window.addEventListener("scroll", queueUpdate, { passive: true });
+  window.addEventListener("resize", queueUpdate, { passive: true });
 }
 
 /**
@@ -633,13 +638,12 @@ function createSectionTransition(
     (item): item is HTMLElement => Boolean(item)
   );
 
-  gsap.set(cleanupTargets, { willChange: "transform,opacity,filter" });
+  gsap.set(cleanupTargets, { willChange: "transform,opacity" });
   if (incoming) {
     gsap.set(incoming, {
       autoAlpha: 0.28,
       y: 64 * direction,
       scale: 0.988,
-      filter: "blur(7px)",
     });
   }
 
@@ -659,7 +663,6 @@ function createSectionTransition(
       autoAlpha: 0.28,
       y: -48 * direction,
       scale: 0.99,
-      filter: "blur(7px)",
       duration: 0.34,
       ease: "power2.in",
     }, 0)
@@ -667,7 +670,6 @@ function createSectionTransition(
       autoAlpha: 1,
       y: 0,
       scale: 1,
-      filter: "blur(0px)",
       duration: 0.52,
       ease: "power4.out",
     }, 0.26);

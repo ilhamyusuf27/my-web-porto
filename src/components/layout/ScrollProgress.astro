@@ -21,9 +21,11 @@
   .scroll-progress__fill {
     display: block;
     height: 100%;
-    width: 0%;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left center;
     background: var(--mauve);
     box-shadow: 0 0 8px rgba(203, 166, 247, 0.24);
-    transition: width 0.05s linear;
+    will-change: transform;
   }
 </style>

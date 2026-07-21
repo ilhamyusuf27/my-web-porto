@@ -15,8 +15,8 @@ import { profile } from "../data/profile";
 ---
 
 <BaseLayout
-  title={`${profile.name} - ${profile.role} | Production Systems Portfolio`}
-  description="Ilham Yusuf is a frontend developer with fullstack range, building maintainable web interfaces, client systems, and reliability-minded product experiences."
+  title={`${profile.name} | Frontend Developer for Production Web Systems`}
+  description="Frontend developer building maintainable interfaces, SaaS dashboards, customer portals, and content-led web systems with React, Vue, TypeScript, and WordPress."
 >
   <ConsoleBackgroundScene slot="ambient" />
   <ScrollProgress slot="nav" />
@@ -33,9 +33,27 @@ import { profile } from "../data/profile";
 
 <script>
   import { initScrollAnimations } from "../scripts/scroll";
-  import { initModal } from "../scripts/modal";
 
   // Reveal animations only matter once content is in the DOM.
   initScrollAnimations();
-  initModal();
+
+  const projects = document.getElementById("projects");
+  let modalLoaded = false;
+  const loadModal = async () => {
+    if (modalLoaded) return;
+    modalLoaded = true;
+    const { initModal } = await import("../scripts/modal");
+    initModal();
+  };
+
+  if (projects && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      observer.disconnect();
+      void loadModal();
+    }, { rootMargin: "1200px 0px" });
+    observer.observe(projects);
+  } else {
+    window.setTimeout(() => void loadModal(), 0);
+  }
 </script>
