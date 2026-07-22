@@ -15,7 +15,7 @@ export const experiences: Experience[] = [
     company: "Madeindonesia",
     role: "Frontend Web Developer",
     period: "2025 - Present",
-    location: "Remote, Indonesia",
+    location: "Yogyakarta, Indonesia",
     status: "active",
     stack: ["WordPress", "WooCommerce", "PHP", "Elementor"],
     highlights: [
