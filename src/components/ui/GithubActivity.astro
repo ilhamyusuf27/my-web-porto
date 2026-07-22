@@ -1,0 +1,498 @@
+---
+import Icon from "./Icon.astro";
+
+interface Props {
+  username: string;
+  limit?: number;
+}
+
+const { username, limit = 4 } = Astro.props;
+const profileUrl = `https://github.com/${username}`;
+---
+
+<section
+  class="github-activity"
+  data-github-activity
+  data-username={username}
+  data-limit={limit}
+  data-profile-url={profileUrl}
+  aria-labelledby="github-activity-title"
+>
+  <header class="github-activity__head">
+    <div class="github-activity__identity">
+      <Icon name="mdi:github" size={22} />
+      <div>
+        <h4 id="github-activity-title">Recent GitHub activity</h4>
+        <span data-github-status>Loading public updates</span>
+      </div>
+    </div>
+
+    <a href={profileUrl} target="_blank" rel="noreferrer">
+      View profile
+      <span aria-hidden="true">↗</span>
+    </a>
+  </header>
+
+  <ol
+    class="github-activity__feed"
+    data-github-feed
+    aria-live="polite"
+    aria-busy="true"
+  >
+    {
+      Array.from({ length: limit }, (_, index) => (
+        <li
+          class="github-activity__skeleton"
+          aria-hidden="true"
+          style={`--index:${index}`}
+        >
+          <span />
+          <div>
+            <span />
+            <span />
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<script>
+  type PublicGithubEvent = {
+    id: string;
+    type: string;
+    created_at: string;
+    repo: { name: string };
+    payload?: Record<string, unknown>;
+  };
+
+  const isPublicGithubEvent = (value: unknown): value is PublicGithubEvent => {
+    if (!value || typeof value !== "object") return false;
+    const event = value as Partial<PublicGithubEvent>;
+    return (
+      typeof event.id === "string" &&
+      typeof event.type === "string" &&
+      typeof event.created_at === "string" &&
+      typeof event.repo?.name === "string"
+    );
+  };
+
+  const formatRelativeTime = (value: string) => {
+    const elapsed = Date.now() - new Date(value).getTime();
+    if (!Number.isFinite(elapsed) || elapsed < 0) return "Recently";
+
+    const minute = 60_000;
+    const hour = minute * 60;
+    const day = hour * 24;
+
+    if (elapsed < minute) return "Just now";
+    if (elapsed < hour) return `${Math.floor(elapsed / minute)}m ago`;
+    if (elapsed < day) return `${Math.floor(elapsed / hour)}h ago`;
+    if (elapsed < day * 7) return `${Math.floor(elapsed / day)}d ago`;
+
+    return new Intl.DateTimeFormat("en", {
+      month: "short",
+      day: "numeric",
+    }).format(new Date(value));
+  };
+
+  const cleanRef = (value: unknown) =>
+    typeof value === "string" ? value.replace("refs/heads/", "") : "a branch";
+
+  const describeEvent = (event: PublicGithubEvent) => {
+    const payload = event.payload ?? {};
+
+    switch (event.type) {
+      case "PushEvent":
+        return {
+          label: "Push",
+          text: `Pushed updates to ${cleanRef(payload.ref)}`,
+        };
+      case "CreateEvent": {
+        const refType =
+          typeof payload.ref_type === "string" ? payload.ref_type : "reference";
+        const ref = typeof payload.ref === "string" ? ` ${payload.ref}` : "";
+        return { label: "Create", text: `Created ${refType}${ref}` };
+      }
+      case "PullRequestEvent": {
+        const action =
+          typeof payload.action === "string" ? payload.action : "Updated";
+        return {
+          label: "Pull request",
+          text: `${action[0]?.toUpperCase()}${action.slice(1)} a pull request`,
+        };
+      }
+      case "IssuesEvent": {
+        const action =
+          typeof payload.action === "string" ? payload.action : "Updated";
+        return {
+          label: "Issue",
+          text: `${action[0]?.toUpperCase()}${action.slice(1)} an issue`,
+        };
+      }
+      case "IssueCommentEvent":
+        return { label: "Comment", text: "Commented on an issue" };
+      case "ForkEvent":
+        return { label: "Fork", text: "Forked the repository" };
+      case "WatchEvent":
+        return { label: "Star", text: "Starred the repository" };
+      case "ReleaseEvent":
+        return { label: "Release", text: "Updated a release" };
+      case "DeleteEvent":
+        return { label: "Delete", text: `Deleted ${cleanRef(payload.ref)}` };
+      default:
+        return { label: "Update", text: event.type.replace(/Event$/, "") };
+    }
+  };
+
+  const createEventRow = (event: PublicGithubEvent, profileUrl: string) => {
+    const item = document.createElement("li");
+    item.className = "github-event";
+
+    const description = describeEvent(event);
+    const type = document.createElement("span");
+    type.className = "github-event__type";
+    type.textContent = description.label;
+
+    const body = document.createElement("div");
+    body.className = "github-event__body";
+
+    const repository = document.createElement("a");
+    repository.target = "_blank";
+    repository.rel = "noreferrer";
+    repository.textContent =
+      event.repo.name.split("/").pop() || event.repo.name;
+    repository.href = /^[\w.-]+\/[\w.-]+$/.test(event.repo.name)
+      ? `https://github.com/${event.repo.name}`
+      : profileUrl;
+
+    const summary = document.createElement("p");
+    summary.textContent = description.text;
+    body.append(repository, summary);
+
+    const time = document.createElement("time");
+    time.dateTime = event.created_at;
+    time.textContent = formatRelativeTime(event.created_at);
+
+    item.append(type, body, time);
+    return item;
+  };
+
+  const createMessageRow = (
+    title: string,
+    text: string,
+    profileUrl: string
+  ) => {
+    const item = document.createElement("li");
+    item.className = "github-event github-event--message";
+
+    const body = document.createElement("div");
+    body.className = "github-event__body";
+    const link = document.createElement("a");
+    link.href = profileUrl;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.textContent = title;
+    const summary = document.createElement("p");
+    summary.textContent = text;
+    body.append(link, summary);
+    item.append(body);
+    return item;
+  };
+
+  document
+    .querySelectorAll<HTMLElement>("[data-github-activity]")
+    .forEach((root) => {
+      if (root.dataset.activityInitialized === "true") return;
+      root.dataset.activityInitialized = "true";
+
+      const username = root.dataset.username;
+      const profileUrl = root.dataset.profileUrl;
+      const limit = Number(root.dataset.limit || 4);
+      const feed = root.querySelector<HTMLOListElement>("[data-github-feed]");
+      const status = root.querySelector<HTMLElement>("[data-github-status]");
+      if (!username || !profileUrl || !feed || !status) return;
+
+      const render = (events: PublicGithubEvent[]) => {
+        const visibleEvents = events.slice(0, Math.max(1, limit));
+        if (visibleEvents.length === 0) {
+          feed.replaceChildren(
+            createMessageRow(
+              "No recent public updates",
+              "Private work and local commits do not appear in this feed.",
+              profileUrl
+            )
+          );
+          status.textContent = "No public events returned";
+        } else {
+          feed.replaceChildren(
+            ...visibleEvents.map((event) => createEventRow(event, profileUrl))
+          );
+          status.textContent = "Synced from public GitHub events";
+        }
+        feed.setAttribute("aria-busy", "false");
+        root.dataset.activityState = "ready";
+      };
+
+      const renderFallback = () => {
+        feed.replaceChildren(
+          createMessageRow(
+            "Open recent work on GitHub",
+            "The public activity feed is temporarily unavailable.",
+            profileUrl
+          )
+        );
+        feed.setAttribute("aria-busy", "false");
+        status.textContent = "GitHub feed unavailable";
+        root.dataset.activityState = "fallback";
+      };
+
+      const load = async () => {
+        try {
+          const response = await fetch(
+            `https://api.github.com/users/${encodeURIComponent(username)}/events/public?per_page=${Math.max(limit, 8)}`,
+            { headers: { Accept: "application/vnd.github+json" } }
+          );
+          if (!response.ok)
+            throw new Error(`GitHub returned ${response.status}`);
+
+          const payload: unknown = await response.json();
+          if (!Array.isArray(payload))
+            throw new Error("Unexpected GitHub response");
+          render(payload.filter(isPublicGithubEvent));
+        } catch {
+          renderFallback();
+        }
+      };
+
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            if (!entries.some((entry) => entry.isIntersecting)) return;
+            observer.disconnect();
+            void load();
+          },
+          { rootMargin: "700px 0px" }
+        );
+        observer.observe(root);
+      } else {
+        void load();
+      }
+    });
+</script>
+
+<style>
+  .github-activity {
+    min-width: 0;
+    border: 1px solid var(--surface-border-strong);
+    background: rgba(26, 35, 58, 0.3);
+    backdrop-filter: blur(20px) saturate(112%);
+    -webkit-backdrop-filter: blur(20px) saturate(112%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .github-activity__head {
+    min-height: 88px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.25rem clamp(1.25rem, 2.4vw, 2rem);
+    border-bottom: 1px solid var(--divider-line);
+  }
+
+  .github-activity__identity {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .github-activity__identity div {
+    min-width: 0;
+    display: grid;
+    gap: 0.35rem;
+  }
+  .github-activity__identity h4 {
+    color: #e1e5ec;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  .github-activity__identity span {
+    color: #9fa9ba;
+    font-family: var(--font-mono);
+    font-size: 0.57rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+
+  .github-activity__head > a {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: #cfd5df;
+    font-size: 0.72rem;
+    border-bottom: 1px solid var(--divider-line-strong);
+    padding-bottom: 0.25rem;
+    transition:
+      color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .github-activity__head > a:hover {
+    color: #fff;
+    border-color: #fff;
+  }
+  .github-activity__feed {
+    min-height: 376px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  :global(.github-event) {
+    min-height: 94px;
+    display: grid;
+    grid-template-columns: minmax(76px, 0.24fr) minmax(0, 1fr) auto;
+    align-items: center;
+    gap: clamp(1rem, 2.5vw, 2rem);
+    padding: 1.2rem clamp(1.25rem, 2.4vw, 2rem);
+    border-bottom: 1px solid var(--divider-line);
+    animation: github-event-enter 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  :global(.github-event:last-child) {
+    border-bottom: 0;
+  }
+  :global(.github-event__type) {
+    color: #cba6f7;
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  :global(.github-event__body) {
+    min-width: 0;
+    display: grid;
+    gap: 0.35rem;
+  }
+  :global(.github-event__body a) {
+    width: fit-content;
+    max-width: 100%;
+    overflow: hidden;
+    color: #e0e4eb;
+    font-size: 0.92rem;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  :global(.github-event__body a:hover) {
+    color: #cba6f7;
+  }
+  :global(.github-event__body p) {
+    color: #aeb7c7;
+    font-size: 0.76rem;
+    line-height: 1.45;
+  }
+  :global(.github-event time) {
+    color: #8f99ab;
+    font-family: var(--font-mono);
+    font-size: 0.56rem;
+    white-space: nowrap;
+  }
+  :global(.github-event--message) {
+    grid-template-columns: 1fr;
+    align-content: center;
+    min-height: 376px;
+  }
+  :global(.github-event--message .github-event__body) {
+    max-width: 34ch;
+  }
+
+  .github-activity__skeleton {
+    min-height: 94px;
+    display: grid;
+    grid-template-columns: minmax(76px, 0.24fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(1rem, 2.5vw, 2rem);
+    padding: 1.2rem clamp(1.25rem, 2.4vw, 2rem);
+    border-bottom: 1px solid var(--divider-line);
+    animation: github-skeleton-pulse 1.3s ease-in-out calc(var(--index) * 0.08s)
+      infinite alternate;
+  }
+
+  .github-activity__skeleton > span,
+  .github-activity__skeleton div span {
+    display: block;
+    height: 7px;
+    background: rgba(196, 203, 216, 0.16);
+  }
+
+  .github-activity__skeleton > span {
+    width: 54px;
+  }
+  .github-activity__skeleton div {
+    display: grid;
+    gap: 0.65rem;
+  }
+  .github-activity__skeleton div span:first-child {
+    width: min(210px, 60%);
+  }
+  .github-activity__skeleton div span:last-child {
+    width: min(310px, 88%);
+    opacity: 0.68;
+  }
+
+  @keyframes github-skeleton-pulse {
+    from {
+      opacity: 0.38;
+    }
+    to {
+      opacity: 0.9;
+    }
+  }
+
+  @keyframes github-event-enter {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 620px) {
+    .github-activity__head {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+    :global(.github-event) {
+      grid-template-columns: 72px minmax(0, 1fr);
+    }
+    :global(.github-event time) {
+      grid-column: 2;
+    }
+    .github-activity__skeleton {
+      grid-template-columns: 64px minmax(0, 1fr);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .github-activity__skeleton,
+    :global(.github-event) {
+      animation: none;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .github-activity {
+      background: rgba(26, 35, 58, 0.96);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+  }
+</style>

@@ -1,5 +1,6 @@
 ---
 import Section from "../layout/Section.astro";
+import GithubActivity from "../ui/GithubActivity.astro";
 import { projects } from "../../data/projects";
 import { ongoingBuilds } from "../../data/profile";
 
@@ -15,6 +16,7 @@ const researchNotes = [
 
 const experimentFunctions = ["Grammar", "Rewrite", "Translation"];
 const featuredExperiment = experiments[0];
+const sreTrack = ongoingBuilds.find((item) => item.id === "sre-path");
 
 const phase = (progress: number) => {
   if (progress >= 70) return "Refining";
@@ -101,24 +103,30 @@ const phase = (progress: number) => {
     <section class="builds" aria-labelledby="builds-title">
       <header class="builds__head">
         <h3 id="builds-title">In progress now</h3>
-        <span>{ongoingBuilds.length} active tracks</span>
+        <span>Learning track and public activity</span>
       </header>
 
-      <div class="builds__lanes">
-        {ongoingBuilds.map((item) => (
-          <article class="build-lane" data-build-lane>
-            <div class="build-lane__status">
-              <span aria-hidden="true"></span>
-              {phase(item.progress)}
+      <div class="builds__content">
+        {sreTrack && (
+          <article class="build-focus" data-build-lane>
+            <header>
+              <span>{phase(sreTrack.progress)}</span>
+              <span>Reliability practice</span>
+            </header>
+
+            <div class="build-focus__body">
+              <h4>{sreTrack.title}</h4>
+              <p>{sreTrack.focus}</p>
             </div>
-            <h4>{item.title}</h4>
-            <p>{item.focus}</p>
+
             <footer>
-              <span>Next</span>
-              <strong>{item.next}</strong>
+              <span>Next practical step</span>
+              <strong>{sreTrack.next}</strong>
             </footer>
           </article>
-        ))}
+        )}
+
+        <GithubActivity username="ilhamyusuf27" limit={4} />
       </div>
     </section>
   </div>
@@ -265,15 +273,17 @@ const phase = (progress: number) => {
   .builds__head { display: flex; align-items: end; justify-content: space-between; gap: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--divider-line); }
   .builds__head h3 { font-size: clamp(2.8rem,6vw,6rem); line-height: .92; letter-spacing: -.06em; }
   .builds__head span { color: #929bad; font-family: var(--font-mono) !important; font-size: .63rem; text-transform: uppercase; letter-spacing: .08em; }
-  .builds__lanes { display: grid; }
-  .build-lane { display: grid; grid-template-columns: minmax(110px,.25fr) minmax(220px,.65fr) minmax(0,1fr) minmax(280px,.8fr); gap: clamp(1.5rem,4vw,4rem); align-items: start; padding: clamp(2rem,4vw,3.5rem) 0; border-bottom: 1px solid var(--divider-line); }
-  .build-lane__status { display: inline-flex; align-items: center; gap: .55rem; color: #a3acbe; font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .08em; }
-  .build-lane__status span { width: 6px; height: 6px; border-radius: 50%; background: #cba6f7; box-shadow: 0 0 0 4px rgba(203,166,247,.08); }
-  .build-lane h4 { font-size: clamp(1.55rem,2.6vw,2.5rem); letter-spacing: -.045em; }
-  .build-lane > p { max-width: 46ch; color: #a3acbe; line-height: 1.6; }
-  .build-lane footer { display: grid; gap: .65rem; }
-  .build-lane footer span { color: #929bad; font-family: var(--font-mono) !important; font-size: .6rem; text-transform: uppercase; letter-spacing: .08em; }
-  .build-lane footer strong { color: #d0d5de; font-size: .82rem; font-weight: 400; line-height: 1.55; }
+  .builds__content { display: grid; grid-template-columns: minmax(280px, .72fr) minmax(0, 1.28fr); gap: clamp(1.5rem, 3vw, 2.5rem); align-items: stretch; }
+  .build-focus { min-height: 466px; display: grid; grid-template-rows: auto 1fr auto; padding: clamp(1.5rem, 3vw, 2.5rem); border-top: 1px solid var(--surface-border-strong); border-bottom: 1px solid var(--surface-border-strong); background: linear-gradient(145deg, rgba(203,166,247,.06), rgba(28,37,61,.18) 48%, transparent); }
+  .build-focus header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .build-focus header span { color: #9fa9ba; font-family: var(--font-mono); font-size: .58rem; text-transform: uppercase; letter-spacing: .08em; }
+  .build-focus header span:first-child { color: #cba6f7; }
+  .build-focus__body { align-self: center; display: grid; gap: 1.5rem; }
+  .build-focus__body h4 { max-width: 8ch; font-size: clamp(2.6rem, 4.8vw, 5rem); line-height: .88; letter-spacing: -.065em; }
+  .build-focus__body p { max-width: 36ch; color: #b7bfcd; line-height: 1.6; }
+  .build-focus footer { display: grid; gap: .65rem; padding-top: 1.25rem; border-top: 1px solid var(--divider-line); }
+  .build-focus footer span { color: #929bad; font-family: var(--font-mono); font-size: .57rem; text-transform: uppercase; letter-spacing: .08em; }
+  .build-focus footer strong { max-width: 42ch; color: #d4d9e2; font-size: .82rem; font-weight: 400; line-height: 1.55; }
 
   @media (max-width: 860px) {
     :global(.section--research) {
@@ -287,8 +297,8 @@ const phase = (progress: number) => {
     .research-feature__question { border-top: 1px solid var(--divider-line); border-left: 0; }
     .research-notes { grid-template-columns: minmax(180px, .7fr) minmax(0, 1.3fr); grid-template-rows: auto auto; }
     .research-notes__principle { grid-column: 1 / -1; max-width: 34ch; }
-    .build-lane { grid-template-columns: 1fr; gap: 1rem; }
-    .build-lane footer { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--divider-line-soft); }
+    .builds__content { grid-template-columns: 1fr; }
+    .build-focus { min-height: 430px; }
   }
   @media (max-width: 560px) {
     .research { gap: 6rem; }
@@ -299,9 +309,11 @@ const phase = (progress: number) => {
     .research-notes { grid-template-columns: 1fr; }
     .research-notes__principle { grid-column: auto; }
     .research-notes__list article { grid-template-columns: 1fr; gap: .6rem; }
+    .builds__head { align-items: flex-start; flex-direction: column; }
+    .build-focus header { align-items: flex-start; flex-direction: column; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .research-feature, .research-notes [data-research-note], .build-lane { transform: none; }
+    .research-feature, .research-notes [data-research-note], .build-focus { transform: none; }
   }
   @media (prefers-reduced-transparency: reduce) {
     .research-feature { background: rgba(30, 39, 64, .96); backdrop-filter: none; -webkit-backdrop-filter: none; }
