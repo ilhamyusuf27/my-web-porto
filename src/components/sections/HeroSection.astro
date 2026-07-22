@@ -33,38 +33,52 @@ import { profile } from "../../data/profile";
   const hero = document.querySelector<HTMLElement>("[data-hero-root]");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  if (hero && !reduceMotion) {
+  if (hero && !reduceMotion && hero.dataset.heroIntroPlayed !== "true") {
     const intro = hero.querySelector<HTMLElement>("[data-hero-intro]");
     const lines = hero.querySelectorAll<HTMLElement>("[data-hero-line]");
     const footer = hero.querySelector<HTMLElement>("[data-hero-footer]");
     const status = hero.querySelector<HTMLElement>("[data-hero-status]");
     const animated = [intro, ...lines, footer, status].filter(Boolean);
 
-    gsap.set(animated, { willChange: "transform,opacity" });
+    // The loading panel fully covers this staging state. Keep the hero opaque
+    // so the handoff has one reveal mechanism instead of two stacked fades.
+    gsap.set(animated, { autoAlpha: 1, willChange: "transform" });
+    gsap.set(intro, { y: 18 });
+    gsap.set(lines, { yPercent: 112 });
+    gsap.set(footer, { y: 30 });
+    gsap.set(status, { x: 18 });
 
-    gsap.timeline({
-      defaults: { ease: "power4.out" },
-      onComplete: () => gsap.set(animated, { clearProps: "willChange" }),
-    })
-      .fromTo(intro, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: .48 })
-      .fromTo(
-        lines,
-        { autoAlpha: 0, yPercent: 112 },
-        { autoAlpha: 1, yPercent: 0, duration: .88, stagger: .1 },
-        "-=.24"
-      )
-      .fromTo(
-        footer,
-        { autoAlpha: 0, y: 30 },
-        { autoAlpha: 1, y: 0, duration: .66 },
-        "-=.48"
-      )
-      .fromTo(
-        status,
-        { autoAlpha: 0, x: 18 },
-        { autoAlpha: 1, x: 0, duration: .58 },
-        "-=.62"
-      );
+    const playHeroEntrance = () => {
+      if (hero.dataset.heroIntroPlayed === "true") return;
+      hero.dataset.heroIntroPlayed = "true";
+
+      gsap.timeline({
+        defaults: { ease: "power4.out" },
+        onComplete: () => gsap.set(animated, { clearProps: "willChange" }),
+      })
+        .to(intro, { y: 0, duration: .48 })
+        .to(
+          lines,
+          { yPercent: 0, duration: .88, stagger: .1 },
+          "-=.24"
+        )
+        .to(
+          footer,
+          { y: 0, duration: .66 },
+          "-=.48"
+        )
+        .to(
+          status,
+          { x: 0, duration: .58 },
+          "-=.62"
+        );
+    };
+
+    if (document.documentElement.hasAttribute("data-scene-state")) {
+      playHeroEntrance();
+    } else {
+      window.addEventListener("portfolio:scene-ready", playHeroEntrance, { once: true });
+    }
   }
 </script>
 
